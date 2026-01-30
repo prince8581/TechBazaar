@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container-fluid">
+    <div class="row mt-5">
+    <div class="col-sm-5 mx-auto mt-5 pt-5">
+
+    <div class="card shadow mt-4 p-3">
+     <h2 class="m-0">Enter Verification Code... </h2>
+     <p class="text-muted m-0">We Send  you on email</p>
+     <p class="pt-4"> We've send you code  on <span>abc@gmail.com</span></p>
+    <form action="/verify-otp" method="post" >
+     <input type="password" class="form-control" name="otp" required placeholder="Enter OTP Here...">
+     <button type="submit" class="btn btn-primary mt-3 w-100">Verify OTP</button>
+    </form>
+    
+    <p class="pt-3">Did not received the email? Check your spam filter, or <a href="#" class="text-decoration-none">Resend code</a></p>
+    </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script>
+  var msg="[[${msg}]]";
+  if(msg!=""){
+	  alert(msg);
+  }
+  </script>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en" th:fragment="layout(content)">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tech Bazaar</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!--top row start-->
+        <div class="row bg-light">
+            <div class="col-sm-4">
+                <h4 class="text-dark mx-5 mt-3">Welcome to TechBazaar</h4>
+            </div>
+            <div class="col-sm-4">
+
+            </div>
+            <div class="col-sm-4">
+                <ul class="list-unstyled d-flex justify-content-evenly mt-3">
+                    <li><i class="fa-solid fa-location-dot text-info"></i> Deliver to 423651</li>
+                    <li><i class="fa-solid fa-truck-fast text-info"></i> Track your order</li>
+                    <li><i class="fa-solid fa-circle-xmark text-info"></i> All Offers</li>
+                </ul>
+            </div>
+        </div>
+        <!--top row end-->
+
+        <!--2nd row start-->
+        <div class="row bg-white">
+            <div class="col-sm-4">
+
+                <div class="d-flex align-items-center p-3 mx-5" style="width: max-content; position: relative;">
+                    <button class="btn btn-outline-primary btn-sm me-2" type="button" id="menuBtn">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h4 class="text-primary mb-0">TechBazaar</h4>
+                </div>
+
+                <!-- Collapsible menu outside parent -->
+                <div class="collapse position-absolute" id="techMenu" style="z-index: 1000;">
+                    <div class="card card-body p-2" style="width: 200px;">
+                        <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/" class="text-decoration-none text-light">Home</a></button>
+                        <button class="btn btn-secondary btn-sm w-100 mb-1"><a href="/Orders" class="text-decoration-none text-light">Orders</a></button>
+                        <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/Products" class="text-decoration-none text-light">Products</a></button>
+                        <button class="btn btn-secondary btn-sm w-100 mb-1"><a href="/Services" class="text-decoration-none text-light">Servicess</a></button>
+                        <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/AboutUs" class="text-decoration-none text-light">AboutUs</a></button>
+                        <button class="btn btn-secondary btn-sm w-100"><a href="/ContactUs" class="text-decoration-none text-light">ContactUs</a></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-4">
+                <div class="input-group m-3 border border-info rounded-2">
+                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-info"></i></span>
+                    <input type="text" class="form-control bg-light border-0"
+                        placeholder="Search essentials,electronics and more..."
+                        aria-label="Amount (to the nearest dollar)">
+                    <span class="input-group-text"><i class="fa-solid fa-bars text-info"></i></span>
+                </div>
+                <!-- <div class="input-group m-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" placeholder="Search essentials" aria-label="Username"
+                        aria-describedby="basic-addon1">
+                </div> -->
+            </div>
+            <div class="col-sm-4">
+                <ul class="list-unstyled d-flex justify-content-evenly m-3">
+                    <li th:if="${session.LoggedInUser == null}"><a href="/Login" class="text-decoration-none text-dark"><i class="fa-regular fa-user  text-info"></i>
+                            SignUp / SignIn</a></li>
+                    <li th:if="${session.LoggedInUser != null}"><a href="#" class="text-decoration-none text-dark"><i class="fa-regular fa-user  text-info"></i>
+                            Profile</a></li>
+                    <li><i class="fa-solid fa-cart-arrow-down text-info"></i> Cart</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <!--2nd row end-->
+        
+        <!--Scroll start-->
+         <div class="row">
+            <div class="col-sm-11 mx-auto">
+                <div class="product-scroll-one">
+                    <div class="product-scroll" id="productScroll">
+                        <button class="btn  product-item">Mobiles</button>
+                        <button class="btn  product-item">Laptops</button>
+                        <button class="btn  product-item">Cooler</button>
+                        <button class="btn  product-item">Irons</button>
+                        <button class="btn  product-item">Lights</button>
+                        <button class="btn  product-item">Wires</button>
+                        <button class="btn  product-item">Mobiles</button>
+                        <button class="btn  product-item">Irons</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!--Scroll end-->
+
+        <!-- Main Content From other pages  start-->
+        <div class="main" th:replace="${content}">
+        
+        </div>
+        <!-- Main Content From other pages end -->
+
+        <!--footer start-->
+        <div class="row bg-info">
+            <div class="col-sm-10 mx-auto">
+                <div class="row pb-5">
+                    <div class="col-sm-4">
+                        <h1 class="mt-5 text-light">TechBazaar</h1>
+                        <h4 class="mt-4 text-light">Contact Us</h4>
+                        <ul class="list-unstyled text-light">
+                            <li><i class="fa-brands fa-whatsapp"></i> Whats App</li>
+                            <li>+91- 8581023460</li>
+                            <li><i class="fa-solid fa-phone"></i> Call us</li>
+                            <li>+91- 8581023460</li>
+                            <li>Downloads App</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 class="mt-5 text-light">Most Popular Categories</h4>
+
+                        <ul class="text-light">
+                            <li>Cancellation & returns</li>
+                            <li>Terms of use</li>
+                            <li>security</li>
+                            <li>privacy</li>
+                            <li>sitemap</li>
+                            <li>Pyments</li>
+                            <li>shippings</li>
+                            <li>Cancellation and returns</li>
+                            <li>FAQ</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 class="mt-5 text-light">Customer Services</h4>
+
+                        <ul class="text-light">
+                            <li>About Us</li>
+                            <li>Term And Conditions</li>
+                            <li>FAQ</li>
+                            <li>privacy Policy</li>
+                            <li>E-Waste Policies</li>
+                            <li>Pyments</li>
+                            <li>shippings</li>
+                            <li>Cancellation and returns</li>
+                            <li>FAQ</li>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="text-light">
+            </div>
+            <div class="row">
+                <div class="col-sm-4 mx-auto">
+                    <p class="text-light">&copy; 2026 All rights reserved. Made By Prince Kumar</p>
+                </div>
+            </div>
+
+        </div>
+        <!--footer end-->
+    </div>
+    <script src="./js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
