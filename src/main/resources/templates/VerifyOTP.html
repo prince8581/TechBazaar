@@ -1,36 +1,236 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container-fluid">
-    <div class="row mt-5">
-    <div class="col-sm-5 mx-auto mt-5 pt-5">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OTP Verification</title>
 
-    <div class="card shadow mt-4 p-3">
-     <h2 class="m-0">Enter Verification Code... </h2>
-     <p class="text-muted m-0">We Send  you on email</p>
-     <p class="pt-4"> We've send you code  on <span>abc@gmail.com</span></p>
-    <form action="/verify-otp" method="post" >
-     <input type="password" class="form-control" name="otp" required placeholder="Enter OTP Here...">
-     <button type="submit" class="btn btn-primary mt-3 w-100">Verify OTP</button>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+body {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+.otp-input {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    transition: 0.3s;
+}
+
+.otp-input:focus {
+    border-color: #fdbb2d;
+    box-shadow: 0 0 12px #fdbb2d;
+}
+
+.circle-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 25px auto;
+}
+
+svg {
+    transform: rotate(-90deg);
+}
+
+circle {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.bg-circle {
+    stroke: rgba(255,255,255,0.2);
+}
+
+.progress-circle {
+    stroke: #fdbb2d;
+    stroke-dasharray: 314;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.btn-primary {
+    background: #fdbb2d;
+    color: #1a2a6c;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #ffce54;
+    color: #1a2a6c;
+    transform: translateY(-2px);
+}
+
+a {
+    color: #ffce54;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+
+<div class="col-md-4">
+  <div class="card text-center">
+
+    <h4 class="mb-2">Verify Your Account</h4>
+    <p>Enter 6-digit OTP</p>
+
+    <form id="otpForm" action="/verify-otp" method="post">
+
+      <div class="d-flex justify-content-between mb-3">
+        <input type="text" maxlength="1" class="form-control otp-input" required>
+        <input type="text" maxlength="1" class="form-control otp-input" required>
+        <input type="text" maxlength="1" class="form-control otp-input" required>
+        <input type="text" maxlength="1" class="form-control otp-input" required>
+        <input type="text" maxlength="1" class="form-control otp-input" required>
+        <input type="text" maxlength="1" class="form-control otp-input" required>
+      </div>
+
+      <input type="hidden" name="otp" id="finalOtp">
+
+      <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
     </form>
-    
-    <p class="pt-3">Did not received the email? Check your spam filter, or <a href="#" class="text-decoration-none">Resend code</a></p>
+
+    <!-- Circular Timer -->
+    <div class="circle-wrapper">
+      <svg width="120" height="120">
+        <circle cx="60" cy="60" r="50" class="bg-circle"></circle>
+        <circle cx="60" cy="60" r="50" class="progress-circle" id="progressCircle"></circle>
+      </svg>
+      <div class="timer-text" id="timerText">60</div>
     </div>
+
+    <div>
+      <a href="/ResendOTP">Resend OTP</a>
     </div>
-    </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-  <script>
-  var msg="[[${msg}]]";
-  if(msg!=""){
-	  alert(msg);
-  }
-  </script>
-  </body>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const inputs = document.querySelectorAll(".otp-input");
+    const progressCircle = document.getElementById("progressCircle");
+    const timerText = document.getElementById("timerText");
+    const form = document.getElementById("otpForm");
+
+    const totalTime = 60;
+    const radius = 50;
+    const circumference = 2 * Math.PI * radius;
+
+    progressCircle.style.strokeDasharray = circumference;
+    progressCircle.style.strokeDashoffset = 0;
+
+    // OTP AUTO FOCUS
+    inputs.forEach((input, index) => {
+        input.addEventListener("input", function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length === 1 && index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        });
+        input.addEventListener("keydown", function(e) {
+            if (e.key === "Backspace" && this.value === "" && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+
+    // TIMER START
+    let timeLeft = totalTime;
+    const timer = setInterval(() => {
+        timeLeft--;
+        timerText.innerText = timeLeft;
+        const offset = circumference - (timeLeft / totalTime) * circumference;
+        progressCircle.style.strokeDashoffset = offset;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            Swal.fire({
+                icon: 'warning',
+                title: 'OTP Expired',
+                text: 'Please resend OTP',
+                background: '#1a2a6c',
+                color: 'white',
+                confirmButtonColor: '#fdbb2d'
+            });
+        }
+    }, 1000);
+
+    // FORM SUBMIT
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        let otpValue = "";
+        inputs.forEach(input => otpValue += input.value);
+        document.getElementById("finalOtp").value = otpValue;
+
+        if(otpValue.length < 6){
+            Swal.fire({
+                icon: 'error',
+                title: 'Incomplete OTP',
+                text: 'Please enter all 6 digits',
+                background: '#1a2a6c',
+                color: 'white',
+                confirmButtonColor: '#fdbb2d'
+            });
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Verifying...',
+                text: 'Please wait',
+                background: '#1a2a6c',
+                color: 'white',
+                timer: 1000,
+                showConfirmButton: false
+            }).then(() => {
+                form.submit();
+            });
+        }
+    });
+
+});
+</script>
+
+</body>
 </html>

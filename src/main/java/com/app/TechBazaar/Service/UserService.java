@@ -28,30 +28,35 @@ public class UserService {
 	}
 	
 	public void saveUserBuyer(UserDTO dto) {
-		Users buyer = new Users();
-		
-		//Data from Dto
-		buyer.setName(dto.getName());
-		buyer.setContactNo(dto.getContactNo());
-		buyer.setEmail(dto.getEmail());
-		buyer.setPassword(dto.getPassword());
-		buyer.setGender(dto.getGender());
-		
-		//Manual Data
-		buyer.setLoginStatus(LoginStatus.INACTIVE);
-		buyer.setUserRole(UserRole.BUYER);
-		buyer.setUserStatus(UserStatus.UNBLOCKED);
-		buyer.setRegDate(LocalDateTime.now());
-		
-		//OTP Verification  & Authentication
-		String otp = generateOTP();
-		buyer.setOtp(otp);
-		buyer.setExpiryTime(LocalDateTime.now().plusMinutes(5));
-		buyer.setVerified(false);
-		
-		userRepo.save(buyer);
-		emailService.sendRegistrationOTP(buyer, otp);
-		System.err.println(otp+ " OTP for email  "+buyer.getEmail());
+		try {
+			Users buyer = new Users();
+			
+			//Data from Dto
+			buyer.setName(dto.getName());
+			buyer.setContactNo(dto.getContactNo());
+			buyer.setEmail(dto.getEmail());
+			buyer.setPassword(dto.getPassword());
+			buyer.setGender(dto.getGender());
+			
+			//Manual Data
+			buyer.setLoginStatus(LoginStatus.INACTIVE);
+			buyer.setUserRole(UserRole.BUYER);
+			buyer.setUserStatus(UserStatus.UNBLOCKED);
+			buyer.setRegDate(LocalDateTime.now());
+			
+			//OTP Verification  & Authentication
+			String otp = generateOTP();
+			buyer.setOtp(otp);
+			buyer.setExpiryTime(LocalDateTime.now().plusMinutes(5));
+			buyer.setVerified(false);
+			
+			userRepo.save(buyer);
+			emailService.sendRegistrationOTP(buyer, otp);
+			System.err.println(otp+ " OTP for email  "+buyer.getEmail());
+		}catch(Exception e) {
+			System.err.println("Error from Service : "+e.getMessage());
+			throw new RuntimeException("Something Went Wrong, please try again later");
+			}
 	}
 	
 	public boolean verifyOTP(String email, String otp) throws Exception {
@@ -66,4 +71,18 @@ public class UserService {
 		return false;
 	
 	}
+	
+	public void ResendOTP(String email) {
+		
+		String otp = generateOTP();
+		Users user = userRepo.findByEmail(email);
+		user.setExpiryTime(LocalDateTime.now().plusMinutes(5));
+		user.setOtp(otp);
+		//System.err.println("New Resend Otp: "+otp);
+		emailService.sendRegistrationOTP(user, otp);
+		userRepo.save(user);
+		
+	}
+	
+	
 }

@@ -156,4 +156,92 @@
         .card-img:hover {
             border: 2px solid #008ecc;
         }
-
+ :root {
+            --primary-color: #008ecc;
+        }
+        body {
+            background-color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .hero {
+            background: linear-gradient(135deg, #008ecc, #00b4ff);
+            color: white;
+            padding: 100px 0;
+        }
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .icon-box {
+            border-radius: 16px;
+            padding: 35px 25px;
+            background: #f8fbfd;
+            transition: 0.3s;
+            height: 100%;
+        }
+        .icon-box:hover {
+            box-shadow: 0 15px 30px rgba(0, 142, 204, 0.2);
+            transform: translateY(-8px);
+            border:1px solid #008ecc;
+        }
+        .icon {
+            font-size: 42px;
+            color: var(--primary-color);
+        }
+        .stats {
+            background: #008ecc;
+            color: white;
+        }
+        
+        .stats h3 {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0076aa;
+        }
+        
+        footer {
+            background: #f1f6f9;
+        }
+        
+         .section-title { 
+         color: var(--primary-color);
+         font-weight: 700;
+         }
+         
+        .service-card { 
+        border-radius: 18px; 
+        background: #f8fbfd; 
+        padding: 35px 25px; 
+        height: 100%; 
+        transition: 0.35s; 
+        }
+        
+        .service-card:hover { transform: translateY(-10px); 
+        box-shadow: 0 18px 35px rgba(0,142,204,0.25);
+        border:2px solid #008ecc;
+         }
+        .service-icon { 
+        font-size: 46px; 
+        color: var(--primary-color);
+        }
+        .badge-custom { 
+        background: var(--primary-color); 
+        }
+        
+        .process-step { 
+        border-left: 4px solid var(--primary-color); 
+        padding-left: 20px; 
+        margin-bottom: 25px; 
+        }
+        .highlight { 
+        background: #008ecc; 
+        color: white; 
+        }
