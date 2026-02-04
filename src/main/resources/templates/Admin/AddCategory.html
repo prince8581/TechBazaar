@@ -1,0 +1,70 @@
+<html  th:replace="~{Admin/Adminbase::layout(~{::main})}">
+<body>
+<main>
+<div class="row">
+<div class="col-sm-6 mx-auto">
+<div class="card shadow">
+<div class="card-header bg-success py-3">
+<h5 class="text-center text-white m-0">Add Product Category</h5>
+</div>
+<div class="card-body px-4">
+<form action="" method="post">
+<div class="mt-3">
+<label>Enter Category Name</label>
+<input th:field="${dto.categoryName}" type="text" class="form-control" required placeholder="Category Name....">
+</div>
+<div class="mt-3">
+<label>Enter Description</label>
+<textarea th:field="${dto.description}" rows="" cols="" class="form-control" required placeholder="Description.."></textarea>
+</div>
+
+<div class="mt-4 text-center">
+<button type="submit"  class="btn btn-success">Add Category</button>
+</div>
+
+</form>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-sm-10  mx-auto">
+<div class="card shadow">
+<div class="card-header bg-success">
+<h5 class="text-center m-0 text-white">Manage Product Categories </h5>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-bordered">
+<thead>
+<tr >
+<th>Sr. No.</th>
+<th>Category Name</th>
+<th>Category Description</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+<tr th:each="cate,srno:${categories}">
+<td th:text="${srno.index+1}"></td>
+<td th:text="${cate. categoryName}"></td>
+<td th:text="${cate.description}"></td>
+<td>
+<a th:href="@{'CategoryStatus/'+${cate.id}}" onclick="return confirm('Are you sure want to update category status?')"  class="btn btn-sm fw-bold" th:classappend="${cate.active ? 'btn-success' : 'btn-danger'}"  th:text="${cate.active}"></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+</body>
+
+</html>

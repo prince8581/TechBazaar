@@ -1,0 +1,24 @@
+<html th:replace="~{Admin/Adminbase::layout(~{::main})}">
+<body>
+<main>
+<div class="row">
+<div class="col-sm-6 mx-auto">
+<div class="card shadow">
+<div class="card-header bg-primary">
+<h5 class="text-center text-white m-0">Update your Profile..</h5>
+</div>
+<div class="card-body">
+<div class="text-center p-4">
+<img style="height:250px; width:120px;"  class="rounded-circle border border-primary border-5 p-1 w-50" alt="image not found" th:src="@{${session.loggedInAdmin.profilePic!=null} ? '/ProfilePic/'+${session.loggedInAdmin.profilePic} : '../assets/img/profile2.jpg'}">
+</div>
+<form action="" method="post" enctype="multipart/form-data" class ="d-flex w-50 mx-auto">
+<input type="file" class="form-control border border-primary" name="profilePic">
+<button type="submit" class="btn btn-primary mx-3">Upload Pic</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body>
+</html>

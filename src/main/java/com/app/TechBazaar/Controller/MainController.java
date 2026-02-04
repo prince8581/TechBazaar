@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.app.TechBazaar.DTO.EnquiryDTO;
 import com.app.TechBazaar.DTO.UserDTO;
 import com.app.TechBazaar.Model.Users;
 import com.app.TechBazaar.Model.Users.UserRole;
 import com.app.TechBazaar.Model.Users.UserStatus;
+import com.app.TechBazaar.Repository.EnquiryRepository;
 import com.app.TechBazaar.Repository.UserRepository;
+import com.app.TechBazaar.Service.EnquiryService;
 import com.app.TechBazaar.Service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,7 +29,14 @@ public class MainController {
 	
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private EnquiryRepository enquiryRepo;
+	
+	@Autowired
+	private EnquiryService enquiryService;
 
+	
 	@GetMapping("/")
 	public String ShowIndex() {
 		return "index";
@@ -53,9 +63,19 @@ public class MainController {
 	}
 	
 	@GetMapping("/ContactUs")
-	public String ShowContactUs() {
+	public String ShowContactUs(Model model) {
+		model.addAttribute("dto", new EnquiryDTO());
 		return "/ContactUs";
 	}
+	
+	@PostMapping("/ContactUs")
+	public String ContactUs(@ModelAttribute("dto") EnquiryDTO dto, RedirectAttributes attributes, HttpSession session) {
+		
+		enquiryService.saveEnquiry(dto);
+		//attributes.addFlashAttribute("msg", "Your Enquiry has been Successfully Saved!");
+		return "redirect:/ContactUs";
+	}
+	
 	
 	@GetMapping("/Login")
 	public String ShowLogin(Model model) {
@@ -89,7 +109,7 @@ public class MainController {
 				}
 				else if(user.getUserRole().equals(UserRole.BUYER)) {
 					session.setAttribute("loggedInBuyer", user);
-					return "redirect:/Buyer/Dashboard";
+					return "redirect:/User/Dashboard";
 				}
 			}
 			else {
@@ -167,4 +187,29 @@ public class MainController {
 		}
 		return "redirect:/verify-otp";
 	}
+	
+	@GetMapping("BecomeSeller")
+	public String ShowSellerRegister(Model model){
+		model.addAttribute("dto", new UserDTO());
+		return "/BecomeSeller";
+		
+	}
+	
+	@PostMapping("/BecomeSeller")
+	public String SellerRegister(@ModelAttribute("dto") UserDTO dto, HttpSession session, RedirectAttributes attributes) {
+		
+		try {
+			if(userRepo.existsByEmailAndIsVerified(dto.getEmail(), true)) {
+				attributes.addFlashAttribute("msg", "User Already Exists");
+				return "redirect:/BecomeSeller";
+			}
+			userService.saveUserSeller(dto);
+			session.setAttribute("email", dto.getEmail());
+			return "redirect:/verify-otp";
+		}catch(Exception e) {
+			attributes.addFlashAttribute("msg", e.getMessage());
+			return "redirect:/BecomeSeller";
+		}
+	}
+
 }

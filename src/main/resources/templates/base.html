@@ -12,6 +12,40 @@
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="./css/style.css">
+        <style>
+/* Offcanvas Theme */
+.tech-offcanvas {
+    width: 260px;
+    background: #ffffff;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+}
+
+/* Menu Links */
+.menu-item {
+    display: block;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.menu-item:hover {
+    background: #008ecc;
+    color: #fff;
+    transform: translateX(5px);
+}
+
+/* Active Item */
+.menu-item.active {
+    background: #008ecc;
+    color: #fff;
+}
+</style>
+        
 </head>
 
 <body>
@@ -36,16 +70,45 @@
 
         <!--2nd row start-->
         <div class="row bg-white">
-            <div class="col-sm-4">
+        
+        <!-- Header -->
+<div class="col-sm-4 position-relative">
+    <div class="d-flex align-items-center p-3 mx-5">
+        <button class="btn btn-outline-primary btn-sm me-2"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#techOffcanvas">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <h4 class="text-primary mb-0 fw-bold">TechBazaar</h4>
+    </div>
+</div>
 
-                <div class="d-flex align-items-center p-3 mx-5" style="width: max-content; position: relative;">
+<!-- Offcanvas Menu -->
+<div class="offcanvas offcanvas-start tech-offcanvas" tabindex="-1" id="techOffcanvas">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title text-primary fw-bold">TechBazaar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body p-3">
+        <a href="/" class="menu-item active">🏠 Home</a>
+        <a href="/Orders" class="menu-item">📦 Orders</a>
+        <a href="/Products" class="menu-item">🛒 Products</a>
+        <a href="/Services" class="menu-item">🛠 Services</a>
+        <a href="/AboutUs" class="menu-item">ℹ About Us</a>
+        <a href="/ContactUs" class="menu-item">📞 Contact Us</a>
+    </div>
+</div>
+        
+            <!-- <div class="col-sm-4">
+             <div class="d-flex align-items-center p-3 mx-5" style="width: max-content; position: relative;">
                     <button class="btn btn-outline-primary btn-sm me-2" type="button" id="menuBtn">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                     <h4 class="text-primary mb-0">TechBazaar</h4>
                 </div>
 
-                <!-- Collapsible menu outside parent -->
+                <!-- Collapsible menu outside parent --
                 <div class="collapse position-absolute" id="techMenu" style="z-index: 1000;">
                     <div class="card card-body p-2" style="width: 200px;">
                         <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/" class="text-decoration-none text-light">Home</a></button>
@@ -57,7 +120,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div>-->
 
             <div class="col-sm-4">
                 <div class="input-group m-3 border border-info rounded-2">
@@ -67,6 +130,7 @@
                         aria-label="Amount (to the nearest dollar)">
                     <span class="input-group-text"><i class="fa-solid fa-bars text-info"></i></span>
                 </div>
+                
                 <!-- <div class="input-group m-3">
                     <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" class="form-control" placeholder="Search essentials" aria-label="Username"
@@ -118,7 +182,11 @@
             <div class="col-sm-10 mx-auto">
                 <div class="row pb-5">
                     <div class="col-sm-4">
-                        <h1 class="mt-5 text-light">TechBazaar</h1>
+                        <h2 class="mt-5 text-light fw-bold">TechBazaar</h2>
+                        <p class="small mt-2 text-light">
+                    Your one-stop destination for electronics & essentials.
+                </p>
+                
                         <h4 class="mt-4 text-light">Contact Us</h4>
                         <ul class="list-unstyled text-light">
                             <li><i class="fa-brands fa-whatsapp"></i> Whats App</li>
@@ -129,17 +197,16 @@
                         </ul>
                     </div>
                     <div class="col-sm-4">
-                        <h4 class="mt-5 text-light">Most Popular Categories</h4>
+                        <h4 class="mt-5 text-light">Quick Links</h4>
 
                         <ul class="text-light">
-                            <li>Cancellation & returns</li>
-                            <li>Terms of use</li>
-                            <li>security</li>
-                            <li>privacy</li>
-                            <li>sitemap</li>
-                            <li>Pyments</li>
+                            <li>About Us</li>
+                            <li>Terms of Use</li>
+                            <li>Security</li>
+                            <li>Privacy Policy</li>
+                            <li>Payments</li>
                             <li>shippings</li>
-                            <li>Cancellation and returns</li>
+                            <li>Cancellation and Returns</li>
                             <li>FAQ</li>
                         </ul>
                     </div>
@@ -147,15 +214,13 @@
                         <h4 class="mt-5 text-light">Customer Services</h4>
 
                         <ul class="text-light">
-                            <li>About Us</li>
-                            <li>Term And Conditions</li>
-                            <li>FAQ</li>
-                            <li>privacy Policy</li>
+                            <li>My Account</li>
+                            <li>Orders</li>
+                            <li>Help Center</li>
                             <li>E-Waste Policies</li>
-                            <li>Pyments</li>
-                            <li>shippings</li>
-                            <li>Cancellation and returns</li>
-                            <li>FAQ</li>
+                            <li>Return Policy</li>
+                            <li>Support</li>
+                            
                         </ul>
                     </div>
                 </div>

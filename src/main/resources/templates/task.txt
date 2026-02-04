@@ -1,0 +1,31 @@
+2-feb-2026
+
+1. 100 % compulasry seller registration
+2. Admin/Manage User(buyer) need to complete for tomorrow class 
+3. maxes you change password 100% should be completed
+4. Need to complete Admin/AddCategory-> data database me save hone chahiye->top Work
+5. (show Product Category on add category pages into table(srno, category name, description,active status(button)))
+6. complete Enquiry Module
+  a. create Enquiry model
+  b. create Enquiry Repository
+  c. Create EnquiryDto
+  d. Create EnquiryService
+  e. Complete form to controller logic the save into database
+  f. show the enquiry Data to admin  -->Enquiry Menu
+       Save Enquiry(Main Controller) | show Enquiry
+       
+       1. Id
+       2. name
+       3. contactNo
+       4. email
+       5. title
+       6. message
+       7. enquiryDate
+       ------------------
+       save ka logic nahi karana hai
+       
+       
+  1. Create update profile pic ----> Seller
+  2. Change Password --->Seller
+  3. 
+              
