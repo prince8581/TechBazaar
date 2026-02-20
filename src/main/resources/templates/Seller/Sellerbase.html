@@ -107,7 +107,7 @@
 									</div>
 								</li>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="EditProfile">
+								<a class="dropdown-item" th:href="@{/Seller/EditProfile(id=${session.loggedInSeller.id})}">
 									<i class="ti-user"></i> 
 									Edit Profile
 								</a>
@@ -118,7 +118,7 @@
 									Change Password
 								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="logout">
+								<a class="dropdown-item" href="/logout">
 									<i class="fa fa-power-off"></i> 
 									Logout
 								</a>
@@ -158,10 +158,17 @@
 						</a>
 					</li>
 					
+					<li class="nav-item" th:classappend="${active5}">
+						<a href="ManageOrders"> 
+							<i class="la la-fonticons"></i>
+							<p>Review & Feedbacks</p>
+						</a>
+					</li>
+					
 					<!-- <li class="nav-item" th:classappend="${active6}">
 						<a href="UserProfile"> 
 							<i class="la la-bullhorn"></i>
-							<p>View & Update Profile</p> 
+							<p>Review & Feedbacks</p> 
 							<!-- <span class="badge badge-success">3</span> --
 						</a>
 					</li>-->

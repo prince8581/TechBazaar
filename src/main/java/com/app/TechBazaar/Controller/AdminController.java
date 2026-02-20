@@ -228,12 +228,12 @@ public class AdminController {
 	}
 	
 	//Logout
-	@GetMapping("/logout")
-	public String Logout() {
-		
-		session.removeAttribute("loggedInAdmin");
-		return "redirect:/Login";
-	}
+//	@GetMapping("/logout")
+//	public String Logout() {
+//		
+//		session.removeAttribute("loggedInAdmin");
+//		return "redirect:/Login";
+//	}
 	
 	
 }

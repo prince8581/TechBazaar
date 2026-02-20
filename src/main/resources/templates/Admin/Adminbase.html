@@ -50,7 +50,7 @@
 						
 						<li class="nav-item dropdown">
 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> 
-							<img th:if="${session.loggedInAdmin.profilePic != null}" th:src="@{'/ProfilePic/'+${session.loggedInAdmin.profilePic}}" alt="user-img" width="36" class="img-circle">
+							<img th:if="${session.loggedInAdmin.profilePic != null}" th:src="@{'/ProfilePic/'+${session.loggedInAdmin.profilePic}}" alt="user-img"  class="img-circle" style="width:36px; height:42px;">
 							<img th:if="${session.loggedInAdmin.profilePic == null}" src="../assets/img/profile2.jpg" alt="user-img" width="36" class="img-circle">
 							
 							<span th:text="${session.loggedInAdmin.name}"></span>
@@ -80,7 +80,7 @@
 								<i class="ti-settings"></i>
 									Change Password</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="logout">
+								<a class="dropdown-item" href="/logout">
 								<i class="fa fa-power-off"></i> Logout</a>
 							</ul> <!-- /.dropdown-user --></li>
 					</ul>

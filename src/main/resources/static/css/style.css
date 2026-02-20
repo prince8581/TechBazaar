@@ -95,6 +95,9 @@
             border: 1px solid  #008ecc;
             background-color: #f3f9fb;
         }
+        .product-item.active{
+          background-color: #008ecc;
+        }
 
         .scroll-left {
             left: 5px;
@@ -120,7 +123,10 @@
             height: 150px;
 
         }
-
+.card-hover:hover{
+	border:1px solid #008ecc;
+	
+}
 /*.deal-line {
     width: 120px;
     height: 4px;
@@ -177,9 +183,7 @@
 }
 
 
- .card:hover {
-            border: 2px solid #0dcaf0;
-        }
+ 
 
         .line1 {
             height: 2px;
@@ -200,6 +204,11 @@
             height: 2px;
             width: 120px;
             background-color: #008ecc;
+        }
+        .line6{
+        height:2px;
+        width:275px;
+        background-color: #008ecc;
         }
 
         .card-img {
@@ -377,4 +386,71 @@
 
 .brand-card:hover img {
     filter: grayscale(0%);
+}
+
+/*Why Shop With TechBazaar*/
+.feature-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.feature-card i {
+    font-size: 30px;
+    color: #0dcaf0;
+    margin-bottom: 12px;
+}
+
+.feature-card h6 {
+    font-weight: 600;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+}
+
+/*Trending Gadgets*/
+.trend-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.trend-card img {
+    height: 160px;
+    object-fit: contain;
+    padding: 15px;
+}
+
+.trend-card:hover {
+    transform: translateY(-6px);
+}
+
+/*Sller banner*/
+.seller-banner{
+    background: linear-gradient(135deg, #0dcaf0, #0a58ca);
+}
+
+.seller-img{
+    max-height: 200px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%{ transform: translateY(0px); }
+    50%{ transform: translateY(-8px); }
+    100%{ transform: translateY(0px); }
+}
+/**/
+
+.product-img {
+    height: 140px;
+    object-fit: cover;
+}
+
+.price {
+    font-weight: 600;
 }

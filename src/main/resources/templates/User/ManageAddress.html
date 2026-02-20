@@ -1,0 +1,213 @@
+<html th:replace="~{base::layout(~{::main})}">
+<head></head>
+<body>
+<main>
+<div class="col-sm-10 mx-auto">
+
+
+<form action="/User/ManageAddress" method="post" class="card shadow p-4" th:object="${dto}">
+
+  <h5 class="fw-bold mb-3 text-primary">
+    <i class="fa-solid fa-location-dot me-2"></i>Add New Address
+  </h5>
+
+  <div class="row g-3">
+
+    <!-- Full Name -->
+    <div class="col-md-6">
+      <label class="form-label">Full Name</label>
+      <input th:field="${dto.name}" type="text" name="name" class="form-control" placeholder="Enter full name" required>
+    </div>
+
+    <!-- Contact No -->
+    <div class="col-md-6">
+      <label class="form-label">Contact Number</label>
+      <input th:field="${dto.contactNo}" type="number" name="contactNo" class="form-control" placeholder="10-digit mobile number" required>
+    </div>
+
+    <!-- Pincode -->
+    <div class="col-md-4">
+      <label class="form-label">Pincode</label>
+      <input th:field="${dto.pincode}" type="number" name="pincode" class="form-control" placeholder="Pincode" required>
+    </div>
+
+    <!-- Locality -->
+    <div class="col-md-4">
+      <label class="form-label">Locality</label>
+      <input th:field="${dto.locality}" type="text" name="locality" class="form-control" placeholder="Locality">
+    </div>
+
+    <!-- City / District -->
+    <div class="col-md-4">
+      <label class="form-label">City / District</label>
+      <input th:field="${dto.cityDistrict}" type="text" name="cityDistrict" class="form-control" placeholder="City or District" required>
+    </div>
+
+    <!-- Address -->
+    <div class="col-12">
+      <label class="form-label">Full Address</label>
+      <textarea th:field="${dto.address}" name="address" class="form-control" rows="2"
+        placeholder="House No, Building, Street, Area" required></textarea>
+    </div>
+
+<!-- State -->
+<div class="col-md-6">
+  <label class="form-label">State</label>
+
+  <select th:field="${dto.state}" name="state" class="form-select" required>
+    <option value="">---Select State---</option>
+
+    <option value="Andhra Pradesh">Andhra Pradesh</option>
+    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+    <option value="Assam">Assam</option>
+    <option value="Bihar">Bihar</option>
+    <option value="Chhattisgarh">Chhattisgarh</option>
+    <option value="Delhi">Delhi</option>
+    <option value="Goa">Goa</option>
+    <option value="Gujarat">Gujarat</option>
+    <option value="Haryana">Haryana</option>
+    <option value="Himachal Pradesh">Himachal Pradesh</option>
+    <option value="Jharkhand">Jharkhand</option>
+    <option value="Karnataka">Karnataka</option>
+    <option value="Kerala">Kerala</option>
+    <option value="Madhya Pradesh">Madhya Pradesh</option>
+    <option value="Maharashtra">Maharashtra</option>
+    <option value="Odisha">Odisha</option>
+    <option value="Punjab">Punjab</option>
+    <option value="Rajasthan">Rajasthan</option>
+    <option value="Tamil Nadu">Tamil Nadu</option>
+    <option value="Telangana">Telangana</option>
+    <option value="Uttar Pradesh">Uttar Pradesh</option>
+    <option value="Uttarakhand">Uttarakhand</option>
+    <option value="West Bengal">West Bengal</option>
+  </select>
+</div>
+
+    <!-- Landmark -->
+    <div class="col-md-6">
+      <label class="form-label">Landmark (Optional)</label>
+      <input th:field="${dto.landmark}" type="text" name="landmark" class="form-control" placeholder="Nearby landmark">
+    </div>
+
+    <!-- Alternate Contact -->
+    <div class="col-md-6">
+      <label class="form-label">Alternate Contact (Optional)</label>
+      <input th:field="${dto.altContactNo}" type="number" name="altContactNo" class="form-control" placeholder="Alternate mobile number">
+    </div>
+
+    <!-- Address Type -->
+    <div class="col-md-6">
+      <label class="form-label">Address Type</label>
+      <select th:field="${dto.addressType}" name="addressType" class="form-select" required>
+        <option value="">---Select---</option>
+        <option value="Home">Home</option>
+        <option value="Work">Work</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-4 d-flex gap-2">
+    <button type="submit" class="btn btn-primary px-4" onclick="return confirm('Are you sure want to save Address?')">
+      <i class="fa-solid fa-floppy-disk me-1"></i>Save Address
+    </button>
+    <button type="reset" class="btn btn-outline-secondary">
+      Cancel
+    </button>
+  </div>
+
+</form>
+
+</div>
+
+<!-- Save Address Data from database to in this page -->
+
+<div class="col-sm-10 mx-auto mb-5">
+<!-- Saved Addresses -->
+<div class="mt-5">
+
+  <h5 class="fw-bold mb-3">
+    <i class="fa-solid fa-address-book me-2 text-info"></i>
+    Saved Addresses
+  </h5>
+
+  <div class="row g-3">
+
+    <div class="col-md-6"
+         th:each="addr : ${savedAddress}">
+
+      <div class="card shadow-sm h-100">
+
+        <div class="card-body">
+
+          <!-- Name + Type -->
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold mb-0" th:text="${addr.name}">User Name</h6>
+
+            <span class="badge bg-info text-dark"
+                  th:text="${addr.addressType}">
+              Home
+            </span>
+          </div>
+
+          <hr class="my-2">
+
+          <!-- Address -->
+          <p class="mb-1 small">
+            <i class="fa-solid fa-location-dot me-1 text-danger"></i>
+            <span th:text="${addr.address}"></span>,
+            <span th:text="${addr.locality}"></span>,
+            <span th:text="${addr.cityDistrict}"></span>,
+            <span th:text="${addr.state}"></span> -
+            <b th:text="${addr.pincode}"></b>
+          </p>
+
+          <!-- Contact -->
+          <p class="mb-1 small">
+            <i class="fa-solid fa-phone me-1 text-success"></i>
+            <span th:text="${addr.contactNo}"></span>
+          </p>
+
+          <p class="mb-1 small" th:if="${addr.altContactNo != null}">
+            <i class="fa-solid fa-phone-volume me-1 text-secondary"></i>
+            <span th:text="${addr.altContactNo}"></span>
+          </p>
+
+          <!-- Landmark -->
+          <p class="mb-2 small text-muted" th:if="${addr.landmark != null}">
+            Landmark: <span th:text="${addr.landmark}"></span>
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="d-flex justify-content-end gap-2 mt-2">
+
+            <a th:href="@{/User/EditAddress/{id}(id=${addr.id})}"
+               class="btn btn-sm btn-outline-primary">
+              <i class="fa-solid fa-pen"></i> Edit
+            </a>
+
+            <a th:href="@{/User/DeleteAddress/{id}(id=${addr.id})}"
+               class="btn btn-sm btn-outline-danger"
+               onclick="return confirm('Are you sure?')">
+              <i class="fa-solid fa-trash"></i> Delete
+            </a>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+
+
+
+</main>
+</body>
+</html>

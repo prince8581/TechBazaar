@@ -1,8 +1,258 @@
-<html  th:replace="~{Seller/Sellerbase::layout(~{::main})}">
+<!DOCTYPE html>
+<html lang="en" th:replace="~{Seller/Sellerbase::layout(~{::main})}">
 <body>
-<main>
-<h1>This is Add Product Page...</h1>
-</main>
-</body>
 
+<main class="container-fluid mt-3">
+
+<form  th:object="${productDto}" method="post" class="bg-white p-3 rounded shadow-sm" enctype="multipart/form-data">
+
+    <!-- ================= BASIC DETAILS ================= -->
+    <h6 class="text-primary mb-2">Basic Details</h6>
+
+    <div class="row g-2">
+        <div class="col-md-4">
+            <label class="form-label">Product Name</label>
+            <input type="text" class="form-control" placeholder="Enter product name" th:field="*{productName}" required>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Brand Name</label>
+            <input type="text" class="form-control" placeholder="Brand" th:field="*{brandName}">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Category</label>
+            <select class="form-control" th:field="*{category}">
+                <option value="">Select category</option>
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.categoryName }"></option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Stock</label>
+            <input type="number" class="form-control" placeholder="Qty" th:field="*{quantityAvailable}">
+        </div>
+    </div>
+
+    <div class="mt-2">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" rows="2" placeholder="Short product description" th:field="*{productDescription}"></textarea>
+    </div>
+
+    <!-- ================= PRICING ================= -->
+    <h6 class="text-primary mt-3 mb-2">Pricing</h6>
+
+    <div class="row g-2">
+        <div class="col-md-3">
+            <label class="form-label">Price Per Unit</label>
+            <input type="number" class="form-control" id="pricePerUnit" placeholder="Price" th:field="*{pricePerUnit}">
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Discount (%)</label>
+            <input type="number" class="form-control" id="discount" placeholder="%" th:field="*{discount}">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Final Price</label>
+            <input type="number" class="form-control bg-light" id="finalPrice" placeholder="Auto calculated" th:field="*{finalPrice}"  readonly>
+        </div>
+    </div>
+
+    <!-- ================= WARRANTY ================= -->
+    <h6 class="text-primary mt-3 mb-2">Warranty</h6>
+
+    <div class="row g-2 align-items-end">
+        <div class="col-md-2">
+            <label class="form-label d-block">Warranty</label>
+            <label class="form-check-label">
+                <input class="form-check-input task-select" type="checkbox" id="warrantyCheckbox" name="warranty">
+                <span class="form-check-sign"></span>
+            </label>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Warranty Duration</label>
+            <input type="number" class="form-control warranty-field" placeholder="Number" th:field="*{warrantyDuration}" disabled>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Warranty Unit</label>
+            <select class="form-control warranty-field"
+                 th:field="*{warrantyUnit}"
+                    disabled>
+                <option value="">Select</option>
+                <option value="DAYS">Days</option>
+                <option value="MONTHS">Months</option>
+                <option value="YEARS">Years</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Warranty Terms</label>
+            <input type="text"
+                   class="form-control warranty-field"
+                   placeholder="Warranty conditions"
+                   th:field="*{warrantyTerms}"
+                   disabled>
+        </div>
+    </div>
+
+    <!-- ================= POLICIES ================= -->
+    <h6 class="text-primary mt-3 mb-2">Policies</h6>
+
+    <div class="row g-2 align-items-end">
+        <div class="col-md-2">
+            <div class="form-check">
+            	<label class="form-label d-block">Return</label>
+	            <label class="form-check-label">
+				    <input class="form-check-input task-select"
+				           type="checkbox"
+				           id="returnCheckbox"
+				           name="returnAvailable">
+				    <span class="form-check-sign"></span>
+				</label>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Return Days</label>
+            <input type="number"
+		       class="form-control return-field"
+		       placeholder="Return Days"
+		       th:field="*{returnDays}"
+		       disabled>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Return Conditions</label>	            
+			<input type="text"
+			       class="form-control return-field"
+			       placeholder="Return Conditions"
+			       th:field="*{returnConditions}"
+			       disabled>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label d-block">Cancellation</label>
+            <label class="form-check-label">
+			    <input class="form-check-input task-select"
+			           type="checkbox"
+			           
+			           name="cancellationAllowed">
+			    <span class="form-check-sign"></span>
+			</label>
+        </div>
+    </div>
+
+    <!-- ================= SHIPPING ================= -->
+    <h6 class="text-primary mt-3 mb-2">Shipping</h6>
+
+    <div class="row g-2 align-items-end">
+        <div class="col-md-2">
+            <label class="form-label">Type</label>
+            <select class="form-control" th:field="*{shippingType}">
+                <option value="">Select</option>
+                <option value="FREE">Free</option>
+                <option value="PAID">Paid</option>
+                <option value="EXPRESS">Express</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Charge</label>
+            <input type="number" class="form-control"
+                   placeholder="₹"
+                   th:field="*{shippingCharge}">
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Min Days</label>
+            <input type="number" class="form-control" placeholder="Min" th:field="*{minDeliveryDays}">
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Max Days</label>
+            <input type="number" class="form-control" placeholder="Max" th:field="*{maxDeliveryDays}">
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label d-block">COD</label>
+            <label class="form-check-label">
+                <input class="form-check-input task-select" type="checkbox" name="codAvailable">
+                <span class="form-check-sign"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- ================= IMAGES ================= -->
+    <h6 class="text-primary mt-3 mb-2">Product Images</h6>
+
+    <label class="form-label">Upload Images</label>
+    <input type="file" class="form-control" name="productMultiImages" multiple accept="image/*">
+
+    <!-- ================= SUBMIT ================= -->
+    <div class="text-end mt-3">
+        <button type="submit" class="btn btn-primary px-4"> Save Product </button>
+    </div>
+
+</form>
+
+<!-- ================= JS ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const warrantyCheckbox = document.getElementById("warrantyCheckbox");
+    const warrantyFields = document.querySelectorAll(".warranty-field");
+
+    function toggleWarranty() {
+        warrantyFields.forEach(f => f.disabled = !warrantyCheckbox.checked);
+    }
+    warrantyCheckbox.addEventListener("change", toggleWarranty);
+    toggleWarranty();
+
+    const price = document.getElementById("pricePerUnit");
+    const discount = document.getElementById("discount");
+    const finalPrice = document.getElementById("finalPrice");
+
+    function calculate() {
+        const p = parseFloat(price.value) || 0;
+        const d = parseFloat(discount.value) || 0;
+        finalPrice.value = (p - (p * d / 100)).toFixed(2);
+    }
+    price.addEventListener("input", calculate);
+    discount.addEventListener("input", calculate);
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ================= RETURN LOGIC ================= */
+    const returnCheckbox = document.getElementById("returnCheckbox");
+    const returnFields = document.querySelectorAll(".return-field");
+    const cancellationCheckbox = document.getElementById("cancellationCheckbox");
+
+    function toggleReturnFields() {
+        const enabled = returnCheckbox.checked;
+
+        returnFields.forEach(field => {
+            field.disabled = !enabled;
+            if (!enabled) field.value = "";
+        });
+
+        // Cancellation depends on Return
+        cancellationCheckbox.disabled = !enabled;
+        if (!enabled) cancellationCheckbox.checked = false;
+    }
+
+    returnCheckbox.addEventListener("change", toggleReturnFields);
+    toggleReturnFields(); // run on load
+
+});
+</script>
+
+</main>
+
+</body>
 </html>

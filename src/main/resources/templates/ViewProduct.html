@@ -1,0 +1,273 @@
+<html th:replace=~{base::layout(~{::main})}>
+<body>
+	<main>
+<style>
+
+body{
+background:#f5f7fa;
+}
+
+/* card hover */
+.card{
+transition:.3s;
+border-radius:18px;
+}
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* thumbnails */
+.thumb{
+height:65px;
+width:65px;
+object-fit:cover;
+border-radius:10px;
+border:2px solid #eee;
+cursor:pointer;
+transition:.3s;
+}
+.thumb:hover{
+transform:scale(1.07);
+border-color:#0d6efd;
+}
+
+/* main image */
+#mainImage{
+max-height:320px;
+object-fit:contain;
+border-radius:12px;
+}
+
+</style>
+</head>
+<body>
+
+
+<div class="container mt-5 mb-5">
+
+<div class="row g-4">
+
+<!-- ================= LEFT CARD ================= -->
+<div class="col-lg-4">
+
+<div class="card border-0 shadow p-3 h-100 text-center">
+
+<img id="mainImage"
+     class="img-fluid mb-3"
+     th:src="@{'/ProductImages/'+${product.productImages[0]}}">
+
+<!-- thumbnails -->
+<div class="d-flex flex-wrap justify-content-center gap-2">
+
+<img th:each="img : ${product.productImages}"
+     th:src="@{'/ProductImages/'+${img}}"
+     class="thumb"
+     onclick="changeImage(this)">
+
+</div>
+
+</div>
+</div>
+
+
+
+<!-- ================= MIDDLE CARD ================= -->
+<div class="col-lg-5">
+
+<div class="card border-0 shadow p-4 h-100">
+
+<h4 class="fw-bold mb-2" th:text="${product.productName}"></h4>
+
+<p class="text-muted mb-1">
+Brand: <b th:text="${product.brandName}"></b>
+</p>
+
+<p class="text-muted">
+Seller: <b th:text="${product.seller.name}"></b>
+</p>
+
+<!-- stock -->
+<span class="badge bg-success"
+      th:if="${product.status.name()=='AVAILABLE'}">
+In Stock
+</span>
+
+<span class="badge bg-danger"
+      th:if="${product.status.name()=='OUT_OF_STOCK'}">
+Out of Stock
+</span>
+
+<hr>
+
+<!-- description -->
+<p class="text-secondary"
+   th:text="${product.productDescription}"></p>
+
+
+
+<!-- warranty -->
+<div class="mt-4" th:if="${product.warranty}">
+<h6 class="fw-bold">Warranty</h6>
+
+<p class="mb-1">
+<span th:text="${product.warrantyDuration}"></span>
+<span th:text="${product.warrantyUnit}"></span>
+</p>
+
+<small th:text="${product.warrantyTerms}"></small>
+</div>
+
+
+
+<!-- return -->
+<div class="mt-4" th:if="${product.returnAvailable}">
+<h6 class="fw-bold">Return Policy</h6>
+
+<p>
+Return in <b th:text="${product.returnDays}"></b> days
+</p>
+
+<small th:text="${product.returnConditions}"></small>
+</div>
+
+</div>
+</div>
+
+
+
+
+<!-- ================= RIGHT CARD ================= -->
+<div class="col-lg-3">
+
+<div class="card border-0 shadow p-4 h-100">
+
+<!-- price -->
+<div class="mb-3">
+
+<span class="fs-3 fw-bold">
+₹ <span th:text="${product.finalPrice}"></span>
+</span>
+
+<del class="ms-2 text-muted">
+₹ <span th:text="${product.pricePerUnit}"></span>
+</del>
+
+<span class="badge bg-success ms-2"
+      th:text="${product.discount + '% OFF'}"></span>
+
+</div>
+
+
+<!-- COD -->
+<p class="text-success fw-semibold"
+   th:if="${product.codAvailable}">
+✔ Cash on Delivery Available
+</p>
+
+
+
+<!-- buttons -->
+<div class="d-grid gap-2 mt-3">
+
+<button class="btn btn-warning fw-bold py-2"
+        th:onclick="addToCart('[[${product.id}]]')">
+Add to Cart
+</button>
+
+<button class="btn btn-danger fw-bold py-2"
+        th:onclick="buyNow([[${product.id}]])">
+Buy Now
+</button>
+
+</div>
+
+
+
+<!-- delivery -->
+<div class="mt-4 border rounded p-3 bg-light small">
+
+<p class="mb-1">
+🚚 Delivery:
+<b>
+<span th:text="${product.minDeliveryDays}"></span> –
+<span th:text="${product.maxDeliveryDays}"></span> days
+</b>
+</p>
+
+<p class="mb-1">
+Shipping: <b th:text="${product.shippingType}"></b>
+</p>
+
+<p th:if="${product.shippingCharge>0}">
+Charge: ₹ <span th:text="${product.shippingCharge}"></span>
+</p>
+
+<p th:if="${product.shippingCharge==0}" class="text-success">
+Free Shipping
+</p>
+
+</div>
+
+
+
+<!-- cancellation -->
+<div class="mt-4">
+
+<h6 class="fw-bold">Cancellation</h6>
+
+<span class="badge bg-success"
+      th:if="${product.cancellationAllowed}">
+Allowed
+</span>
+
+<span class="badge bg-danger"
+      th:unless="${product.cancellationAllowed}">
+Not Allowed
+</span>
+
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+
+	
+	
+	
+	
+		
+	<!-- Java Script code start -->
+	
+<script type="text/javascript">
+
+function changeImage(element){
+	document.getElementById("mainImage").src = element.src;
+	}
+	
+
+function addToCart(productId){
+	fetch('/product/addToCart/'+productId,{
+		method : 'POST'
+	} )
+	.then(res=> res.json())
+	.then(data => {
+		alert(data.message);
+		document.getElementById("cartItemCount").innerText = data.count;
+	})
+	.catch(err => {
+		console.log(err);
+	});
+}
+
+//Buy Now
+function buyNow(productId){
+	window.location.href= "/checkout?productId="+ productId + "&qty=1";
+}
+</script>
+	</main>
+</body>
+</html>

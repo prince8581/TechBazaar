@@ -213,4 +213,29 @@ public class UserService {
          userRepo.save(user);		
 	}
 	
+	//Update Seller Edit Profile
+	public void updateEditProfile(Users seller, MultipartFile profileImage) throws IOException  {
+		Users existUsers = userRepo.findById(seller.getId()).orElseThrow();
+		
+		//Delete Existing profilepic from source
+		if(existUsers.getProfilePic() != null && !existUsers.getProfilePic().isEmpty()) {
+			Path filePath = Paths.get(uploadDir+existUsers.getProfilePic());
+			Files.deleteIfExists(filePath);
+		}
+		
+		String storageFileName = UUID.randomUUID()+"_"+profileImage.getOriginalFilename();
+		Files.copy(profileImage.getInputStream(), Paths.get(uploadDir+storageFileName), StandardCopyOption.REPLACE_EXISTING);
+		
+		existUsers.setName(seller.getName());
+		existUsers.setContactNo(seller.getContactNo());
+		existUsers.setPanCard(seller.getPanCard());
+		existUsers.setAadharNo(seller.getAadharNo());
+		existUsers.setGstNo(seller.getGstNo());
+		existUsers.setAddress(seller.getAddress());
+		existUsers.setProfilePic(storageFileName);
+		
+		userRepo.save(existUsers);
+		
+	}
+	
 }

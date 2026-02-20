@@ -1,14 +1,244 @@
-
 <html th:replace="~{base::layout(~{::main})}">
- <body>
- 
-    <main>
-    <div class="row">
-     <h1 class="py-5 bg-danger">This is Products Page</h1>
-     
-    </div>
-   
-    
-    </main>
-  </body>
+<body>
+<main>
+
+<style>
+
+/* PAGE BACKGROUND */
+body{
+  background:linear-gradient(180deg,#eef5ff,#e6f0ff);
+}
+
+
+/* MAIN WRAPPER */
+.product-wrapper{
+  background:#ffffffcc;
+  backdrop-filter:blur(8px);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 10px 40px rgba(0,0,0,.08);
+}
+
+
+/* CATEGORY BAR */
+.product-scroll{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+.product-item{
+  border-radius:40px;
+  padding:8px 20px;
+  font-size:18px;
+  border:none;
+  background:#e9f1ff;
+  color:#2563eb;
+  font-weight:500;
+  transition:.3s;
+}
+.product-item:hover{
+  background:#2563eb;
+  color:white;
+}
+.product-item.active{
+  background:#2563eb;
+  color:white;
+}
+
+
+/* CARD */
+.product-card{
+  border:none;
+  border-radius:16px;
+  overflow:hidden;
+  background:white;
+  transition:.3s;
+  position:relative;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+.product-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 12px 28px rgba(0,0,0,.15);
+}
+
+
+/* IMAGE BOX */
+.img-box{
+  height:170px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+.product-img{
+  max-height:100%;
+  transition:.3s;
+}
+.product-card:hover .product-img{
+  transform:scale(1.05);
+}
+
+
+/* TITLE */
+.product-title{
+  font-size:18px;
+  font-weight:600;
+  min-height:40px;
+  color:#111827;
+}
+
+
+/* PRICE */
+.price{
+  font-size:18px;
+  font-weight:700;
+}
+.old-price{
+  font-size:15px;
+  color:#9ca3af;
+  text-decoration:line-through;
+}
+
+
+/* DISCOUNT */
+.discount{
+  color:#16a34a;
+  font-weight:600;
+  font-size:15px;
+}
+
+
+/* WISHLIST */
+.wishlist{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:white;
+  height:34px;
+  width:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.2);
+  cursor:pointer;
+  transition:.3s;
+}
+.wishlist:hover{
+  background:#fee2e2;
+  color:#ef4444;
+}
+
+
+/* RATING */
+.rating{
+  font-size:14px;
+  color:#f59e0b;
+}
+
+
+/* DELIVERY */
+.delivery{
+  font-size:15px;
+  color:#6b7280;
+}
+
+</style>
+
+
+
+<div class="col-sm-11 mx-auto mt-4 product-wrapper mb-5">
+
+<!-- CATEGORY FILTER -->
+<div class="product-scroll mb-4">
+
+  <a th:href="@{/Products}"
+     class="btn product-item"
+     th:classappend="${selectedCategory == null ? 'active':''}">
+     All
+  </a>
+
+  <a th:each="cate:${categories}"
+     th:href="@{'/Products/'+${cate.categoryName}}"
+     th:text="${cate.categoryName}"
+     class="btn product-item"
+     th:classappend="${cate.categoryName == selectedCategory ? 'active':''}">
+  </a>
+
+</div>
+
+
+
+<!-- PRODUCT GRID -->
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-4 col-sm-6"
+     th:each="product:${products}">
+
+<a th:href="@{/ViewProduct/{name}/{id}(name=${product.productName},id=${product.id})}"
+   class="text-decoration-none text-dark">
+
+<div class="card product-card h-100">
+
+<!-- Wishlist -->
+<div class="wishlist">
+<i class="fa-regular fa-heart"></i>
+</div>
+
+<!-- Image -->
+<div class="img-box">
+<img th:src="@{'/ProductImages/'+${product.productImages[0]}}" class="product-img">
+</div>
+
+<div class="card-body d-flex flex-column">
+
+<h6 class="product-title"
+    th:text="${product.productName}"></h6>
+
+<h6 class="text-muted  mb-1"
+   th:text="${product.brandName}"></h6>
+
+<!-- Rating -->
+<div class="rating mb-1">
+★★★★☆ <span class="text-muted">(124)</span>
+</div>
+
+<!-- Price -->
+<div class="mb-1">
+<span class="price">₹ <span th:text="${product.finalPrice}"></span></span>
+
+<span class="old-price ms-2"
+      th:if="${product.discount>0}">
+₹ <span th:text="${product.pricePerUnit}"></span>
+</span>
+
+<span class="discount ms-2"
+      th:if="${product.discount>0}"
+      th:text="${product.discount} + '% off'"></span>
+</div>
+
+<!-- Offer line -->
+<div class="delivery mb-2">
+Or Pay ₹<span th:text="${product.finalPrice - 30}"></span> + ⚡ 15
+</div>
+
+<!-- Delivery -->
+<div class="delivery mb-2">
+Delivery in
+<span th:text="${product.minDeliveryDays}"></span>–
+<span th:text="${product.maxDeliveryDays}"></span> days
+</div>
+
+</div>
+</div>
+
+</a>
+</div>
+
+</div>
+</div>
+
+</main>
+</body>
 </html>

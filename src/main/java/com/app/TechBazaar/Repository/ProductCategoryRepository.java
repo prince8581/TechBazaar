@@ -10,4 +10,6 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 
 	boolean existsByCategoryName(String categoryName);
 
+	ProductCategory findByCategoryName(String selectedCategory);
+
 }

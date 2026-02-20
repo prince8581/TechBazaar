@@ -28,4 +28,20 @@
   1. Create update profile pic ----> Seller
   2. Change Password --->Seller
   3. 
-              
+  -------------------------------------
+  
+  User
+  1. create view profile page
+  2. complete change password logic
+  3. card ban 5 cards
+        
+        
+  ==========================================
+  18-02-2026
+  1. complete all pages--> home, About, Contact, Orders, Products, ViewProduct
+  2. complete My orders pages
+  3. Apply String formatting with Abbreviate ------ for manage orders(seller)
+  4. My Order page----->Card -----> Anchor tag ----> Order Tracking      
+  5. complete change password ---> Admin, Seller,User
+  6. Edit User -- > By User ----- Edit Profile
+  

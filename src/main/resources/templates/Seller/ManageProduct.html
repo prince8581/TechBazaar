@@ -1,7 +1,92 @@
 <html  th:replace="~{Seller/Sellerbase::layout(~{::main})}">
 <body>
 <main>
-<h1>This is Manage Product Page...</h1>
+<div class="row">
+<div class="col-sm-12 ">
+<div class="card shadow">
+<div class="card-header bg-primary">
+<h4 class="text-center m-0 text-white">Manage your Products</h4>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-bordered" id="example">
+<thead>
+<tr >
+<th>Sr. No.</th>
+<th>Product Image</th>
+<th>Product Name</th>
+<th>Description</th>
+<th>Brand Name</th>
+<th>Category</th>
+<th>Price </th>
+<th>Discount</th>
+<th>Final Price</th>
+<th>Stock Available</th>
+<th>Status</th>
+<th>COD</th>
+<th>Cancellation</th>
+<th>Shipping</th>
+<th>Shipping Charge</th>
+<th>Delivery Time</th>
+<th>Return Days</th>
+<th>Return Conditions</th>
+<th>Warranty</th>
+<th>Warranty Duration</th>
+<th>Warranty Terms</th>
+<th>Listed At</th>
+<th>Updated At</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+<tr th:each="product, srno : ${products}">
+<td th:text="${srno.index+1}"></td>
+<td>
+<img alt="image not found" th:each="img : ${product.productImages}" th:src="@{'/ProductImages/'+${img}}" width="50px" height="50px" class="p-1 border border-danger m-1">
+</td>
+<td th:text="${product.productName}"></td>
+<td  th:text="${product.productDescription}"></td>
+<td  th:text="${product.brandName}"></td>
+<td  th:text="${product.category.categoryName}"></td>
+<td  th:text="${'₹.'+product.pricePerUnit}"></td>
+<td  th:text="${product.discount+'%'}"></td>
+<td  th:text="${'₹'+product.finalPrice}"></td>
+<td  th:text="${product.quantityAvailable+'Pcs.'}"></td>
+<!-- <td>
+<span class="badge" th:text="${product.status}" th:classappend="${product.status.name()=='Available'}?'bg-success' : 'bg-danger'">asbc</span>
+</td>-->
+<td>
+    <span class="badge"
+          th:text="${product.status}"
+          th:classappend="${product.status.name() == 'AVAILABLE'} ? ' bg-success' : ' bg-danger'">
+    </span>
+</td>
+
+<td  th:text="${product.codAvailable ? 'Yes' : 'No'}"></td>
+<td  th:text="${product.cancellationAllowed ? 'yes' : 'No'}"></td>
+<td  th:text="${product.shippingType}"></td>
+<td  th:text="${'Rs.'+product.shippingCharge}"></td>
+<td  th:text="${product.minDeliveryDays+' - ' +product.maxDeliveryDays+' Days'}"></td>
+<td  th:text="${product.returnDays+ ' Days'}"></td>
+<td  th:text="${product.returnConditions!=null ? product.returnConditions: 'No Return Allowed'}"></td>
+<td  th:text="${product.warranty ? 'Available' : 'NA'}"></td>
+<td  th:text="${product.warranty ? product.warrantyDuration + ' '+ product.warrantyUnit : 'NA'}"></td>
+<td  th:text="${product.warranty ? product.warrantyTerms : 'NA'}"></td>
+<td  th:text="${#temporals.format(product.createdAt, 'dd-MM-yyyy')}"></td>
+<td  th:text="${#temporals.format(product.updatedAt, 'dd-MM-yyyy')}"></td>
+<td>
+<a th:href="@{'ProductVisibility/'+${product.id}}" class="btn btn-sm" onclick="return confirm('Are you sure want to Change Visibility?')" th:classappend="${product.visibility ? 'btn-success' : 'btn-danger'}" th:text="${product.visibility ? 'Visible' : 'hidden'}">Visibility</a>
+<a href="#" onclick="return confirm('Are you sure want to delete?')" class="btn btn-primary btn-sm">Update</a></td>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
 </main>
 </body>
 
