@@ -1,9 +1,213 @@
-<html th:replace="~{base::layout(~{::main})}">
-<head></head>
-<body>
-<main>
-<h1> user Profile</h1>
-</main>
-
-</body>
-</html>
+	<html th:replace="~{Base::layout(~{::main})}">
+	<body>
+	<main class="bg-light py-4">
+	
+	<style>
+	/* Wrapper */
+	.profile-wrapper {
+	    background: #fff;
+	    border-radius: 6px;
+	}
+	
+	/* Sidebar */
+	.profile-sidebar {
+	    border-right: 1px solid #e5e7eb;
+	    padding: 20px;
+	}
+	
+	.user-box {
+	    display: flex;
+	    align-items: center;
+	    gap: 12px;
+	    margin-bottom: 25px;
+	}
+	
+	.user-box img {
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 50%;
+	}
+	
+	.user-box h6 {
+	    margin: 0;
+	}
+	
+	.menu-title {
+	    font-size: 12px;
+	    font-weight: 600;
+	    color: #6b7280;
+	    margin-top: 15px;
+	    margin-bottom: 8px;
+	}
+	
+	.menu-item {
+	    display: block;
+	    padding: 10px;
+	    border-radius: 4px;
+	    color: #111827;
+	    text-decoration: none;
+	    font-size: 14px;
+	}
+	
+	.menu-item:hover,
+	.menu-item.active {
+	    background: #f1f5ff;
+	    color: #0d6efd;
+	    font-weight: 500;
+	}
+	
+	/* Content */
+	.profile-content {
+	    padding: 25px;
+	}
+	
+	.section-box {
+	    border: 1px solid #e5e7eb;
+	    border-radius: 6px;
+	    padding: 18px;
+	    margin-bottom: 20px;
+	}
+	
+	.section-box h6 {
+	    font-weight: 600;
+	    margin-bottom: 15px;
+	}
+	
+	.label {
+	    font-size: 12px;
+	    color: #6b7280;
+	}
+	
+	.value {
+	    font-weight: 500;
+	}
+	</style>
+	
+	<div class="container">
+	    <div class="row justify-content-center">
+	        <div class="col-lg-11">
+	
+	            <div class="profile-wrapper shadow-sm">
+	                <div class="row g-0">
+	
+	                    <!-- LEFT SIDEBAR -->
+	                    <div class="col-md-3 profile-sidebar">
+	
+	                        <div class="user-box">
+	                            <img src="https://i.pravatar.cc/100?img=12">
+	                            <div>
+	                                <small>Hello,</small>
+	                                <h6 th:text="${session.loggedInUser.name}">Prince Kumar</h6>
+	                            </div>
+	                        </div>
+	
+	                        <div class="menu-title">ACCOUNT SETTINGS</div>
+	                        <a class="menu-item active" href="#">Profile Information</a>
+	                        
+							
+	                    </div>
+	
+	                    <!-- RIGHT CONTENT -->
+	                    <div class="col-md-9 profile-content">
+	
+	                        <!-- Personal Info -->
+	                        <div class="section-box">
+	                            <div class="d-flex justify-content-between align-items-center mb-3">
+	                                <h6>Personal Information</h6>
+	                                
+	                            </div>
+	
+	                            <div class="row g-3">
+	                                <div class="col-md-6">
+	                                    <div class="label">First Name</div>
+	                                    <div class="value" th:text="${session.loggedInUser.name}">Prince</div>
+	                                </div>
+	                               
+	                                <div class="col-md-6">
+	                                    <div class="label">Gender</div>
+	                                    <div class="value" th:text="${session.loggedInUser.gender}">Male</div>
+	                                </div>
+	                            </div>
+	                        </div>
+	
+	                        <!-- Email -->
+	                        <div class="section-box">
+	                            <div class="d-flex justify-content-between align-items-center mb-3">
+	                                <h6>Email Address</h6>
+	                                
+	                            </div>
+	                            <div class="value" th:text="${session.loggedInUser.email}">pk@gmail.com</div>
+	                        </div>
+	
+	                        <!-- Mobile -->
+	                        <div class="section-box">
+	                            <div class="d-flex justify-content-between align-items-center mb-3">
+	                                <h6>Mobile Number</h6>
+	                                
+	                            </div>
+	                            <div class="value" th:text="${session.loggedInUser.contactNo}">+91 8581023460</div>
+	                        </div>
+	
+	                        <!-- Address -->
+	                        <div class="section-box">
+	                            <h6>Default Address</h6>
+	                            <p class="mb-0 value">
+	                                Near City Mall, Main Road, Ranchi, Jharkhand – 834001
+	                            </p>
+	                        </div>
+							<div class="text-end">
+								<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Profile</button>
+							</div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	        </div>
+	    </div>
+	</div>
+	
+	
+		<!-- Modal -->
+	<div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile Details</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <form  method="post" action="/User/EditProfile">
+	      <div class="modal-body">
+	        <div class="mt-3">
+	        	<label>Enter Name : </label>
+	        	<input type="text" name="name" th:value="${session.loggedInUser.name}" placeholder="Enter Name" required class="form-control">
+	        </div>
+	        <div class="mt-3">
+	        	<label>Enter Contact No : </label>
+	        	<input type="text" name="contactNo" th:value="${session.loggedInUser.contactNo}" placeholder="Enter Contact No" required class="form-control">
+	        </div>
+	        <div class="mt-3">
+	        	<label>Select Gender :  </label>
+	        	<select  class="form-select" required name="gender">
+	          <option value="" >---- Select Gender ----</option>
+	           <option value="Male"
+	        th:selected="${session.loggedInUser.gender == 'Male'}">Male</option>
+	
+	    <option value="Female"
+	        th:selected="${session.loggedInUser.gender == 'Female'}">Female</option>
+	          <option value="Other" th:selected="${session.loggedInUser.gender=='Other'}">Other</option>
+	        </select>
+	        	
+	        </div>
+	        <!-- <input type="hidden" name="id" th:value="${session.loggedInUser.id}"> -->
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-primary">Save changes</button>
+	      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+	</main>
+	</body>
+	</html>

@@ -1,6 +1,7 @@
 
 package com.app.TechBazaar.Controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.app.TechBazaar.DTO.EnquiryDTO;
+import com.app.TechBazaar.DTO.FeedbackDTO;
 import com.app.TechBazaar.DTO.UserDTO;
 import com.app.TechBazaar.Model.CartItem;
 import com.app.TechBazaar.Model.Orders;
@@ -36,9 +38,11 @@ import com.app.TechBazaar.Repository.SavedAddressRepository;
 import com.app.TechBazaar.Repository.UserRepository;
 import com.app.TechBazaar.Service.CartItemService;
 import com.app.TechBazaar.Service.EnquiryService;
+import com.app.TechBazaar.Service.FeedbackService;
 import com.app.TechBazaar.Service.OrderService;
 import com.app.TechBazaar.Service.SavedAddressService;
 import com.app.TechBazaar.Service.UserService;
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -85,6 +89,9 @@ public class MainController {
 	
 	@Autowired
 	private OrderRepository orderRepo;
+	
+	@Autowired
+	private FeedbackService feedbackService;
 
 	
 	@GetMapping("/")
@@ -101,9 +108,44 @@ public class MainController {
 		
 		Users user = (Users) session.getAttribute("loggedInUser");
 		List<Orders> orders = orderRepo.findAllByUser(user);
-		model.addAttribute("orders", orders);
+		model.addAttribute("orders", orders.reversed());
 		return "Orders";
 	}
+	
+	//showOrderDetails
+	@GetMapping("/{productName}/details/{id}")
+	public String showOrderDetails(@PathVariable("id") long id, Model model) {
+
+		if (session.getAttribute("loggedInUser")==null) {
+			return"redirect:/Login";
+		}
+		//System.err.println("Product Name: " + productName);
+		System.err.println("Order Id: " + id);
+
+		Orders order = orderRepo.findById(id).get();
+		model.addAttribute("order", order);
+
+		return "ViewOrder";
+	}
+
+	 @GetMapping("/cancel/order/{id}")
+	public String CancelOrder(@PathVariable("id") long id , HttpServletRequest request)
+	{
+			try {
+				orderService.cancelOrder(id);
+			} catch (RazorpayException e) {
+				e.printStackTrace();
+			}
+		      String referer=  request.getHeader("Referer"); 
+				return "redirect:"+referer;
+	}
+	
+	@GetMapping("/return/request/{id}")
+	public String ReturnRequest(@PathVariable("id") long id,HttpServletRequest request){ 
+		orderService.returnRequest(id);
+		return "redirect:"+request.getHeader("Referer");
+	}
+	
 	
 	@GetMapping({"/Products","/Products/{selectedCategory}"})
 	public String ShowProducts(@PathVariable(value = "selectedCategory", required = false) String selectedCategory , Model model) {
@@ -159,6 +201,7 @@ public class MainController {
 		
 	}
 	
+	
 	@GetMapping("/ViewCart")
 	public String ShowViewCart(Model model) {
 		
@@ -196,29 +239,37 @@ public class MainController {
 		
 	}
 	
+	
 	@PostMapping("/UpdateQuantity/{id}")
 	@ResponseBody
 	public Map<String, Object> UpdateItemQuantity(@PathVariable("id") long cartId, @RequestParam("quantity") int quantity) {
 		//service se method call hoga -- cart service
-		cartItemService.updateQuantity(cartId, quantity);
-		
-         List<CartItem> cartItems = cartItemService.getCartItems(session);
-		
-		double totalPrice = cartItems.stream()
-				.mapToDouble(cartItem -> 
-						cartItem.getQuantity()*cartItem.getProduct().getPricePerUnit()
-						).sum();
-		
-		double finalPrice = cartItems.stream()
-				.mapToDouble(cartItem ->
-				cartItem.getQuantity()*cartItem.getProduct().getFinalPrice()
-						).sum();
-		
-		return Map.of(
-				"totalPrice" , totalPrice,
-				"finalPrice", finalPrice
-				);
-		
+		try {
+			cartItemService.updateQuantity(cartId, quantity);
+			
+	         List<CartItem> cartItems = cartItemService.getCartItems(session);
+			
+			double totalPrice = cartItems.stream()
+					.mapToDouble(cartItem -> 
+							cartItem.getQuantity()*cartItem.getProduct().getPricePerUnit()
+							).sum();
+			
+			double finalPrice = cartItems.stream()
+					.mapToDouble(cartItem ->
+					cartItem.getQuantity()*cartItem.getProduct().getFinalPrice()
+							).sum();
+			
+			return Map.of(
+					"totalPrice" , totalPrice,
+					"finalPrice", finalPrice
+					);
+			
+		}
+		catch(Exception e) {
+			return Map.of("err",e.getMessage(),
+					"quantity",quantity
+					);
+		}
 	}
 	
 	@PostMapping("/ChangeAddress")
@@ -309,6 +360,7 @@ public class MainController {
     	
     	return "checkout";
     }
+	
 	
 	@PostMapping("/place-order")
 	@ResponseBody
@@ -506,6 +558,7 @@ public class MainController {
 		}
 	}
 	
+	
 	//Logout
 	@GetMapping("/logout")
 	public String Logout() {
@@ -515,7 +568,30 @@ public class MainController {
 		return "redirect:/Login";
 	}
 	
-	
+	@GetMapping("/Feedback/{orderId}")
+    public String showFeedbackPage(@PathVariable Long orderId, Model model) {
+
+        Orders order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        model.addAttribute("order", order);
+
+        return "Feedback";
+    }
+
+
+    // Feedback submit karne ke liye
+    @PostMapping("/Feedback")
+    public String submitFeedback(
+            @ModelAttribute FeedbackDTO dto,
+            @RequestParam("orderId") long orderId) {
+
+        Users user = (Users) session.getAttribute("loggedInUser");
+
+        feedbackService.saveFeedback(dto, orderId, user);
+
+        return "redirect:/Orders";
+    }
 
 
 }

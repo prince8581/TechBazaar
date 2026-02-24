@@ -171,12 +171,12 @@ Return in <b th:text="${product.returnDays}"></b> days
 <div class="d-grid gap-2 mt-3">
 
 <button class="btn btn-warning fw-bold py-2"
-        th:onclick="addToCart('[[${product.id}]]')">
+        th:onclick="addToCart('[[${product.id}]]')" th:disabled="${product.status.name()=='OUT_OF_STOCK'}">
 Add to Cart
 </button>
 
 <button class="btn btn-danger fw-bold py-2"
-        th:onclick="buyNow([[${product.id}]])">
+        th:onclick="buyNow([[${product.id}]])" th:disabled="${product.status.name()=='OUT_OF_STOCK'}">
 Buy Now
 </button>
 

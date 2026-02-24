@@ -16,12 +16,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.app.TechBazaar.DTO.ProductCategoryDTO;
 import com.app.TechBazaar.DTO.ProductDTO;
+import com.app.TechBazaar.Model.Feedback;
+import com.app.TechBazaar.Model.Orders;
+import com.app.TechBazaar.Model.Orders.OrderStatus;
 import com.app.TechBazaar.Model.ProductCategory;
 import com.app.TechBazaar.Model.Products;
 import com.app.TechBazaar.Model.Users;
+import com.app.TechBazaar.Repository.FeedbackRepository;
+import com.app.TechBazaar.Repository.OrderRepository;
 import com.app.TechBazaar.Repository.ProductCategoryRepository;
 import com.app.TechBazaar.Repository.ProductRepository;
 import com.app.TechBazaar.Repository.UserRepository;
+import com.app.TechBazaar.Service.OrderService;
 import com.app.TechBazaar.Service.ProductService;
 import com.app.TechBazaar.Service.UserService;
 
@@ -50,11 +56,39 @@ public class SellerController {
 	@Autowired
 	private UserRepository userRepo;
 	
+	@Autowired
+	private OrderRepository orderRepo;
+	
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private FeedbackRepository feedbackRepo;
+	
 	@GetMapping("/Dashboard")
-	public String ShowDashboard() {
-		if(session.getAttribute("loggedInSeller") == null) {
+	public String ShowDashboard(Model model) {
+		
+		Users seller = (Users) session.getAttribute("loggedInSeller");
+		if(seller == null) {
 			return "redirect:/Login";
 		}
+		model.addAttribute("totalProducts",productRepo.countBySeller(seller));
+		model.addAttribute("totalOrders",orderRepo.countBySeller(seller));
+		model.addAttribute("completedOrders", orderRepo.countBySellerAndOrderStatus(seller,OrderStatus.DELIVERED));
+		model.addAttribute("cancelledOrders", orderRepo.countBySellerAndOrderStatus(seller,OrderStatus.CANCELLED));
+		
+		
+		//model.addAttribute("deliveredOrders", orderRepo.countByOrderStatus(OrderStatus.DELIVERED));
+		//model.addAttribute("cancelledOrders", orderRepo.countByOrderStatus(OrderStatus.CANCELLED));
+		
+		List<Orders> recentOrders = orderRepo.findTop5BySellerOrderByOrderedAtDesc(seller);
+		model.addAttribute("recentOrders", recentOrders);
+		
+		model.addAttribute("topProduct", orderRepo.getTopSellingProductBySeller(seller));
+		model.addAttribute("monthlyRevenue", orderRepo.getCurrentMonthRevenueBySeller(seller));
+		model.addAttribute("totalRevenue", orderRepo.getTotalRevenueBySeller(seller));
+		model.addAttribute("inStockRevenue", productRepo.getTotalInStockRevenueBySeller(seller));
+		
 		return "Seller/Dashboard";
 	}
 	
@@ -103,9 +137,58 @@ public class SellerController {
 	}
 	
 	@GetMapping("/ManageOrders")
-	public String ShowManageOrders() {
+	public String ShowManageOrders(RedirectAttributes attributes,@RequestParam(value="selectedStatus",required = false) OrderStatus orderStatus,Model model) {
+		
+		
+		if(session.getAttribute("loggedInSeller")==null) {
+			attributes.addFlashAttribute("msg","SessionExpire");
+			return "redirect:/Login";
+		
+		}
+		
+		Users user=(Users) session.getAttribute("loggedInSeller");
+		if (orderStatus !=null) {
+			List<Orders> orders=orderRepo.findAllBySellerAndOrderStatus(user,orderStatus);
+			model.addAttribute("orders", orders);
+		}
+		else 
+		{
+			List<Orders> orders=orderRepo.findAllBySeller(user);
+			model.addAttribute("orders", orders);
+		}
+		model.addAttribute("orderStatus",Orders.OrderStatus.values());
+		
 		return "Seller/ManageOrders";
 	}
+	
+	@GetMapping("/UpdateOrderStatus/{id}")
+	public String UpdateOrderStatus(@PathVariable("id") long id,RedirectAttributes attributes) 
+	{
+		try {
+			
+			attributes.addFlashAttribute("msg", "Order Successfuly"+orderService.updateOrderStatus(id));
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return "redirect:/Seller/ManageOrders";
+	}
+	
+	@GetMapping("/CancelOrder/{id}")
+	public String CancelOrder(@PathVariable("id") long id,RedirectAttributes attributes) 
+	{
+		try {
+			orderService.cancelOrder(id);
+			attributes.addFlashAttribute("msg", "order  cancelled successfuly");
+			return "redirect:/Seller/ManageOrders";
+			
+		} catch (Exception e) {
+			attributes.addFlashAttribute("msg",e.getMessage());
+			return "redirect:/Seller/ManageOrders";
+		}
+		
+		
+	}
+	
 	
 	@GetMapping("/UserProfile")
 	public String ShowUserProfile() {
@@ -161,6 +244,71 @@ public class SellerController {
 		}
 	}
 	
+	@GetMapping("/UpdateProduct{id}")
+	public String ShowUpdateProduct(@PathVariable long id,Model model,RedirectAttributes attributes) 
+	{
+		if(session.getAttribute("loggedInSeller")==null) {
+			attributes.addFlashAttribute("msg","SessionExpire");
+			return "redirect:/Login";
+		
+		}
+		Products product=productRepo.findById(id).orElseThrow(null);
+		ProductDTO productdto=new ProductDTO();
+		List<ProductCategory> categories=productCategoryRepo.findAll();
+		model.addAttribute("categories", categories);
+		model.addAttribute("product", product);
+		model.addAttribute("productdto", productdto);
+		
+		return "Seller/UpdateProduct";
+	}
+	
+	@PostMapping("/UpdateProduct")
+	public String UpdateProduct(@RequestParam("id") long id,@ModelAttribute ProductDTO productDto,RedirectAttributes attributes) 
+	{
+		try {
+			
+			productService.updateProduct(id, productDto);
+			attributes.addFlashAttribute("msg","Product Successfuly Update");
+			
+		} catch (Exception e) {
+			attributes.addFlashAttribute("msg",e.getMessage());
+		}
+		return "redirect:/Seller/ManageProducts";
+	}
+	
+	
+	
+	@GetMapping("/Feedback")
+    public String showAllFeedback(Model model, HttpSession session) {
+
+        if (session.getAttribute("loggedInSeller") == null) {
+            return "redirect:/Login";
+        }
+
+        List<Feedback> feedback = feedbackRepo.findAll();
+
+        model.addAttribute("feedback", feedback);
+        
+        
+
+        return "Seller/Feedback";
+    }
+	@GetMapping("/deleteFeedback/{id}")
+	public String deleteFeedback(@PathVariable Long id,
+	                             HttpSession session,
+	                             RedirectAttributes attributes) {
+
+	    if (session.getAttribute("loggedInSeller") == null) {
+	        return "redirect:/Login";
+	    }
+
+	    feedbackRepo.deleteById(id);
+
+	    attributes.addFlashAttribute("success",
+	            "Feedback deleted successfully!");
+
+	    return "redirect:/Seller/Feedback";
+	}
 	
 	//Logout
 //		@GetMapping("/logout")

@@ -1,7 +1,194 @@
 <html th:replace="~{Seller/Sellerbase::layout(~{::main})}">
 <body>
-<main>
-<h1>This is seller dashboard</h1>
+        
+        <main>
+
+<style>
+
+.dashboard-container{
+padding:20px;
+}
+
+.card-box{
+border-radius:10px;
+padding:20px;
+color:white;
+font-weight:600;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.bg-green{background:#28a745;}
+.bg-blue{background:#007bff;}
+.bg-orange{background:#fd7e14;}
+.bg-dark{background:#343a40;}
+
+.stat-card{
+background:white;
+border-radius:10px;
+padding:20px;
+text-align:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.stat-number{
+font-size:28px;
+font-weight:bold;
+}
+
+</style>
+
+<div class="dashboard-container">
+
+<h4>
+Welcome,
+<span>Seller Name</span>
+</h4>
+
+<br>
+
+<!-- Revenue Cards -->
+<div class="row">
+
+<div class="col-md-3">
+<div class="card-box bg-green">
+Sold Product Revenue
+<br>
+₹ <span th:text="${totalRevenue}">0</span>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card-box bg-blue">
+Revenue This Month
+<br>
+₹ <span th:text="${monthlyRevenue}">0</span>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card-box bg-orange">
+In-Stock Revenue
+<br>
+₹ <span th:text="${inStockRevenue}">0</span>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card-box bg-dark">
+Top Selling Product
+<br>
+<span th:text="${topProduct}">Product</span>
+</div>
+</div>
+
+</div>
+
+<br>
+
+<!-- Stats Cards -->
+<div class="row">
+
+<div class="col-md-3">
+<div class="stat-card">
+My Products
+<br>
+<div class="stat-number text-success" th:text="${totalProducts}">
+0
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+Total Orders
+<br>
+<div class="stat-number text-primary"
+th:text="${totalOrders}">
+0
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+Completed Orders
+<br>
+<div class="stat-number text-info"
+th:text="${completedOrders}">
+0
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+Cancelled Orders
+<br>
+<div class="stat-number text-danger"
+ th:text="${cancelledOrders}"   >
+0
+</div>
+</div>
+</div>
+
+</div>
+
+<br>
+
+<!-- Recent Orders -->
+<div class="card shadow">
+
+<div class="card-header">
+Recent Orders
+</div>
+
+<div class="card-body">
+
+<table class="table table-bordered">
+
+<thead>
+
+<tr>
+<th>S.No.</th>
+<th>Product</th>
+<th>Quantity</th>
+<th>Buyer</th>
+<th>Status</th>
+<th>Date</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr th:each="order, iStat:${recentOrders}">
+
+<td th:text="${iStat.index+1}"></td>
+
+<td th:text="${order.product.productName}"></td>
+
+<td th:text="${order.quantity}"></td>
+<td th:text="${order.user.name}"></td>
+<td>
+<span class="badge bg-success" th:text="${order.orderStatus}">
+</span>
+</td>
+
+<td th:text="${#temporals.format(order.orderedAt, 'dd-MMM-yyyy hh:mm a')}">
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
 </main>
-</body>
+    </body>
 </html>

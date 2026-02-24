@@ -15,101 +15,111 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "orders")
+@Table(name="orders")
 public class Orders {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(unique = true, nullable = false)
+	@Column(unique = true,nullable = false)
 	private String orderNumber;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name="user_id",nullable = false)
 	private Users user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "seller_id", nullable = false)
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="seller_id",nullable = false)
 	private Users seller;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
+	@JoinColumn(name = "product_id",nullable = false)
 	private Products product;
 	
-	//Product SnapShot
+	// Product Snapshot
+	
 	private String productName;
 	private int quantity;
 	private double price;
 	private double subtotal;
 	
-	//Price Summary
+	
+	//++++Price Summary++++++++++
+	
+
 	private double shippingCharge;
-	private double discountAmount;
 	private double finalAmount;
+	private double discountAmount;
 	
+	//=== Payment Info=====
 	
-	
-	//payment info
 	@Enumerated(EnumType.STRING)
 	private PaymentMethod paymentMethod;
 	
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus paymentStatus;
 	
+	
 	private String razorpayOrderId;
 	private String transactionId;
 	private String paymentSignature;
 	
-	//Address SnapShot
-	private String fullname;
+	//====Address Snapshot=======
+	
+	private String fullName;
 	private String phone;
 	private String address;
 	private String city;
 	private String state;
 	private String pincode;
 	
-
-	//Order Status
-	@Enumerated(EnumType.STRING)
-	private OrderStatus orderstatus;
+	
+	
+	//====order Status====
 	
 	@Enumerated(EnumType.STRING)
-	private OrderSource ordersource;
+	private OrderStatus orderStatus;
 	
+	@Enumerated(EnumType.STRING)
+	private OrderSource orderSource;
 	
-	private LocalDateTime orderedAt;
 	private LocalDateTime paymentTime;
-	private LocalDateTime deliveredAt;
+	private LocalDateTime orderedAt;
 	private LocalDateTime cancelledAt;
+	private LocalDateTime deliveredAt;
 	private LocalDateTime refundedAt;
+	private LocalDateTime returnRequestedAt;
+	private LocalDateTime returnedAt;
 	
-	public enum OrderStatus{
-		PLACED,         //User Placed
-		CONFIRMED,       //Seller/Admin
-		PROCESSING,        //Preparing Product
-		DISPATCHED,        //Handed over for shipping
+	public enum OrderStatus
+	{	PLACED,  
+		CONFIRMED,
+		PROCESSING,
+		DISPATCHED,
 		SHIPPED,
 		OUT_FOR_DELIVERY,
-		DELIVERED,                 // Completed
+		DELIVERED,
 		CANCELLED,
-		RETURN_REQUESTED,          //Buyer asked return
-		RETURNED                    //
-		
+		RETURN_REQUESTED,
+		RETURNED
 	}
 	
-	public enum OrderSource{
+	public enum OrderSource
+	{
 		BUY_NOW,
 		CART
 	}
 	
-	public enum PaymentMethod{
+	public enum PaymentMethod
+	{
 		COD,
 		ONLINE
 	}
 	
-	public enum PaymentStatus{
-		PENDING, 
+	public enum PaymentStatus
+	{
+		PENDING,
 		SUCCESS,
 		FAILED,
 		REFUNDED
@@ -159,6 +169,7 @@ public class Orders {
 		return productName;
 	}
 
+	
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
@@ -195,20 +206,20 @@ public class Orders {
 		this.shippingCharge = shippingCharge;
 	}
 
-	public double getDiscountAmount() {
-		return discountAmount;
-	}
-
-	public void setDiscountAmount(double discountAmount) {
-		this.discountAmount = discountAmount;
-	}
-
 	public double getFinalAmount() {
 		return finalAmount;
 	}
 
 	public void setFinalAmount(double finalAmount) {
 		this.finalAmount = finalAmount;
+	}
+
+	public double getDiscountAmount() {
+		return discountAmount;
+	}
+
+	public void setDiscountAmount(double discountAmount) {
+		this.discountAmount = discountAmount;
 	}
 
 	public PaymentMethod getPaymentMethod() {
@@ -251,12 +262,12 @@ public class Orders {
 		this.paymentSignature = paymentSignature;
 	}
 
-	public String getFullname() {
-		return fullname;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getPhone() {
@@ -299,20 +310,12 @@ public class Orders {
 		this.pincode = pincode;
 	}
 
-	public OrderStatus getOrderstatus() {
-		return orderstatus;
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
 	}
 
-	public void setOrderstatus(OrderStatus orderstatus) {
-		this.orderstatus = orderstatus;
-	}
-
-	public LocalDateTime getOrderedAt() {
-		return orderedAt;
-	}
-
-	public void setOrderedAt(LocalDateTime orderedAt) {
-		this.orderedAt = orderedAt;
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 
 	public LocalDateTime getPaymentTime() {
@@ -323,12 +326,12 @@ public class Orders {
 		this.paymentTime = paymentTime;
 	}
 
-	public LocalDateTime getDeliveredAt() {
-		return deliveredAt;
+	public LocalDateTime getOrderedAt() {
+		return orderedAt;
 	}
 
-	public void setDeliveredAt(LocalDateTime deliveredAt) {
-		this.deliveredAt = deliveredAt;
+	public void setOrderedAt(LocalDateTime orderedAt) {
+		this.orderedAt = orderedAt;
 	}
 
 	public LocalDateTime getCancelledAt() {
@@ -339,6 +342,14 @@ public class Orders {
 		this.cancelledAt = cancelledAt;
 	}
 
+	public LocalDateTime getDeliveredAt() {
+		return deliveredAt;
+	}
+
+	public void setDeliveredAt(LocalDateTime deliveredAt) {
+		this.deliveredAt = deliveredAt;
+	}
+
 	public LocalDateTime getRefundedAt() {
 		return refundedAt;
 	}
@@ -347,17 +358,30 @@ public class Orders {
 		this.refundedAt = refundedAt;
 	}
 
-	public OrderSource getOrdersource() {
-		return ordersource;
+	public OrderSource getOrderSource() {
+		return orderSource;
 	}
 
-	public void setOrdersource(OrderSource ordersource) {
-		this.ordersource = ordersource;
+	public void setOrderSource(OrderSource orderSource) {
+		this.orderSource = orderSource;
 	}
 
-	
-	
-	
+	public LocalDateTime getReturnRequestedAt() {
+		return returnRequestedAt;
+	}
+
+	public void setReturnRequestedAt(LocalDateTime returnRequestedAt) {
+		this.returnRequestedAt = returnRequestedAt;
+	}
+
+	public LocalDateTime getReturnedAt() {
+		return returnedAt;
+	}
+
+	public void setReturnedAt(LocalDateTime returnedAt) {
+		this.returnedAt = returnedAt;
+	}
+
 	
 	
 	

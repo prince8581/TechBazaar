@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.TechBazaar.API.RazorpayService;
+import com.app.TechBazaar.API.SendEmailService;
 import com.app.TechBazaar.Model.CartItem;
 import com.app.TechBazaar.Model.Orders;
 import com.app.TechBazaar.Model.Orders.OrderSource;
@@ -18,6 +19,7 @@ import com.app.TechBazaar.Model.Orders.OrderStatus;
 import com.app.TechBazaar.Model.Orders.PaymentMethod;
 import com.app.TechBazaar.Model.Orders.PaymentStatus;
 import com.app.TechBazaar.Model.Products;
+import com.app.TechBazaar.Model.Products.ProductStatus;
 import com.app.TechBazaar.Model.SavedAddress;
 import com.app.TechBazaar.Model.Users;
 import com.app.TechBazaar.Repository.CartItemRepository;
@@ -25,6 +27,7 @@ import com.app.TechBazaar.Repository.OrderRepository;
 import com.app.TechBazaar.Repository.ProductRepository;
 import com.app.TechBazaar.Repository.SavedAddressRepository;
 import com.razorpay.Order;
+import com.razorpay.RazorpayException;
 
 import jakarta.transaction.Transactional;
 
@@ -45,6 +48,9 @@ public class OrderService {
 	
 	@Autowired
 	private RazorpayService razorpayService;
+	
+	@Autowired
+	private SendEmailService emailService;
 	
 	
 	@Transactional
@@ -115,21 +121,21 @@ public class OrderService {
 				 //rzpId, txnid, psign
 				 
 				 //Address Snapshot
-				 order.setFullname(address.getName());
+				 order.setFullName(address.getName());
 				 order.setPhone(address.getContactNo());
 				 order.setAddress(address.getAddress());
 				 order.setCity(address.getCityDistrict());
 				 order.setState(address.getState());
 				 order.setPincode(address.getPincode());
 				 
-				 order.setOrderstatus(paymentMethod.equalsIgnoreCase("COD") ? OrderStatus.CONFIRMED : OrderStatus.PLACED);
+				 order.setOrderStatus(paymentMethod.equalsIgnoreCase("COD") ? OrderStatus.CONFIRMED : OrderStatus.PLACED);
 				 order.setOrderedAt(LocalDateTime.now());
 				 
 				 if(productId!=null) {
-					 order.setOrdersource(OrderSource.BUY_NOW);
+					 order.setOrderSource(OrderSource.BUY_NOW);
 				 }
 				 else {
-					 order.setOrdersource(OrderSource.CART);
+					 order.setOrderSource(OrderSource.CART);
 				 }
 				 
 				 orderRepo.save(order);
@@ -145,6 +151,9 @@ public class OrderService {
 					 //reduce stock
 					 
 					 product.setQuantityAvailable(product.getQuantityAvailable() - item.getQuantity());
+					 if(product.getQuantityAvailable()  < 1) {
+						 product.setStatus(ProductStatus.OUT_OF_STOCK);
+					 }
 					 productRepo.save(product);
 				 }
 			}
@@ -221,14 +230,17 @@ public class OrderService {
 	    		order.setPaymentSignature(signature);
 	    		order.setTransactionId(paymentId);
 	    		order.setPaymentTime(LocalDateTime.now());
-	    		order.setOrderstatus(OrderStatus.CONFIRMED);
+	    		order.setOrderStatus(OrderStatus.CONFIRMED);
 	    		orderRepo.save(order);
 	    		
 	    		Products product = order.getProduct();
 	    		product.setQuantityAvailable(product.getQuantityAvailable() - order.getQuantity());
+	    		if(product.getQuantityAvailable() < 1 ) {
+	    			product.setStatus(ProductStatus.OUT_OF_STOCK);
+	    		}
 	    		productRepo.save(product);
 	    		
-	    		if(order.getOrdersource().equals(OrderSource.CART)) {
+	    		if(order.getOrderSource().equals(OrderSource.CART)) {
 	    			cartItemRepo.deleteByUserAndProduct(order.getUser(), order.getProduct());
 	    		}
 	    		
@@ -247,4 +259,86 @@ public class OrderService {
 	    	
 	    }
 	}
+	//new code
+	 public OrderStatus updateOrderStatus(long id) throws RazorpayException
+	 {
+		 Orders order = orderRepo.findById(id).orElseThrow(()->new RuntimeException("Order Not Found"));
+		 if (order.getOrderStatus().equals(OrderStatus.CONFIRMED)) {
+			 emailService.sendOrderConfirmed(order.getUser(), order);
+			order.setOrderStatus(OrderStatus.PROCESSING);
+			
+		}
+		 else if(order.getOrderStatus().equals(OrderStatus.PROCESSING))
+		 {
+			 order.setOrderStatus(OrderStatus.DISPATCHED);
+		 }
+		 else if(order.getOrderStatus().equals(OrderStatus.DISPATCHED))
+		 {
+			 order.setOrderStatus(OrderStatus.SHIPPED);
+		 }
+		 else if(order.getOrderStatus().equals(OrderStatus.SHIPPED))
+		 {
+			 order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
+		 }
+		 else if(order.getOrderStatus().equals(OrderStatus.OUT_FOR_DELIVERY))
+		 {
+			 
+			 order.setOrderStatus(OrderStatus.DELIVERED);
+			 order.setDeliveredAt(LocalDateTime.now());
+			 if (order.getPaymentMethod().equals(PaymentMethod.COD)) {
+				order.setPaymentStatus(PaymentStatus.SUCCESS);
+				emailService.sendOrderDelivered(order.getUser(), order);
+			}
+		 }
+		 else if(order.getOrderStatus().equals(OrderStatus.RETURN_REQUESTED))
+		 {
+			 order.setOrderStatus(OrderStatus.RETURNED);
+			 order.setReturnedAt(LocalDateTime.now());
+			 order.setPaymentStatus(PaymentStatus.REFUNDED);
+			 emailService.sendOrderReturn(order.getUser(), order);
+			 order.setRefundedAt(LocalDateTime.now());
+			 if (order.getPaymentMethod().equals(PaymentMethod.ONLINE)&& order.getPaymentStatus().equals(PaymentStatus.SUCCESS)) {
+				razorpayService.refundPayment(order.getTransactionId());
+				
+			}
+		 }
+		 
+		 orderRepo.save(order);
+		 return order.getOrderStatus();
+	 }
+	 
+	 
+	 public  void cancelOrder(long id) throws RazorpayException
+	 {
+		 Orders order = orderRepo.findById(id).orElseThrow(()-> new RuntimeException("Order Not Found"));
+		 if (order.getPaymentMethod().equals(PaymentMethod.ONLINE)) {
+			 
+			 if (!order.getPaymentStatus().equals(PaymentStatus.SUCCESS)) {
+				throw new RuntimeException("Something Went Wrong");
+			}
+			 order.setPaymentStatus(PaymentStatus.REFUNDED);
+			 order.setRefundedAt(LocalDateTime.now());
+			 
+			razorpayService.refundPayment(order.getTransactionId());
+			
+		}
+		 order.setOrderStatus(OrderStatus.CANCELLED);
+		 
+		 order.setCancelledAt(LocalDateTime.now());
+		 
+		 orderRepo.save(order);
+		 emailService.sendOrderCancelled(order.getUser(), order);
+	 }
+	 
+	 public void returnRequest(long id)
+	 {
+		 Orders order = orderRepo.findById(id).orElseThrow(()->new RuntimeException("Order Not  Found"));
+		 if (order.getProduct().isReturnAvailable())
+		 {
+			order.setOrderStatus(OrderStatus.RETURN_REQUESTED);
+			orderRepo.save(order);
+		}
+	 }
+
+
 }

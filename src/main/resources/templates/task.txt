@@ -45,3 +45,13 @@
   5. complete change password ---> Admin, Seller,User
   6. Edit User -- > By User ----- Edit Profile
   
+  
+  ==================================================
+  1.Registration Template mail ----> User and Seller
+  2.Order Confirmation after seller confirm order ---> template mail
+  3.Order Cancellation (user/seller)  ---> template mail
+  4.order successfull congratulations message ---> Template mail
+  5.Order return message --> template email
+  6. Edit Address
+  
+  

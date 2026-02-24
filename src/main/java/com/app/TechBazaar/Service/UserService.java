@@ -10,16 +10,20 @@ import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.TechBazaar.API.SendEmailService;
+import com.app.TechBazaar.DTO.SavedAddressDTO;
 import com.app.TechBazaar.DTO.UserDTO;
+import com.app.TechBazaar.Model.SavedAddress;
 import com.app.TechBazaar.Model.Users;
 import com.app.TechBazaar.Model.Users.LoginStatus;
 import com.app.TechBazaar.Model.Users.UserRole;
 import com.app.TechBazaar.Model.Users.UserStatus;
+import com.app.TechBazaar.Repository.SavedAddressRepository;
 import com.app.TechBazaar.Repository.UserRepository;
 
 @Service
@@ -30,6 +34,12 @@ public class UserService {
 	
 	@Autowired
 	private SendEmailService emailService;
+	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private SavedAddressRepository addressRepo;
 	
 	private final String uploadDir = "public/uploads/";
 	
@@ -84,13 +94,17 @@ public class UserService {
 	
 	public void ResendOTP(String email) {
 		
-		String otp = generateOTP();
-		Users user = userRepo.findByEmail(email);
-		user.setExpiryTime(LocalDateTime.now().plusMinutes(5));
-		user.setOtp(otp);
-		//System.err.println("New Resend Otp: "+otp);
-		emailService.sendRegistrationOTP(user, otp);
-		userRepo.save(user);
+		try {
+			String otp = generateOTP();
+			Users user = userRepo.findByEmail(email);
+			user.setExpiryTime(LocalDateTime.now().plusMinutes(5));
+			user.setOtp(otp);
+			//System.err.println("New Resend Otp: "+otp);
+			emailService.sendRegistrationOTP(user, otp);
+			userRepo.save(user);
+		}catch(Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
 		
 	}
 	
@@ -237,5 +251,32 @@ public class UserService {
 		userRepo.save(existUsers);
 		
 	}
+	public void updateProfile(Users user,UserDTO dto) 
+	{
+		user.setName(dto.getName());
+		user.setAadharNo(dto.getAadharNo());
+		user.setContactNo(dto.getContactNo());
+		user.setPanCard(dto.getPanCard());
+		user.setGstNo(dto.getGstNo());
+		user.setAddress(dto.getAddress());
+		userRepo.save(user);
+	}
 	
+	public void editprofile(Users user,UserDTO dto) 
+	{
+		user.setName(dto.getName());
+		user.setContactNo(dto.getContactNo());
+		user.setGender(dto.getGender());
+		userRepo.save(user);
+	}
+	
+	
+//	public void editAddress(SavedAddress address, SavedAddressDTO dto) {
+//		address.setAddress(dto.getAddress());
+//		address.setContactNo(dto.getContactNo());
+//		address.setAltContactNo(dto.getAltContactNo());
+//		address.setLandmark(dto.getLandmark());
+//		
+//		addressRepo.save(address);
+//	}
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 
 public class SavedAddressDTO {
 
-	
+	private Long id;
 	private String name;
 	private String contactNo;
 	private String pincode;
@@ -75,6 +75,12 @@ public class SavedAddressDTO {
 	}
 	public void setAddressType(String addressType) {
 		this.addressType = addressType;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

@@ -1,8 +1,67 @@
-<html  th:replace="~{Admin/Adminbase::layout(~{::main})}">
-<body>
-<main>
-<h1>This is View Orders Page..</h1>
-</main>
-</body>
-
+<html th:replace="~{Admin/Adminbase::layout(~{::main})}">
+	<body>
+		<main>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="card shadow">
+						<div class="card-header bg-warning">
+							<h5 class="text-center text-white m-0">Track Order History</h5>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="example">
+									<thead>
+										<tr>
+											<th>Sr.No</th>
+											<th>Order Id</th>
+											<th>ProductName</th>
+											<th>Image</th>
+											<th>Seller</th>
+											<th>Buyer</th>
+											<th>Delivery Address</th>
+											<th>Product Price</th>
+											<th>Quantity</th>
+											<th>Shipping Charge</th>
+											<th>Total Amount</th>
+											<th>Payment Status</th>
+											<th>Payment Method</th>
+											<th>Order Status</th>
+											<th>Order Date</th>
+											
+											
+										</tr>
+									</thead>
+									
+									<tbody>
+										<tr th:each="order,srno : ${orders}">
+											<td th:text="${srno.index+1}"></td>
+											<td th:text="${order.orderNumber}"></td>
+											<td th:text="${order.productName}"></td>
+											<td>
+												<img alt="Image not found" height="100px" width="100px" th:src="@{'/ProductImages/'+${order.product.ProductImages[0]}}">
+											</td>
+											<td th:text="${order.seller.name}+'_'+${order.seller.contactNo}"></td>
+											<td th:text="${order.user.name}"></td>
+											<td th:text="${order.user.name}+'|'+${order.pincode}+'|'+${order.address}"></td>
+											<td>
+												<del class="text-danger" th:text="${'₹'+(order.finalAmount+order.discountAmount)}"></del> | 
+												<span class=" badge badge-success" th:text="${#numbers.formatInteger((order.discountAmount * 100) / (order.finalAmount+order.discountAmount),1)+'%'}"></span> | <span class="text-success" th:text="'₹'+${order.price}"></span>
+											</td>
+											<td th:text="${order.quantity+'.Pcs'}"></td>
+											<td th:text="'₹'+${order.shippingCharge}"></td>
+											<td th:text="'₹'+${order.finalAmount}"></td>
+											<td th:text="${order.paymentStatus}" ></td>
+											<td th:text="${order.paymentMethod}"></td>
+											<td th:text="${order.orderStatus}"></td>
+											<td th:text="${#temporals.format(order.orderedAt,'dd MMM yyyy'+'|'+'hh:mm a')}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</body>
 </html>

@@ -1,233 +1,182 @@
-<!doctype html>
-<html lang="en">
+<html th:replace="~{base::layout(~{::main})}">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seller Registeration</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-	crossorigin="anonymous">
-<style>
-.seller-card {
-	background: #ffffff;
-	border-left: 6px solid #008ecc;
-}
-
-.form-control, .form-select, textarea {
-	border-radius: 10px;
-	padding: 10px 12px;
-}
-
-.form-control:focus, .form-select:focus, textarea:focus {
-	border-color: #008ecc;
-	box-shadow: 0 0 0 0.15rem rgba(0, 142, 204, 0.25);
-}
-
-.btn-primary {
-	border-radius: 10px;
-}
-
-label {
-	color: #444;
-}
-</style>
-
+	<title>Seller Registration</title>
 </head>
+
 <body>
-	<div class="container-fluid">
-		<div class="row mt-5 mb-5">
-			<div class="col-lg-9 col-md-10 mx-auto">
+	<main>
 
-				<div class="card shadow-lg border-0 rounded-4 seller-card p-5">
-					<div class="text-center mb-4">
-						<h2 class="fw-bold text-primary">Become a TechBazaar Seller</h2>
-						<p class="text-muted">Start selling your products and grow
-							your business 🚀</p>
-					</div>
+		<!-- Hero Section -->
+		<section class="hero text-center text-white py-5"
+			style="background: linear-gradient(135deg, #008ecc, #00b4ff);">
+			<div class="container py-4">
+				<h1 class="display-4 fw-bolder mb-3 text-white">Become a TechBazaar Seller</h1>
+				<p class="lead mb-0 text-white-50">Start selling your products and grow your business today 🚀</p>
+			</div>
+		</section>
 
-					<form action="/BecomeSeller" method="post" th:object="${dto}"
-						enctype="multipart/form-data">
-						<div class="row g-4">
+		<!-- Main Container for aligned content -->
+		<div class="container-fluid py-5 bg-light pb-5">
+			<div class="row">
+				<div class="col-sm-11 mx-auto">
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Full Name</label> <input
-									th:field="${dto.name}" type="text" class="form-control"
-									placeholder="Enter full name" required>
-							</div>
+					<div class="row mt-2 mb-5">
+						<div class="col-lg-9 col-md-10 mx-auto">
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Email Address</label> <input
-									th:field="${dto.email}" type="email" class="form-control"
-									placeholder="Enter email address" required>
-							</div>
+							<div class="card shadow-sm border-0 rounded-4 p-5 position-relative overflow-hidden">
+								<!-- Left decoration border -->
+								<div class="position-absolute top-0 bottom-0 start-0"
+									style="width: 6px; background: #008ecc;"></div>
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Contact Number</label> <input
-									th:field="${dto.contactNo}" type="text" class="form-control"
-									placeholder="Enter mobile number" pattern="[6-9]\d{9}" required>
-							</div>
+								<div class="text-center mb-5">
+									<h2 class="fw-bold section-title mb-2">Seller Registration Form</h2>
+									<div class="category-line mx-auto mt-2 mb-3" style="width: 80px;"></div>
+									<p class="text-muted fs-6">Please provide accurate business and personal details to
+										verify your seller account.</p>
+								</div>
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Password</label> <input
-									th:field="${dto.password}" type="password" class="form-control"
-									placeholder="Create strong password" required>
-							</div>
+								<form action="/BecomeSeller" method="post" th:object="${dto}"
+									enctype="multipart/form-data">
+									<div class="row g-4">
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Gender</label> <select
-									th:field="${dto.gender}" class="form-select">
-									<option value="">--- Select Gender ---</option>
-									<option value="Male">Male</option>
-									<option value="Female">Female</option>
-									<option value="Other">Other</option>
-								</select>
-							</div>
+										<div class="col-md-6">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-regular fa-user text-primary me-2"></i>Full Name</label>
+											<input th:field="${dto.name}" type="text"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;" placeholder="Enter complete name" required>
+										</div>
 
+										<div class="col-md-6">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-regular fa-envelope text-primary me-2"></i>Email
+												Address</label>
+											<input th:field="${dto.email}" type="email"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;" placeholder="Enter professional email"
+												required>
+										</div>
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Upload Profile Pic</label>
-								<input th:field="${dto.profilePic}" type="file"
-									class="form-control" required
-									accept=".png, .jpg, .jpeg, .webp, .bmp">
-							</div>
+										<div class="col-md-6">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-solid fa-mobile-screen text-primary me-2"></i>Contact
+												Number</label>
+											<input th:field="${dto.contactNo}" type="text"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;" placeholder="Enter mobile number"
+												pattern="[6-9]\d{9}" required>
+										</div>
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">PAN Card Number</label> <input
-									th:field="${dto.panCard}" type="text" class="form-control"
-									placeholder="ABCDE1234F" required>
-							</div>
+										<div class="col-md-6">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-solid fa-lock text-primary me-2"></i>Password</label>
+											<input th:field="${dto.password}" type="password"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;" placeholder="Create strong password" required>
+										</div>
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">Aadhaar Number</label> <input
-									th:field="${dto.aadharNo}" type="text" class="form-control"
-									placeholder="Enter Aadhaar number" required>
-							</div>
+										<div class="col-md-6">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-solid fa-venus-mars text-primary me-2"></i>Gender</label>
+											<select th:field="${dto.gender}"
+												class="form-select form-select-lg bg-light border-0"
+												style="font-size: 15px;" required>
+												<option value="">--- Select Gender ---</option>
+												<option value="Male">Male</option>
+												<option value="Female">Female</option>
+												<option value="Other">Other</option>
+											</select>
+										</div>
 
-							<div class="col-sm-6">
-								<label class="form-label fw-semibold">GST Number</label> <input
-									th:field="${dto.gstNo}" type="text" class="form-control"
-									placeholder="22AAAAA0000A1Z5" required>
-							</div>
+										<div class="col-md-6">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-regular fa-image text-primary me-2"></i>Upload Profile
+												Pic</label>
+											<input th:field="${dto.profilePic}" type="file"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;" required
+												accept=".png, .jpg, .jpeg, .webp, .bmp">
+										</div>
 
-							<div class="col-sm-12">
-								<label class="form-label fw-semibold">Business Address</label>
-								<textarea th:field="${dto.address}" rows="3"
-									class="form-control"
-									placeholder="Enter complete business address" required></textarea>
-							</div>
+										<div class="col-md-6 mt-5">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-regular fa-id-card text-primary me-2"></i>PAN Card
+												Number</label>
+											<input th:field="${dto.panCard}" type="text"
+												class="form-control form-control-lg bg-light border-0 text-uppercase"
+												style="font-size: 15px;" placeholder="ABCDE1234F" required>
+										</div>
 
-							<div
-								class="col-sm-12 d-flex justify-content-between align-items-center mt-3">
-								<span class="text-muted small"> 🔒 Your details are safe
-									and secure </span>
-								<button type="submit"
-									class="btn btn-primary px-5 py-2 fw-semibold">
-									Register as Seller</button>
+										<div class="col-md-6 mt-5">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-solid fa-fingerprint text-primary me-2"></i>Aadhaar
+												Number</label>
+											<input th:field="${dto.aadharNo}" type="text"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;" placeholder="Enter Aadhaar ID" required>
+										</div>
+
+										<div class="col-md-12">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-solid fa-building-columns text-primary me-2"></i>GST
+												Number</label>
+											<input th:field="${dto.gstNo}" type="text"
+												class="form-control form-control-lg bg-light border-0 text-uppercase"
+												style="font-size: 15px;" placeholder="22AAAAA0000A1Z5" required>
+										</div>
+
+										<div class="col-md-12">
+											<label class="form-label fw-semibold text-dark"><i
+													class="fa-solid fa-map-location-dot text-primary me-2"></i>Business
+												Address</label>
+											<textarea th:field="${dto.address}" rows="3"
+												class="form-control form-control-lg bg-light border-0"
+												style="font-size: 15px;"
+												placeholder="Enter complete registered business address"
+												required></textarea>
+										</div>
+
+										<div
+											class="col-md-12 d-flex justify-content-between align-items-center mt-5 bg-primary bg-opacity-10 p-4 rounded-3 border border-primary border-opacity-10">
+											<div class="d-flex align-items-center">
+												<i class="fa-solid fa-shield-halved fs-3 text-primary me-3"></i>
+												<span class="text-dark fw-semibold">Your business details are fully
+													encrypted and secure with TechBazaar.</span>
+											</div>
+											<button type="submit"
+												class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-pill shadow-sm text-uppercase tracking-wide simple-hover">
+												Register as Seller <i class="fa-solid fa-arrow-right ms-2"></i>
+											</button>
+										</div>
+
+									</div>
+								</form>
+
+								<p class="text-center mt-5 fs-5">
+									Already an registered seller? <a href="/Login"
+										class="text-primary fw-bold text-decoration-none">Login to Dashboard</a>
+								</p>
+
 							</div>
 
 						</div>
-					</form>
-
-					<p class="text-center mt-4">
-						Already a seller? <a href="/Login"
-							class="text-primary fw-semibold text-decoration-none"> Login
-							here </a>
-					</p>
+					</div>
 
 				</div>
-
 			</div>
 		</div>
-	</div>
 
-
-	<!--<div class="container-fluid">
-    <div class="row mt-5 mb-5">
-    <div class="col-sm-8 mx-auto">
-
-    <div class="card shadow mt-4 p-5">
-        <h4 class="text-center">Seller Registration</h4>
-    <form action="/BecomeSeller" method="post" th:object="${dto}">
-     <div class="row">
-     <div class="col-sm-6 mt-3">
-     <label>Enter your Name : </label>
-     <input th:field="${dto.name}" type="text" class="form-control" required placeholder="Enter Name">
-     </div>
-     
-     <div class="col-sm-6 mt-3">
-     <label>Enter your Email : </label>
-     <input th:field="${dto.email}" type="email" class="form-control" required placeholder="Enter Email">
-     </div>
-     
-     <div class="col-sm-6 mt-3">
-     <label>Enter your ContactNo : </label>
-     <input th:field="${dto.contactNo}" type="text" class="form-control" required placeholder="Enter ContactNo" pattern="[6-9]\d{9}">
-     </div>
-     
-     <div class="col-sm-6 mt-3">
-     <label>Enter your Password : </label>
-     <input th:field="${dto.password}" type="password" class="form-control" required placeholder="Enter Password">
-     </div>
-     
-     <div class="col-sm-6 mt-3">
-     <label>Select Gender : </label>
-     <select th:field="${dto.gender}" class="form-control">
-     <option value="">---Select Gender---</option>
-     <option value="Male">Male</option>
-      <option value="Female">Female</option>
-      <option value="Other">Other</option>
-     </select>
-     </div>
-     
-    <!--   <div class="col-sm-6 mt-3">
-    <label>Upload Profile Pic</label>
-    <input  th:field="${dto.profilePic}" type="file" class="form-control" required accept=".png, .jpg, .jpeg, .webp, .bmp">
-    </div>-->
-
-	<!--<div class="col-sm-6 mt-3">
-     <label>Enter your PAN Card No : </label>
-     <input th:field="${dto.panCard}" type="text" class="form-control" required placeholder="Enter PAN Card No">
-     </div>
-     
-      <div class="col-sm-6 mt-3">
-     <label>Enter your Adhaar Card No : </label>
-     <input th:field="${dto.aadharNo}" type="text" class="form-control" required placeholder="Enter Adhaar Card No">
-     </div>
-     
-      <div class="col-sm-6 mt-3">
-     <label>Enter your GST No : </label>
-     <input th:field="${dto.gstNo}" type="text" class="form-control" required placeholder="Enter GST No">
-     </div>
-    
-     <div class="col-sm-12 mt-3">
-    <label>Enter Address: </label>
-    <textarea th:field="${dto.address}" rows="2" cols="" class="form-control" required placeholder="Enter address here.... "></textarea>
-    </div>
-    
-     <div class="col-sm-6 mt-3 text-end">
-     <button type="submit" class="btn btn-primary mt-4">Register</button>
-     
-     </div>
-     
-     </div>
-    </form>
-    </div>
-    </div>
-    </div>
-    </div>-->
-
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-		crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		var msg = "[[${msg}]]";
-		if (msg != "") {
-			alert(msg);
-		}
-	</script>
+		<!-- Script to handle messages -->
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function () {
+				var msg = "[[${msg}]]";
+				if (msg != "" && msg != "null") {
+					alert(msg);
+				}
+			});
+		</script>
+	</main>
 </body>
+
 </html>

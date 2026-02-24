@@ -1,8 +1,117 @@
-<html  th:replace="~{Seller/Sellerbase::layout(~{::main})}">
-<body>
-<main>
-<h1>This is Manage Orders Page...</h1>
-</main>
-</body>
-
+<html th:replace="~{Seller/Sellerbase::layout(~{::main})}">
+	<body>
+		<main>
+			<div class="row">
+				<div class="col-sm-12">
+					<div>
+						<form  method="get" class="d-flex w-50 mx-auto">
+								<select class="form-control" name="selectedStatus">
+									<option value="">---Select Order Status---</option>
+									<option th:each="status : ${orderStatus}" th:text="${status}" th:value="${status}"></option>
+									
+								</select>
+								<button type="submit" class="btn btn-danger mx-2">Search Order</button>
+							</form>
+					</div>
+					<div class="card shadow">
+						<div class="card-header bg-primary text-white text-center">
+							<h4 class="text-white m-0">Track And Manage Your orders From Here</h4>
+							
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="example">
+									<thead>
+										<tr>
+											<th>Sr.No</th>
+											<th>Order Id</th>
+											<th>Product</th>
+											<th>Image</th>
+											<th>Buyer</th>
+											<th>ContactNo</th>
+											<th>Email</th>
+											<th>Product Price</th>
+											<th>Discount</th>
+											<th>Quantity</th>
+											<th>Sub Total</th>
+											<th>Shipping Charge</th>
+											<th>Total Amount</th>
+											<th>Payment Method</th>
+											<th>Payment Status</th>
+											<th>RazorPay Order Id</th>
+											<th>Transaction Id</th>
+											<th>Shipping Details</th>
+											<th>Order Status</th>
+											<th>Order Date</th>
+											<th>Delivery Date</th>
+											<th>Return Date</th>
+											<th>Cancellation Date</th>
+											<th>Action</th>
+											
+											
+										</tr>
+									</thead>
+									<tbody>
+									<tr th:each="order,srno : ${orders}">
+										<td th:text="${srno.index+1}"></td>
+										<td th:text="${order.orderNumber}"></td>
+										<td th:text="${order.product.productName}"></td>
+										<td>
+											<img alt="img not found" th:src="@{'/ProductImages/'+${order.product.ProductImages[0]}}" height="100px" width="100px">
+										</td>
+										<td th:text="${order.fullName}"></td>
+										<td th:text="${order.phone}"></td>
+										<td th:text="${order.user.email}"></td>
+										<td>
+											<del class="text-danger" th:text="${'₹'+(order.finalAmount+order.discountAmount)}"></del>
+											<span th:text="${'₹'+(order.finalAmount)}" style="font-size: 22px;" class="mx-2 text-success"></span>
+										</td>
+										<td>
+											<span class="badge bg-success" th:text="${#numbers.formatInteger((order.discountAmount * 100/(order.discountAmount+order.finalAmount)),1)}+'%'"></span>
+										</td>
+										<td th:text="${order.quantity}" class="fw-bold text-center"></td>
+										<td th:text="${'₹'+(order.finalAmount*order.quantity)}" class="fw-bold text-center"></td>
+										<td th:text="${'₹'+(order.shippingCharge)}" class="text-center fw-bold"></td>
+										<td th:text="${'₹'+(order.finalAmount*order.quantity+order.shippingCharge)}" class="text-center fw-bold"></td>
+										<td th:text="${order.paymentMethod}" class="text-center fw-bold"></td>
+										<td th:text="${order.paymentStatus}" class="text-center fw-bold"></td>
+										<td th:text="${order.razorpayOrderId != null ? order.razorpayOrderId : 'NA'}" class="text-center fw-bold"></td>
+										<td th:text="${order.transactionId != null ? order.transactionId : 'NA'}" class="text-center fw-bold"></td>
+										<td >
+											<span th:text="${order.pincode+','+order.address}"></span><br>
+											<span th:text="${order.city+','+order.state}"></span>
+										</td>
+										<td>
+										<span th:text="${order.orderStatus}" class="badge badge-success"></span>
+										</td>
+										<td th:text="${#temporals.format(order.orderedAt,'dd-MMM-yyyy | hh:mm a')}"></td>
+										<td th:text="${order.deliveredAt !=null ?  #temporals.format(order.deliveredAt,'dd-MMM-yyyy | hh:mm a') : 'NA'}" class="text-center fw-bold"></td>
+										<td th:text="${order.returnedAt !=null ?  #temporals.format(order.returnedAt,'dd-MMM-yyyy | hh:mm a') : 'NA'}" class="text-center fw-bold"></td>
+										<td th:text="${order.cancelledAt !=null ?  #temporals.format(order.cancelledAt,'dd-MMM-yyyy | hh:mm a') : 'NA'}" class="text-center fw-bold"></td>
+										<td class="text-center">
+											<a th:href="@{'CancelOrder/'+${order.id}}" onclick="return confirm('Are you sure want to cancel this order')" th:if="${order.orderStatus.name()=='CONFIRMED'}" class="btn btn-danger btn-sm">Cancel</a>
+											<a th:href="@{'UpdateOrderStatus/'+${order.id}}" th:if="${order.orderStatus.name()=='CONFIRMED'}" class="btn btn-warning btn-sm">Confirm</a>
+											
+											<a th:href="@{'UpdateOrderStatus/'+${order.id}}" th:if="${order.orderStatus.name()=='PROCESSING'}" class="btn btn-secondary btn-sm">Dispatch</a>
+											
+											<a th:href="@{'UpdateOrderStatus/'+${order.id}}" th:if="${order.orderStatus.name()=='DISPATCHED'}" class="btn btn-primary btn-sm">Shipped</a>
+											
+											<a th:href="@{'UpdateOrderStatus/'+${order.id}}" th:if="${order.orderStatus.name()=='SHIPPED'}" class="btn btn-primary btn-sm">Out For Delivery</a>
+											<a th:href="@{'UpdateOrderStatus/'+${order.id}}" th:if="${order.orderStatus.name()=='OUT_FOR_DELIVERY'}" class="btn btn-success btn-sm">Delivered</a>
+											<a th:href="@{'UpdateOrderStatus/'+${order.id}}" th:if="${order.orderStatus.name()=='RETURN_REQUESTED'}" class="btn btn-warning btn-sm">Accept Return</a>
+											<span th:if="${order.orderStatus.name()=='DELIVERED'}">✅</span>
+											<span th:if="${order.orderStatus.name()=='CANCELLED'}">❌</span>
+											<span th:if="${order.orderStatus.name()=='RETURNED'}">Return Successful</span>
+										</td>
+									</tr>
+									
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</body>
 </html>

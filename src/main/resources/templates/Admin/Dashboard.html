@@ -1,7 +1,239 @@
-<html th:replace="~{Admin/Adminbase::layout(~{::main})}">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{Admin/Adminbase::layout(~{::main})}">
 <body>
 <main>
-<h1>This is Admin Dashboard</h1>
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE TITLE -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="fw-bold text-success">
+                <i class="la la-dashboard"></i> Admin Dashboard
+            </h2>
+        </div>
+    </div>
+
+    <!-- ================= TOP COUNT CARDS ================= -->
+    <div class="row g-4 text-center">
+
+        <!-- Sellers -->
+        <div class="col-md-2">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <div class="icon-circle bg-success text-white mb-2">
+                        <i class="la la-user"></i>
+                    </div>
+                    <h6 class="text-muted">Sellers</h6>
+                    <h4 class="fw-bold" th:text="${sellerCount}">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buyers -->
+        <div class="col-md-2">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <div class="icon-circle bg-primary text-white mb-2">
+                        <i class="la la-users"></i>
+                    </div>
+                    <h6 class="text-muted">Users (Buyers)</h6>
+                    <h4 class="fw-bold" th:text="${buyerCount}">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="col-md-2">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <div class="icon-circle bg-warning text-white mb-2">
+                        <i class="la la-cube"></i>
+                    </div>
+                    <h6 class="text-muted">Products</h6>
+                    <h4 class="fw-bold" th:text="${productCount}">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="col-md-2">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <div class="icon-circle bg-danger text-white mb-2">
+                        <i class="la la-shopping-cart"></i>
+                    </div>
+                    <h6 class="text-muted">Orders</h6>
+                    <h4 th:text="${orderCount}">5</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Sales -->
+        <div class="col-md-2">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <div class="icon-circle bg-info text-white mb-2">
+                        <i class="la la-money"></i>
+                    </div>
+                    <h6 class="text-muted">Categories</h6>
+                    <h4 th:text="${categoryCount}">₹6</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enquiries -->
+        <div class="col-md-2">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <div class="icon-circle bg-secondary text-white mb-2">
+                        <i class="la la-envelope"></i>
+                    </div>
+                    <h6 class="text-muted">Enquiries</h6>
+                    <h4 th:text="${enquiryCount}">0</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= ORDER STATUS ================= -->
+    <div class="row mt-5 g-4 text-center">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <i class="la la-times-circle text-danger fs-5"></i>
+                    <h6 class="mt-2 text-muted">Cancelled Orders</h6>
+                    <h4 class="fw-bold" th:text="${cancelledOrders}">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <i class="la la-clock-o text-warning fs-5"></i>
+                    <h6 class="mt-2 text-muted">Pending Orders</h6>
+                    <h4 class="fw-bold" th:text="${confirmOrders}">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm start-card border-0 rounded-4">
+                <div class="card-body">
+                    <i class="la la-check-circle text-success fs-1"></i>
+                    <h6 class="mt-2 text-muted">Delivered Orders</h6>
+                    <h4 class="fw-bold" th:text="${deliveredOrders}">0</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= CHART + RECENT ================= -->
+    <div class="row mt-5 g-4">
+
+        <!-- Chart -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-success text-white fw-bold">
+                    Orders Overview
+                </div>
+                <div class="card-body">
+                    <canvas id="ordersChart" height="110"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Enquiries -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-info text-white fw-bold">
+                    Recent Enquiries
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush"
+                        style="max-height:300px; overflow-y:auto;">
+                        <li class="list-group-item"
+                            th:each="enq : ${recentEnquiries}">
+                            <strong th:text="${enq.name}">Name</strong>
+                            <small class="text-muted d-block"
+                                   th:text="${#temporals.format(enq.enquiryDate, 'dd MMM yyyy')}"></small>
+                            <span class="d-block text-truncate"
+                                  th:text="${enq.message}"></span>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-3">
+                        <a th:href="@{/Admin/Enquiry}"
+                           class="btn btn-outline-success btn-sm">
+                            View All
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= CHART JS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script th:inline="javascript">
+    const ctx = document.getElementById('ordersChart');
+
+    const orderMonths = [[${orderMonths}]];
+    const orderCounts = [[${orderCounts}]];
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: orderMonths,
+            datasets: [{
+                label: 'Orders',
+                data: orderCounts,
+                borderColor: 'green',
+                backgroundColor: 'rgba(0,128,0,0.1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            }
+        }
+    });
+</script>
+
+<!-- ================= CUSTOM CSS ================= -->
+<style>
+.start-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+.start-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.icon-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+}
+</style>
+
 </main>
 </body>
 </html>

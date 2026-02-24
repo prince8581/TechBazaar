@@ -19,6 +19,8 @@ public interface UserRepository extends JpaRepository<Users, Long>{
 
 	List<Users> findAllByUserRoleAndIsVerifiedAndUserStatusNot(UserRole seller, boolean b, UserStatus status);
 
+	Object countByUserRoleAndUserStatusNot(UserRole seller, UserStatus deleted);
+
 
 
 

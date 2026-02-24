@@ -2,297 +2,590 @@
 <html lang="en" th:fragment="layout(content)">
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tech Bazaar</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Tech Bazaar</title>
 
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-	integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-	crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="/css/style.css">
-<style>
-* {
-	font-family: new times roman;
-}
-/* Offcanvas Theme */
-.tech-offcanvas {
-	width: 260px;
-	background: #ffffff;
-	box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-}
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+		integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="/css/style.css">
 
-/* Menu Links */
-.menu-item {
-	display: block;
-	padding: 12px 15px;
-	margin-bottom: 8px;
-	border-radius: 8px;
-	text-decoration: none;
-	font-weight: 500;
-	color: #333;
-	transition: all 0.3s ease;
-}
+	<!-- Google Fonts for Modern Typography -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+		rel="stylesheet">
 
-/* Hover Effect */
-.menu-item:hover {
-	background: #008ecc;
-	color: #fff;
-	transform: translateX(5px);
-}
+	<style>
+		:root {
+			--primary-color: #0d6efd;
+			--primary-dark: #0a58ca;
+			--secondary-color: #6c757d;
+			--accent-color: #f39c12;
+			--bg-light: #f8f9fa;
+			--text-main: #2b2b2b;
+		}
 
-/* Active Item */
-.menu-item.active {
-	background: #008ecc;
-	color: #fff;
-}
-</style>
+		* {
+			font-family: 'Inter', sans-serif;
+		}
+
+		body {
+			background-color: #f4f6f9;
+			color: var(--text-main);
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.main-content-wrapper {
+			flex: 1;
+		}
+
+		/* Top Bar */
+		.top-bar {
+			background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+			color: #fff;
+			font-size: 0.85rem;
+			font-weight: 500;
+			padding: 8px 0;
+			width: 100%;
+		}
+
+		.top-bar a,
+		.top-bar span {
+			color: #e0e0e0;
+			text-decoration: none;
+			transition: color 0.2s ease;
+		}
+
+		.top-bar a:hover {
+			color: #ffffff;
+		}
+
+		/* Navbar */
+		.main-navbar {
+			background: #ffffff;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+			z-index: 1020;
+			width: 100%;
+		}
+
+		.navbar-brand-text {
+			font-weight: 800;
+			font-size: 1.5rem;
+			background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+			-webkit-background-clip: text;
+			background-clip: text;
+			-webkit-text-fill-color: transparent;
+			letter-spacing: -0.5px;
+		}
+
+		/* Search Bar Wrapper */
+		.search-wrapper {
+			position: relative;
+			max-width: 600px;
+			width: 100%;
+		}
+
+		.search-input {
+			border-radius: 50px;
+			padding: 12px 20px 12px 45px;
+			border: 2px solid #e9ecef;
+			background: #f8f9fa;
+			transition: all 0.3s ease;
+			font-weight: 500;
+		}
+
+		.search-input:focus {
+			border-color: var(--primary-color);
+			background: #ffffff;
+			box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+		}
+
+		.search-icon {
+			position: absolute;
+			left: 18px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #adb5bd;
+			font-size: 1.1rem;
+		}
+
+		.search-btn {
+			position: absolute;
+			right: 5px;
+			top: 5px;
+			bottom: 5px;
+			border-radius: 40px;
+			font-weight: 600;
+			padding: 0 25px;
+		}
+
+		/* Icons & Buttons Profile/Cart */
+		.action-btn {
+			width: 45px;
+			height: 45px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f8f9fa;
+			color: #495057;
+			transition: all 0.3s ease;
+			text-decoration: none;
+			position: relative;
+			border: 1px solid transparent;
+		}
+
+		.action-btn:hover {
+			background: var(--primary-color);
+			color: #ffffff;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+		}
+
+		.action-text-btn {
+			border-radius: 50px;
+			padding: 8px 24px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+
+		/* Cart Badge */
+		.cart-badge {
+			position: absolute;
+			top: -5px;
+			right: -5px;
+			background: #dc3545;
+			color: white;
+			border: 2px solid #ffffff;
+			border-radius: 50%;
+			height: 22px;
+			min-width: 22px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 0.75rem;
+			font-weight: bold;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Offcanvas Theme */
+		.tech-offcanvas {
+			width: 300px;
+			border: none;
+			border-radius: 0 20px 20px 0;
+			box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+		}
+
+		.offcanvas-header-custom {
+			background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+			padding: 25px 30px;
+			border-radius: 0 20px 0 0;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.offcanvas-header-custom::after {
+			content: '';
+			position: absolute;
+			bottom: -15px;
+			right: -15px;
+			width: 100px;
+			height: 100px;
+			background: rgba(255, 255, 255, 0.1);
+			border-radius: 50%;
+		}
+
+		/* Menu Links */
+		.menu-item {
+			display: flex;
+			align-items: center;
+			padding: 14px 20px;
+			margin-bottom: 8px;
+			border-radius: 12px;
+			text-decoration: none;
+			font-weight: 500;
+			color: #495057;
+			transition: all 0.3s ease;
+			border: 1px solid transparent;
+		}
+
+		.menu-item i {
+			font-size: 1.2rem;
+			width: 35px;
+			text-align: center;
+			color: #adb5bd;
+			transition: all 0.3s ease;
+		}
+
+		/* Hover Effect */
+		.menu-item:hover {
+			background: #f8f9fa;
+			color: var(--primary-color);
+			border-color: #e9ecef;
+			transform: translateX(5px);
+		}
+
+		.menu-item:hover i {
+			color: var(--primary-color);
+		}
+
+		/* Active Item */
+		.menu-item.active {
+			background: rgba(13, 110, 253, 0.08);
+			color: var(--primary-color);
+			font-weight: 600;
+			border-color: rgba(13, 110, 253, 0.1);
+		}
+
+		.menu-item.active i {
+			color: var(--primary-color);
+		}
+
+		/* Footer Styling */
+		.modern-footer {
+			background: linear-gradient(135deg, #1e3c72 0%, #152c5b 100%);
+			color: #e2e8f0;
+			padding-top: 4rem;
+		}
+
+		.footer-heading {
+			color: #ffffff;
+			font-weight: 700;
+			margin-bottom: 1.5rem;
+			font-size: 1.15rem;
+			position: relative;
+			padding-bottom: 10px;
+			letter-spacing: 0.5px;
+		}
+
+		.footer-heading::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 45px;
+			height: 3px;
+			background: #0dcaf0;
+			/* Cyan accent */
+			border-radius: 2px;
+		}
+
+		.footer-links {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.footer-links li {
+			margin-bottom: 0.8rem;
+		}
+
+		.footer-links a {
+			color: #cbd5e1;
+			text-decoration: none;
+			transition: all 0.2s ease;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.footer-links a:hover {
+			color: #0dcaf0;
+			transform: translateX(4px);
+		}
+
+		.footer-bottom {
+			background: rgba(11, 21, 40, 0.95);
+			/* Deep dark blue for the bottom strip */
+			padding: 1.5rem 0;
+			margin-top: 3rem;
+			border-top: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.social-icons a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 38px;
+			height: 38px;
+			background: rgba(255, 255, 255, 0.1);
+			color: #ffffff;
+			border-radius: 50%;
+			margin-right: 8px;
+			transition: all 0.3s ease;
+			text-decoration: none;
+		}
+
+		.social-icons a:hover {
+			background: #0dcaf0;
+			color: #ffffff;
+			transform: translateY(-4px);
+			box-shadow: 0 4px 12px rgba(13, 202, 240, 0.4);
+		}
+
+		/* Dropdown customization */
+		.dropdown-menu-custom {
+			border: none;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			border-radius: 12px;
+			padding: 10px;
+			min-width: 220px;
+		}
+
+		.dropdown-menu-custom .dropdown-item {
+			border-radius: 8px;
+			padding: 8px 16px;
+			font-weight: 500;
+			transition: all 0.2s;
+			margin-bottom: 2px;
+		}
+
+		.dropdown-menu-custom .dropdown-item:hover {
+			background-color: #f8f9fa;
+			color: var(--primary-color);
+		}
+	</style>
 
 </head>
 
 <body>
-	<div class="container-fluid">
-		<!--top row start-->
-		<div class="row bg-light">
-			<div class="col-sm-4">
-				<h4 class="text-dark mx-5 mt-3">Welcome to TechBazaar</h4>
-			</div>
-			<div class="col-sm-4"></div>
-			<div class="col-sm-4">
-				<ul class="list-unstyled d-flex justify-content-evenly mt-3">
-					<li><i class="fa-solid fa-location-dot text-info"></i> Deliver
-						to 423651</li>
-					<li><i class="fa-solid fa-truck-fast text-info"></i> Track
-						your order</li>
-					<li><i class="fa-solid fa-circle-xmark text-info"></i> All
-						Offers</li>
-				</ul>
+	<!-- Top Info Bar -->
+	<div class="top-bar">
+		<div class="container-fluid px-4 pe-lg-5 ps-lg-5">
+			<div class="row align-items-center">
+				<div class="col-md-6 d-none d-md-block">
+					<span class="d-inline-flex align-items-center gap-2">
+						<i class="fa-solid fa-bolt text-warning"></i> Welcome to TechBazaar - Premium Electronics &
+						Essentials
+					</span>
+				</div>
+				<div class="col-md-6 text-center text-md-end">
+					<div
+						class="d-inline-flex align-items-center justify-content-center justify-content-md-end gap-3 gap-md-4 w-100">
+						<a href="#"><i class="fa-solid fa-location-dot me-1 text-info"></i> Deliver to 423651</a>
+						<a href="#"><i class="fa-solid fa-truck-fast me-1 text-info"></i> Track Order</a>
+						<a href="#"><i class="fa-solid fa-tags me-1 text-warning"></i> Offers</a>
+					</div>
+				</div>
 			</div>
 		</div>
-		<!--top row end-->
+	</div>
 
-		<!--2nd row start-->
-		<div class="row bg-white">
-
-			<!-- Header -->
-			<div class="col-sm-4 position-relative">
-				<div class="d-flex align-items-center p-3 mx-5">
-					<button class="btn btn-outline-primary btn-sm me-2"
-						data-bs-toggle="offcanvas" data-bs-target="#techOffcanvas">
-						<i class="fa-solid fa-bars"></i>
+	<!-- Main Navigation -->
+	<div class="main-navbar sticky-top py-3">
+		<div class="container-fluid px-4 pe-lg-5 ps-lg-5">
+			<div class="row align-items-center">
+				<!-- Left: Menu Toggle & Logo -->
+				<div class="col-4 col-lg-3 d-flex align-items-center gap-3">
+					<button class="action-btn" data-bs-toggle="offcanvas" data-bs-target="#techOffcanvas"
+						style="background: transparent; border: 1px solid #dee2e6;">
+						<i class="fa-solid fa-bars-staggered fs-5"></i>
 					</button>
-					<h4 class="text-primary mb-0 fw-bold">TechBazaar</h4>
-				</div>
-			</div>
-
-			<!-- Offcanvas Menu -->
-			<div class="offcanvas offcanvas-start tech-offcanvas" tabindex="-1"
-				id="techOffcanvas">
-				<div class="offcanvas-header border-bottom">
-					<h5 class="offcanvas-title text-primary fw-bold">TechBazaar</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+					<a href="/" class="text-decoration-none">
+						<h3 class="navbar-brand-text mb-0 m-0">TechBazaar</h3>
+					</a>
 				</div>
 
-				<div class="offcanvas-body p-3">
-					<a href="/" class="menu-item active">🏠 Home</a> <a href="/Orders"
-						class="menu-item">📦 Orders</a> <a href="/Products"
-						class="menu-item">🛒 Products</a> <a href="/Services"
-						class="menu-item">🛠 Services</a> <a href="/AboutUs"
-						class="menu-item">ℹ About Us</a> <a href="/ContactUs"
-						class="menu-item">📞 Contact Us</a>
-				</div>
-			</div>
-
-			<!-- <div class="col-sm-4">
-             <div class="d-flex align-items-center p-3 mx-5" style="width: max-content; position: relative;">
-                    <button class="btn btn-outline-primary btn-sm me-2" type="button" id="menuBtn">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                    <h4 class="text-primary mb-0">TechBazaar</h4>
-                </div>
-
-                <!-- Collapsible menu outside parent --
-                <div class="collapse position-absolute" id="techMenu" style="z-index: 1000;">
-                    <div class="card card-body p-2" style="width: 200px;">
-                        <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/" class="text-decoration-none text-light">Home</a></button>
-                        <button class="btn btn-secondary btn-sm w-100 mb-1"><a href="/Orders" class="text-decoration-none text-light">Orders</a></button>
-                        <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/Products" class="text-decoration-none text-light">Products</a></button>
-                        <button class="btn btn-secondary btn-sm w-100 mb-1"><a href="/Services" class="text-decoration-none text-light">Servicess</a></button>
-                        <button class="btn btn-primary btn-sm w-100 mb-1"><a href="/AboutUs" class="text-decoration-none text-light">AboutUs</a></button>
-                        <button class="btn btn-secondary btn-sm w-100"><a href="/ContactUs" class="text-decoration-none text-light">ContactUs</a></button>
-                    </div>
-                </div>
-
-            </div>-->
-
-			<div class="col-sm-4">
-				<div class="input-group m-3 border border-info rounded-2">
-					<span class="input-group-text"><i
-						class="fa-solid fa-magnifying-glass text-info"></i></span> <input
-						type="text" class="form-control bg-light border-0"
-						placeholder="Search essentials,electronics and more..."
-						aria-label="Amount (to the nearest dollar)"> <span
-						class="input-group-text"><i
-						class="fa-solid fa-bars text-info"></i></span>
+				<!-- Center: Search Bar -->
+				<div class="col-4 col-lg-6 d-none d-lg-flex justify-content-center">
+					<div class="search-wrapper">
+						<i class="fa-solid fa-magnifying-glass search-icon"></i>
+						<input type="text" class="form-control search-input w-100 shadow-none"
+							placeholder="Search essentials, electronics, and more...">
+						<button class="btn btn-primary search-btn shadow-sm" type="button">Search</button>
+					</div>
 				</div>
 
-				<!-- <div class="input-group m-3">
-                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
-                    <input type="text" class="form-control" placeholder="Search essentials" aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div> -->
-			</div>
+				<!-- Right: Account & Cart Actions -->
+				<div class="col-8 col-lg-3 d-flex align-items-center justify-content-end gap-3 gap-lg-4">
 
-			<div class="col-sm-4">
-				<ul class="list-unstyled d-flex justify-content-evenly m-3">
-					<li th:if="${session.loggedInUser == null}"><a href="/Login"
-						class="text-decoration-none text-dark"><i
-							class="fa-regular fa-user  text-info"></i> SignUp / SignIn</a></li>
-					<li class="dropdown" th:if="${session.loggedInUser != null}">
-						<a href="#" class="text-decoration-none text-dark dropdown-toggle"
-						data-bs-toggle="dropdown" aria-expanded="false"> <i
-							class="fa-regular fa-user text-info"></i> Profile
+					<!-- Search Icon Mobile -->
+					<button class="action-btn d-lg-none d-flex" title="Search">
+						<i class="fa-solid fa-magnifying-glass"></i>
+					</button>
+
+					<!-- Login / Profile Area -->
+					<div th:if="${session.loggedInUser == null}">
+						<a href="/Login"
+							class="btn btn-primary action-text-btn shadow-sm d-flex align-items-center gap-2">
+							<i class="fa-regular fa-user"></i> <span class="d-none d-sm-inline">Sign In</span>
+						</a>
+					</div>
+
+					<div class="dropdown" th:if="${session.loggedInUser != null}">
+						<a href="#"
+							class="text-decoration-none text-dark d-flex align-items-center gap-2 dropdown-toggle fw-semibold"
+							data-bs-toggle="dropdown" aria-expanded="false"
+							style="padding: 5px 10px 5px 5px; border-radius: 50px; border: 1px solid #e9ecef; background: #fff;">
+							<div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+								style="width: 36px; height: 36px;">
+								<i class="fa-regular fa-user fs-6"></i>
+							</div>
+							<span class="d-none d-sm-inline pe-2">Profile</span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom mt-2">
+							<li class="px-3 py-2 mb-2 bg-light rounded text-center mx-2 mt-1">
+								<small class="text-muted d-block">Welcome back!</small>
+								<strong class="text-dark" th:text="${session.loggedInUser.name}">User Account</strong>
+							</li>
+							<li>
+								<hr class="dropdown-divider">
+							</li>
+							<li><a class="dropdown-item" href="/User/Profile"><i
+										class="fa-solid fa-user me-2 text-primary opacity-75"></i> View Profile</a></li>
+							<li><a class="dropdown-item" href="/User/ManageAddress"><i
+										class="fa-solid fa-location-dot me-2 text-primary opacity-75"></i> Manage
+									Address</a></li>
+							<li><a class="dropdown-item" href="/User/ChangePassword"><i
+										class="fa-solid fa-key me-2 text-primary opacity-75"></i> Change Password</a>
+							</li>
+							<li>
+								<hr class="dropdown-divider my-2">
+							</li>
+							<li><a class="dropdown-item text-danger" href="/logout"><i
+										class="fa-solid fa-arrow-right-from-bracket me-2 opacity-75"></i> Logout</a>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Cart Area -->
+					<a href="/ViewCart" class="action-btn" title="View Cart">
+						<i class="fa-solid fa-cart-shopping fs-5"></i>
+						<span class="cart-badge" th:text="${cartItemCount}" id="cartItemCount">3</span>
 					</a>
 
-						<ul class="dropdown-menu bg-info">
-							<li><a class="dropdown-item" href="/User/Profile"> <i
-									class="fa-solid fa-user me-2"></i>View Profile
-							</a></li>
-							<li><a class="dropdown-item" href="/User/ManageAddress">
-									<i class="fa-solid fa-user me-2"></i>Manage Address
-							</a></li>
-							<li><a class="dropdown-item" href="/User/ChangePassword">
-									<i class="fa-solid fa-key me-2"></i> Change Password
-							</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item text-danger" href="/logout">
-									<i class="fa-solid fa-right-from-bracket me-2"></i> Logout
-							</a></li>
-						</ul>
-					</li>
-
-					<!--<li th:if="${session.loggedInUser != null}"><a href="#" class="text-decoration-none text-dark"><i class="fa-regular fa-user  text-info"></i>
-                            Profile</a></li>-->
-
-					<li class="position-relative"><a href="/ViewCart"
-						class="text-decoration-none text-dark position-relative"> <i
-							class="fa-solid fa-cart-arrow-down text-info fs-5"></i> <!-- Cart Count -->
-							<span
-							class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-							th:text="${cartItemCount}" id="cartItemCount">3</span>
-					</a></li>
-
-					<!-- <li>
-                       <a href="/cart" class="text-decoration-none text-dark">
-                       <i class="fa-solid fa-cart-arrow-down text-info"></i> Cart
-                       </a>
-                   </li>-->
-
-
-					<!-- <li><i class="fa-solid fa-cart-arrow-down text-info"></i> Cart</li> -->
-				</ul>
-			</div>
-		</div>
-		<hr>
-		<!--2nd row end-->
-
-
-
-		<!--  -->
-
-		<!--Scroll start--
-         <div class="row">
-            <div class="col-sm-11 mx-auto">
-                <div class="product-scroll-one">
-                    <div class="product-scroll" id="productScroll">
-                        <button class="btn  product-item active">Mobiles</button>
-                        <button class="btn  product-item">Laptops</button>
-                        <button class="btn  product-item">Cooler</button>
-                        <button class="btn  product-item">Irons</button>
-                        <button class="btn  product-item">Lights</button>
-                        <button class="btn  product-item">Wires</button>
-                        <button class="btn  product-item">Mobiles</button>
-                        <button class="btn  product-item">Irons</button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <!--Scroll end-->
-
-		<!-- Main Content From other pages  start-->
-		<div class="main" th:replace="${content}"></div>
-		<!-- Main Content From other pages end -->
-
-		<!--footer start-->
-		<div class="row bg-info">
-			<div class="col-sm-10 mx-auto">
-				<div class="row pb-5">
-					<div class="col-sm-4">
-						<h2 class="mt-5 text-light fw-bold">TechBazaar</h2>
-						<p class="small mt-2 text-light">Your one-stop destination for
-							electronics & essentials.</p>
-
-						<h4 class="mt-4 text-light">Contact Us</h4>
-						<ul class="list-unstyled text-light">
-							<li><i class="fa-brands fa-whatsapp"></i> Whats App</li>
-							<li>+91- 8581023460</li>
-							<li><i class="fa-solid fa-phone"></i> Call us</li>
-							<li>+91- 8581023460</li>
-							<li>Downloads App</li>
-						</ul>
-					</div>
-					<div class="col-sm-4">
-						<h4 class="mt-5 text-light">Quick Links</h4>
-
-						<ul class="text-light">
-							<li>About Us</li>
-							<li>Terms of Use</li>
-							<li>Security</li>
-							<li>Privacy Policy</li>
-							<li>Payments</li>
-							<li>shippings</li>
-							<li>Cancellation and Returns</li>
-							<li>FAQ</li>
-						</ul>
-					</div>
-					<div class="col-sm-4">
-						<h4 class="mt-5 text-light">Customer Services</h4>
-
-						<ul class="text-light">
-							<li>My Account</li>
-							<li>Orders</li>
-							<li>Help Center</li>
-							<li>E-Waste Policies</li>
-							<li>Return Policy</li>
-							<li>Support</li>
-
-						</ul>
-					</div>
-				</div>
-				<hr class="text-light">
-			</div>
-			<div class="row">
-				<div class="col-sm-4 mx-auto">
-					<p class="text-light">&copy; 2026 All rights reserved. Made By
-						Prince Kumar</p>
 				</div>
 			</div>
-
 		</div>
-		<!--footer end-->
 	</div>
-	<script src="./js/script.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+
+	<!-- Offcanvas Menu -->
+	<div class="offcanvas offcanvas-start tech-offcanvas" tabindex="-1" id="techOffcanvas">
+		<div class="offcanvas-header offcanvas-header-custom d-flex justify-content-between align-items-center">
+			<div class="d-flex align-items-center gap-3" style="z-index: 1;">
+				<div class="bg-white rounded-circle p-2 d-flex align-items-center justify-content-center shadow"
+					style="width: 44px; height: 44px;">
+					<i class="fa-solid fa-layer-group text-primary fs-4"></i>
+				</div>
+				<div>
+					<h5 class="offcanvas-title text-white fw-bold mb-0">TechBazaar</h5>
+					<small class="text-white-50">Main Menu</small>
+				</div>
+			</div>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"
+				style="z-index: 1;"></button>
+		</div>
+		<div class="offcanvas-body p-4">
+			<div class="mb-4">
+				<a href="/" class="menu-item active"><i class="fa-solid fa-house"></i> Home</a>
+				<a href="/Products" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Products</a>
+				<a href="/Services" class="menu-item"><i class="fa-solid fa-screwdriver-wrench"></i> Services</a>
+				<a href="/Orders" class="menu-item"><i class="fa-solid fa-box-open"></i> Orders</a>
+				<a href="/AboutUs" class="menu-item"><i class="fa-solid fa-circle-info"></i> About Us</a>
+				<a href="/ContactUs" class="menu-item"><i class="fa-solid fa-headset"></i> Contact Us</a>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Main Content From other pages start -->
+	<div class="main-content-wrapper w-100">
+		<div class="main w-100" th:replace="${content}"></div>
+	</div>
+	<!-- Main Content From other pages end -->
+
+
+	<!-- Modern Footer -->
+	<footer class="modern-footer mt-auto w-100">
+		<div class="container-fluid px-4 pe-lg-5 ps-lg-5">
+			<div class="row g-5 mb-5">
+				<!-- Brand Column -->
+				<div class="col-lg-4 col-md-6">
+					<h2 class="text-white fw-bolder mb-3 d-flex align-items-center gap-2">
+						<i class="fa-solid fa-bolt text-info"></i> TechBazaar
+					</h2>
+					<p class="pe-lg-4 mb-4" style="color: #cbd5e1; font-weight: 400; line-height: 1.6;">
+						Your ultimate destination for premium electronics, smart gadgets, and everyday essentials. We
+						deliver quality products with unmatched customer service.
+					</p>
+					<div class="social-icons d-flex flex-wrap gap-2">
+						<a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+						<a href="#"><i class="fa-brands fa-twitter"></i></a>
+						<a href="#"><i class="fa-brands fa-instagram"></i></a>
+						<a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+					</div>
+				</div>
+
+				<!-- Quick Links -->
+				<div class="col-lg-2 col-md-6">
+					<h4 class="footer-heading">Quick Links</h4>
+					<ul class="footer-links">
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> About Us</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Terms of Use</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Security</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Privacy Policy</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Payments</a></li>
+					</ul>
+				</div>
+
+				<!-- Customer Service -->
+				<div class="col-lg-3 col-md-6">
+					<h4 class="footer-heading">Customer Services</h4>
+					<ul class="footer-links">
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> My Account</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Track Orders</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> E-Waste Policies</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Return Policy</a></li>
+						<li><a href="#"><i class="fa-solid fa-angle-right small"></i> Support</a></li>
+					</ul>
+				</div>
+
+				<!-- Contact -->
+				<div class="col-lg-3 col-md-6">
+					<h4 class="footer-heading">Contact Us</h4>
+					<ul class="footer-links">
+						<li><a href="#" class="mb-2"><i class="fa-brands fa-whatsapp fs-5 text-success"></i>
+								+91-8581023460</a></li>
+						<li><a href="#" class="mb-3"><i class="fa-solid fa-phone fs-5 text-info"></i>
+								+91-8581023460</a></li>
+						<li class="mt-3"><a href="#"
+								class="btn btn-info fw-bold d-inline-flex align-items-center gap-2 border-0 shadow-sm text-dark mt-2"
+								style="text-decoration: none;"><i class="fa-solid fa-download"></i> Download App</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Copyright -->
+		<div class="footer-bottom">
+			<div class="container-fluid px-4 pe-lg-5 ps-lg-5">
+				<div class="row align-items-center">
+					<div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+						<p class="mb-0 small" style="color: #94a3b8;">&copy; 2026 TechBazaar. All rights reserved.</p>
+					</div>
+					<div class="col-md-6 text-center text-md-end">
+						<p class="mb-0 small" style="color: #94a3b8;">Made by <span class="text-info fw-bold">Prince
+								Kumar</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
 		crossorigin="anonymous"></script>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<script type="text/javascript" src="/js/main.js"></script>
+	<script type="text/javascript" src="./js/script.js"></script>
 
 </body>
 

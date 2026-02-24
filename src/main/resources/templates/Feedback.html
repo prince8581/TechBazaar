@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html th:replace="~{base::layout(~{::main})}">
+<head>
+<title>Write Feedback</title>
+
+</head>
+
+
+<body>
+<main>
+
+<style>
+
+/* PAGE BG */
+body{
+background:linear-gradient(135deg,#eef2f7,#e6ecf5);
+font-family:'Segoe UI',sans-serif;
+}
+
+
+/* CARD */
+.feedback-card{
+max-width:550px;
+margin:60px auto;
+border-radius:16px;
+border:none;
+background:#fff;
+box-shadow:0 12px 30px rgba(0,0,0,0.08);
+animation:fadeIn .6s ease;
+}
+
+
+/* HEADER */
+.feedback-card h4{
+font-weight:700;
+background:linear-gradient(90deg,#0d6efd,#00b4ff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+
+/* LABEL */
+.form-label{
+font-weight:600;
+font-size:14px;
+color:#333;
+}
+
+
+/* INPUT */
+.form-control{
+border-radius:10px;
+padding:10px;
+border:1px solid #dce1e7;
+transition:.25s;
+}
+.form-control:focus{
+border-color:#0d6efd;
+box-shadow:0 0 0 3px rgba(13,110,253,.15);
+}
+
+
+/* STAR RATING */
+.star-rating{
+display:flex;
+flex-direction:row-reverse;
+justify-content:center;
+gap:8px;
+font-size:32px;
+}
+.star-rating input{display:none;}
+
+.star-rating label{
+color:#ddd;
+cursor:pointer;
+transition:.25s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label{
+color:#ffc107;
+transform:scale(1.2);
+}
+
+
+/* IMAGE PREVIEW */
+.preview-img{
+display:none;
+margin-top:12px;
+max-height:160px;
+border-radius:12px;
+box-shadow:0 4px 14px rgba(0,0,0,.15);
+}
+
+
+/* BUTTON */
+.btn-submit{
+background:linear-gradient(90deg,#0d6efd,#00b4ff);
+border:none;
+color:#fff;
+font-weight:600;
+padding:10px 26px;
+border-radius:10px;
+transition:.3s;
+}
+
+.btn-submit:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(13,110,253,.3);
+}
+
+
+/* ANIMATION */
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+
+/* MOBILE */
+@media(max-width:576px){
+.feedback-card{
+margin:30px 15px;
+padding:20px;
+}
+}
+
+</style>
+
+
+<div class="card feedback-card p-4">
+
+<h4 class="text-center mb-4">Write Your Feedback</h4>
+
+<form th:action="@{/Feedback}" method="post" enctype="multipart/form-data">
+
+<!-- Hidden Order ID -->
+<input type="hidden" name="orderId" th:value="${order.id}" />
+
+
+<!-- ⭐ Rating -->
+<div class="mb-4 text-center">
+<label class="form-label">Rate this Product</label>
+
+<div class="star-rating mt-2">
+
+<input type="radio" name="rating" value="5" id="star5" required>
+<label for="star5">★</label>
+
+<input type="radio" name="rating" value="4" id="star4">
+<label for="star4">★</label>
+
+<input type="radio" name="rating" value="3" id="star3">
+<label for="star3">★</label>
+
+<input type="radio" name="rating" value="2" id="star2">
+<label for="star2">★</label>
+
+<input type="radio" name="rating" value="1" id="star1">
+<label for="star1">★</label>
+
+</div>
+</div>
+
+
+<!-- Message -->
+<div class="mb-4">
+<label class="form-label">Your Review</label>
+<textarea class="form-control"
+name="message"
+rows="4"
+placeholder="Share your experience..."
+required></textarea>
+</div>
+
+
+<!-- Upload -->
+<div class="mb-4">
+<label class="form-label">Upload Image (Optional)</label>
+<input type="file"
+class="form-control"
+name="profilePic"
+accept="image/*"
+onchange="previewImage(event)">
+<img id="preview" class="preview-img"/>
+</div>
+
+
+<!-- Button -->
+<div class="text-center">
+<button type="submit" class="btn-submit">
+Submit Feedback
+</button>
+</div>
+
+</form>
+</div>
+
+
+
+<script>
+function previewImage(event){
+const reader=new FileReader();
+reader.onload=function(){
+const output=document.getElementById('preview');
+output.src=reader.result;
+output.style.display='block';
+};
+reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+
+
+</main>
+</body>
+</html>

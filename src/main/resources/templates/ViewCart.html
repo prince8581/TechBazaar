@@ -43,7 +43,7 @@
 						<div class="card rounded-1 shadow  p-2">
 							<div class="row p-1">
 								<div class="col-sm-8 pt-2"
-									th:if="${session.loggedInUser == null}">
+									th:if="${session.loggedInUser == null  or address == null}">
 									<p class="pt-1 m-0">Select Address from Saved Addresses</p>
 								</div>
 								<div class="col-sm-8" th:if="${session.loggedInUser != null && address!=null}">
@@ -181,7 +181,7 @@
 					<img alt="image not found" src="assets/img/cart.webp"
 						width="350px" class="mx-auto">
 					<h5>Your Card is empty!</h5>
-					<small>Add items to it now</small> <br> <a href=""
+					<small>Add items to it now</small> <br> <a href="/Products"
 						class="btn btn-primary rounded-0 mx-auto" style="width: 15%">Shop
 						Now</a>
 				</div>
@@ -219,7 +219,7 @@
 									class="p-2">
 							</div>
 							<div class="col-md-2 d-flex align-items-end">
-								<button class="btn btn-secondary btn-sm disabled">Submit</button>
+								<button class="btn btn-secondary btn-sm disabled"> Submit</button>
 							</div>
 
 							<div class="col-md-12">
@@ -259,7 +259,7 @@
 								<div class="d-flex justify-content-between pt-3 px-4">
 									<a href="/User/ManageAddress"
 										class="text-decoration-none fw-bold">+ Add New Address</a>
-									<button type="submit" class="btn btn-primary btn-sm">Save
+									<button type="submit" class="btn btn-primary btn-sm" th:if="${address!=null}">Save
 										Address</button>
 								</div>
 							</div>
@@ -271,43 +271,7 @@
 			</div>
 		</div>
 
-		<script type="text/javascript">
 		
-			function updateQuantity(btn, update) {
-				var cartItem = btn.closest(".cart-row");
-				var cartId = cartItem.getAttribute('data-id');
-				var finalPrice = parseFloat(cartItem
-						.querySelector('.final-price').value);
-				var unitPrice = parseFloat(cartItem
-						.querySelector(".price-per-unit").value);
-
-				var qtyElement = cartItem.querySelector(".qty")
-
-				let qty = parseInt(qtyElement.innerText);
-				let max = 5;
-
-				(update == 1) ? (qty == max ? alert("no") : qty += update)
-						: qty == 1 ? alert("no") : qty += update
-
-				//update UI at realTime
-				qtyElement.innerText = qty;
-				cartItem.querySelector('.updated-unit-price').innerText = parseFloat(qty
-						* unitPrice).toFixed(1);
-				cartItem.querySelector('.updated-final-price').innerText = parseFloat(qty
-						* finalPrice).toFixed(1);
-
-				fetch('/UpdateQuantity/' + cartId + '?quantity=' + qty, {
-					method : 'POST'
-				})
-				.then(res => res.json())
-				.then(data =>{
-					document.getElementById("totalPrice").innerText ="₹"+ parseFloat(data.totalPrice).toFixed(1);
-					document.getElementById("discount").innerText ="₹"+ parseFloat(data.totalPrice - data.finalPrice).toFixed(1);
-					document.getElementById("finalPrice").innerText ="₹" +parseFloat( data.finalPrice.toFixed(1));
-				} )
-			}
-			
-		</script>
 
 	</main>
 </body>

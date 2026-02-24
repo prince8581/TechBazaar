@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import com.razorpay.Refund;
 
 import jakarta.annotation.PostConstruct;
 
@@ -64,6 +65,13 @@ public class RazorpayService {
 
 		
 	}
+	public Refund refundPayment(String paymentId) throws RazorpayException
+	{
+		JSONObject cancelRequest=new JSONObject();
+		cancelRequest.put("payment_id", paymentId);
+		return razorpayClient.payments.refund(cancelRequest);
+	}
+	
 	public String getRazorpayKey() {
 		return razorpayKey;
 	}

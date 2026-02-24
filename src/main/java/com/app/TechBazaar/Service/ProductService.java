@@ -1,6 +1,7 @@
 package com.app.TechBazaar.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,7 @@ import com.app.TechBazaar.Model.Products.ProductStatus;
 import com.app.TechBazaar.Model.Users;
 import com.app.TechBazaar.Repository.ProductCategoryRepository;
 import com.app.TechBazaar.Repository.ProductRepository;
+import com.app.TechBazaar.Repository.UserRepository;
 
 @Service
 public class ProductService {
@@ -29,6 +31,11 @@ public class ProductService {
 	
 	@Autowired
 	private ProductCategoryRepository productCategoryRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
+	
+	private final String uploadDir = "public/uploads/";
 	
 	//Logics
 	public void saveProduct(ProductDTO productDTO, MultipartFile[] images, Users user) {
@@ -112,4 +119,82 @@ public class ProductService {
 		productRepo.save(product);
 	}
 
+	
+	public void setProductVisibility(Users user,boolean visibility) 
+	{
+		List<Products> products=productRepo.findAllBySeller(user);
+		
+		for(Products product:products) 
+		{
+			product.setVisibility(visibility);
+			productRepo.save(product);
+		}
+	}
+	
+	public void updateProduct(long id,ProductDTO productDto) 
+	{
+		
+	
+		Products product=productRepo.findById(id).orElseThrow(()->new RuntimeException("User NOt found"));
+		product.setProductName(productDto.getProductName());
+		product.setProductDescription(productDto.getProductDescription());
+		product.setBrandName(productDto.getBrandName());
+		product.setPricePerUnit(productDto.getPricePerUnit());
+		product.setDiscount(productDto.getDiscount());
+		product.setFinalPrice(productDto.getFinalPrice());
+		product.setQuantityAvailable(productDto.getQuantityAvailable());
+		product.setVisibility(true);
+		
+		product.setCategory(productDto.getCategory());
+		
+		
+		product.setCancellationAllowed(productDto.isCancellationAllowed());
+		product.setCodAvailable(productDto.isCodAvailable());
+		product.setShippingType(productDto.getShippingType());
+		product.setShippingCharge(productDto.getShippingCharge());
+		product.setMinDeliveryDays(productDto.getMinDeliveryDays());
+		product.setMaxDeliveryDays(productDto.getMaxDeliveryDays());
+		product.setReturnAvailable(productDto.isReturnAvailable());
+		product.setReturnConditions(productDto.getReturnConditions());
+		product.setReturnDays(productDto.getReturnDays());
+		product.setWarranty(productDto.isWarranty());
+		product.setWarrantyDuration(productDto.getWarrantyDuration());
+		product.setWarrantyTerms(productDto.getWarrantyTerms());
+		product.setWarrantyUnit(productDto.getWarrantyUnit());
+		product.setStatus(ProductStatus.AVAILABLE);
+		product.setUpdatedAt(LocalDateTime.now());
+		
+		productRepo.save(product);
+			
+			
+	
+		
+	}
+	
+	//Update product 
+//		public void updateProduct(Users seller, MultipartFile profileImage) throws IOException  {
+//			Users existProducts = userRepo.findById(seller.getId()).orElseThrow();
+//			
+//			//Delete Existing profilepic from source
+//			if(existUsers.getProfilePic() != null && !existUsers.getProfilePic().isEmpty()) {
+//				Path filePath = Paths.get(uploadDir+existUsers.getProfilePic());
+//				Files.deleteIfExists(filePath);
+//			}
+//			
+//			String storageFileName = UUID.randomUUID()+"_"+profileImage.getOriginalFilename();
+//			Files.copy(profileImage.getInputStream(), Paths.get(uploadDir+storageFileName), StandardCopyOption.REPLACE_EXISTING);
+//			
+//			existUsers.setName(seller.getName());
+//			existUsers.setContactNo(seller.getContactNo());
+//			existUsers.setPanCard(seller.getPanCard());
+//			existUsers.setAadharNo(seller.getAadharNo());
+//			existUsers.setGstNo(seller.getGstNo());
+//			existUsers.setAddress(seller.getAddress());
+//			existUsers.setProfilePic(storageFileName);
+//			
+//			userRepo.save(existUsers);
+//			
+//		}
+//	
+	
 }

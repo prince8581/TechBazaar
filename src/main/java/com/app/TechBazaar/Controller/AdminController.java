@@ -1,6 +1,9 @@
 package com.app.TechBazaar.Controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,12 +20,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.app.TechBazaar.DTO.EnquiryDTO;
 import com.app.TechBazaar.DTO.ProductCategoryDTO;
 import com.app.TechBazaar.Model.Enquiry;
+import com.app.TechBazaar.Model.Feedback;
+import com.app.TechBazaar.Model.Orders;
+import com.app.TechBazaar.Model.Orders.OrderStatus;
 import com.app.TechBazaar.Model.ProductCategory;
 import com.app.TechBazaar.Model.Users;
 import com.app.TechBazaar.Model.Users.UserRole;
 import com.app.TechBazaar.Model.Users.UserStatus;
 import com.app.TechBazaar.Repository.EnquiryRepository;
+import com.app.TechBazaar.Repository.FeedbackRepository;
+import com.app.TechBazaar.Repository.OrderRepository;
 import com.app.TechBazaar.Repository.ProductCategoryRepository;
+import com.app.TechBazaar.Repository.ProductRepository;
 import com.app.TechBazaar.Repository.UserRepository;
 import com.app.TechBazaar.Service.EnquiryService;
 import com.app.TechBazaar.Service.ProductCategoryService;
@@ -56,13 +65,59 @@ public class AdminController {
 	
 	@Autowired
 	private EnquiryService enquiryService;
+	
+	@Autowired
+	private ProductRepository productRepo;
+	
+	@Autowired
+	private OrderRepository orderRepo;
+	
+	@Autowired
+	private FeedbackRepository feedbackRepo;
+	
+	
 
 	@GetMapping("/Dashboard")
-	public String ShowDashboard() {
+	public String ShowDashboard(Model model) {
 		
 		if(session.getAttribute("loggedInAdmin") == null) {
 			return "redirect:/Login";
 		}
+		
+		model.addAttribute("sellerCount", userRepo.countByUserRoleAndUserStatusNot(UserRole.SELLER, UserStatus.DELETED));
+		model.addAttribute("buyerCount", userRepo.countByUserRoleAndUserStatusNot(UserRole.BUYER, UserStatus.DELETED));
+		model.addAttribute("productCount", productRepo.count());
+		model.addAttribute("orderCount", orderRepo.count());
+		model.addAttribute("categoryCount", categoryRepo.count());
+		model.addAttribute("enquiryCount", enquiryRepo.count());
+		model.addAttribute("cancelledOrders", orderRepo.countByOrderStatus(OrderStatus.CANCELLED));
+		model.addAttribute("confirmOrders", orderRepo.countByOrderStatus(OrderStatus.CONFIRMED));
+		model.addAttribute("deliveredOrders", orderRepo.countByOrderStatus(OrderStatus.DELIVERED));
+		
+		List<Enquiry> recentEnquiries = enquiryRepo.findTop5ByOrderByEnquiryDateDesc();
+		model.addAttribute("recentEnquiries", recentEnquiries);
+		
+		//Monthly Order stats count for chart
+		List<Object[]> stats = orderRepo.getMonthlyOrderStats();
+		Map<Integer, Long> monthCountMap = new HashMap<>();
+		for(Object[] row: stats) {
+			int monthNumber = ((Integer) row[0]).intValue();
+			long count = ((Long) row[1]).longValue();
+			monthCountMap.put(monthNumber, count);
+		}
+		
+		List<String> orderMonths = new ArrayList<>();
+		List<Long> orderCounts = new ArrayList<>();
+		
+		String monthNames[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+		for(int i=1;i<=monthNames.length;i++) {
+			orderMonths.add(monthNames[i-1]);
+			orderCounts.add(monthCountMap.getOrDefault(i, 0L));
+			
+		}
+		model.addAttribute("orderMonths",orderMonths);
+		model.addAttribute("orderCounts", orderCounts);
+		
 		return "Admin/Dashboard";
 	}
 	
@@ -114,7 +169,13 @@ public class AdminController {
 	}
 	
 	@GetMapping("/ViewOrders")
-	public String showViewOrders() {
+	public String showViewOrders(Model model) {
+		
+		if(session.getAttribute("loggedInAdmin")==null) {
+			return "redirect:/Login";
+		}
+		List<Orders> orders=orderRepo.findAll();
+		model.addAttribute("orders", orders.reversed());
 		return "Admin/ViewOrders";
 	}
 	
@@ -149,8 +210,33 @@ public class AdminController {
 	}
 	
 	@GetMapping("/Feedback")
-	public String showFeedback() {
+	public String showFeedback(Model model) {
+
+		if(session.getAttribute("loggedInAdmin") == null) {
+		return "redirect:/Login";
+		}
+		List<Feedback> feedback = feedbackRepo.findAll();
+		model.addAttribute("feedback", feedback);
+		
 		return "Admin/Feedback";
+	}
+	
+	
+	@GetMapping("/deleteFeedback/{id}")
+	public String deleteFeedback(@PathVariable Long id,
+	                             HttpSession session,
+	                             RedirectAttributes attributes) {
+
+	    if (session.getAttribute("loggedInAdmin") == null) {
+	        return "redirect:/Login";
+	    }
+
+	    feedbackRepo.deleteById(id);
+
+	    attributes.addFlashAttribute("success",
+	            "Feedback deleted successfully!");
+
+	    return "redirect:/Admin/Feedback";
 	}
 	
 	@GetMapping("/Enquiry")

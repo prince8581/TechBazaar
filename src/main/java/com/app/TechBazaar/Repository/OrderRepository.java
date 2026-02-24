@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.app.TechBazaar.Model.Orders;
+import com.app.TechBazaar.Model.Orders.OrderStatus;
 import com.app.TechBazaar.Model.Users;
 
 @Repository
@@ -19,6 +20,32 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 	List<Orders> findAllByRazorpayOrderId(String razorPayOrderId);
 
 	List<Orders> findAllByUser(Users user);
+
+	Object countByOrderStatus(OrderStatus cancelled);
+
+	List<Orders> findAllBySellerAndOrderStatus(Users user, OrderStatus orderStatus);
+
+	List<Orders> findAllBySeller(Users user);
+
+	@Query(value = "SELECT MONTH(o.ordered_at) AS month, COUNT(*) AS total FROM Orders o GROUP BY MONTH(o.ordered_at) ORDER BY month", nativeQuery = true)
+	List<Object[]> getMonthlyOrderStats();
+
+	Object countBySeller(Users seller);
+
+	Object countBySellerAndOrderStatus(Users seller, OrderStatus delivered);
+
+	List<Orders> findTop5BySellerOrderByOrderedAtDesc(Users seller);
+	
+	
+	@Query("SELECT SUM(o.finalAmount) FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' or o.paymentStatus ='SUCCESS'")
+	double getTotalRevenueBySeller(Users seller);
 	
 
+	@Query("SELECT SUM(o.finalAmount) FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' AND MONTH(o.deliveredAt) = MONTH(CURRENT_DATE) AND YEAR(o.deliveredAt) = YEAR(CURRENT_DATE)")
+	double getCurrentMonthRevenueBySeller(Users seller);
+	
+	
+	@Query("SELECT o.product.productName FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' GROUP BY o.product ORDER BY SUM(o.quantity) DESC LIMIT 1")
+	String getTopSellingProductBySeller(Users seller);
+	
 }

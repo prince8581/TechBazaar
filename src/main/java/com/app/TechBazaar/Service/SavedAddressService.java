@@ -40,7 +40,7 @@ public class SavedAddressService {
 	}
 	
 	
-	
+	//change address for only login this user
 	public  void changeAddress(Users user, long id) {
 		
 		List<SavedAddress> addresses = addressRepo.findAllByUser(user);
@@ -54,5 +54,41 @@ public class SavedAddressService {
 	    	addressRepo.save(add);
 	    	
 	    }
+	}
+	
+	// ===== Fetch Address by ID (for Edit) =====
+    public SavedAddress getAddressById(Long id) {
+        return addressRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Address not found with ID: " + id));
+    }
+	
+    //update existing address
+	public void editAddress(SavedAddressDTO dto) 
+	{
+		
+		SavedAddress address=addressRepo.findById(dto.getId()).orElseThrow(()-> new RuntimeException("Address not Found"));
+		
+		address.setName(dto.getName());
+		address.setContactNo(dto.getContactNo());
+		address.setPincode(dto.getPincode());
+		address.setLocality(dto.getLocality());
+		address.setAddress(dto.getAddress());
+		address.setCityDistrict(dto.getCityDistrict());
+		address.setState(dto.getState());
+		address.setLandmark(dto.getLandmark());
+		address.setAltContactNo(dto.getAltContactNo());
+		address.setAddressType(dto.getAddressType());
+		
+		addressRepo.save(address);
+		
+	}
+	
+	public void deleteAddress(Long id) {
+		if(addressRepo.existsById(id)) {
+			addressRepo.deleteById(id);
+		}
+		else {
+			throw new RuntimeException("Address not found with id: "+id);
+		}
 	}
 }

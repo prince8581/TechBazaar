@@ -8,14 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.app.TechBazaar.DTO.SavedAddressDTO;
+import com.app.TechBazaar.DTO.UserDTO;
 import com.app.TechBazaar.Model.SavedAddress;
 import com.app.TechBazaar.Model.Users;
 import com.app.TechBazaar.Repository.SavedAddressRepository;
+import com.app.TechBazaar.Repository.UserRepository;
 import com.app.TechBazaar.Service.SavedAddressService;
 import com.app.TechBazaar.Service.UserService;
 
@@ -38,7 +42,11 @@ public class UserController {
 	@Autowired
 	private SavedAddressService addressService;
 	
+	@Autowired
+	private UserRepository userRepo;
 	
+	@Autowired
+	private SavedAddressService savedAddressService;
 	
 	@GetMapping("/")
 	public String showDashboard() {
@@ -50,11 +58,28 @@ public class UserController {
 	}
 	
 	@GetMapping("/Profile")
-	public String ShowProfile() {
+	public String ShowProfile(Model model) {
 		if(session.getAttribute("loggedInUser") == null) {
 			return "redirect:/Login";
 		}
+		model.addAttribute("dto", new UserDTO());
 		return "User/Profile";
+	}
+	
+	@PostMapping("/EditProfile")
+	public String EditProfile(@ModelAttribute UserDTO dto,RedirectAttributes attributes) 
+	{	
+		try {
+			
+			Users buyer=(Users) session.getAttribute("loggedInUser");
+			userService.updateProfile(buyer, dto);
+			attributes.addFlashAttribute("msg","data Successfuly  Update");
+			
+		} catch (Exception e) {
+			attributes.addFlashAttribute("msg",e.getMessage());
+		}
+		
+		return "redirect:/User/Profile";
 	}
 	
 	@GetMapping("/ManageAddress")
@@ -93,6 +118,36 @@ public class UserController {
 		}
 		return "redirect:/User/ManageAddress";
 	}
+	
+	@GetMapping("/DeleteAddress/{id}")
+	public String DeleteAddress(@PathVariable("id") long id) 
+	{	
+		addressRepo.deleteById(id);
+		return "redirect:/User/ManageAddress";
+	}
+	
+	@GetMapping("/EditAddress/{id}")
+	public String showEditAddress(@PathVariable Long id, Model model) {
+
+	    SavedAddress savedAddress = savedAddressService.getAddressById(id);
+	    model.addAttribute("address", savedAddress);
+
+	    return "User/EditAddress";
+	}
+	
+	
+	@PostMapping("EditAddress")
+	public String updateAddress(@ModelAttribute SavedAddressDTO dto,
+	                            RedirectAttributes redirectAttributes) {
+
+	    savedAddressService.editAddress(dto);
+	    redirectAttributes.addFlashAttribute("msg", "Address Updated Successfully!");
+
+	    return "redirect:/User/ManageAddress";
+	}
+	
+
+	
 	
 	@GetMapping("/ChangePassword")
 	public String ShowChangePassword() {

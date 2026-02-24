@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{Seller/Sellerbase::layout(~{::main})}">
+
+<body>
+<main>
+
+<div class="row">
+<div class="col-sm-12">
+
+<div class="card shadow">
+
+<div class="card-header bg-primary">
+<h4 class="text-center m-0 text-white">All Customer Feedback</h4>
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover" id="example">
+
+<thead class="table-light">
+<tr>
+<th>Sr No</th>
+<th>Product</th>
+<th>Buyer</th>
+<th>Rating</th>
+<th>Message</th>
+<th>Image</th>
+<th>Date</th>
+<!-- <th>Status</th>-->
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr th:each="feed, srno : ${feedback}">
+
+<td th:text="${srno.index+1}"></td>
+
+<td th:text="${feed.product.productName}"></td>
+
+
+
+<td th:text="${feed.order.user.name}"></td>
+
+<td>
+<span class="text-warning fw-bold"
+      th:text="${feed.rating} + ' ★'"></span>
+</td>
+
+<td th:text="${feed.message}"></td>
+
+<td>
+<img th:if="${feed.images != null}"
+     th:src="@{'/feedback/' + ${feed.images}}"
+     style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
+</td>
+
+<td th:text="${#temporals.format(feed.submittedAt, 'dd-MMM-yyyy hh:mm a')}"></td>
+
+<!--<td>
+<span th:if="${feed.active}" class="badge bg-success">Active</span>
+<span th:unless="${feed.active}" class="badge bg-danger">Hidden</span>
+</td>-->
+
+<td>
+<a th:href="@{'/Seller/deleteFeedback/' + ${feed.id}}"
+   class="btn btn-danger btn-sm"
+   onclick="return confirm('Are you sure you want to delete this feedback?')">
+Delete
+</a>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</main>
+</body>
+</html>

@@ -1,154 +1,193 @@
-
 <html th:replace="~{base::layout(~{::main})}">
+
 <body>
 
 	<main>
-		<div class="row">
+		<!-- Hero Section -->
+		<section class="hero text-center text-white py-5"
+			style="background: linear-gradient(135deg, #008ecc, #00b4ff);">
+			<div class="container py-5">
+				<h2 class="mb-3 fw-bold text-white">TechBazaar Services</h2>
+				<h1 class="display-4 fw-bolder mb-4 text-white">Powerful Services for Smart Tech Shopping</h1>
+				<p class="lead mb-4 text-white-50">One platform • Multiple solutions • Complete trust</p>
+				<a href="#"
+					class="btn btn-light rounded-pill px-5 py-3 fw-bold shadow mt-2 text-primary simple-hover">Explore
+					Services</a>
+			</div>
+		</section>
 
-			<!-- Hero -->
-			<section class="hero text-center">
-				<div class="container">
-					<h2 class=" mb-5">TechBazaar Services</h2>
-					<h1 class="fw-bold display-5 mt-3">Powerful Services for Smart
-						Tech Shopping</h1>
-					<p class="lead mt-3">One platform • Multiple solutions •
-						Complete trust</p>
-					<a href="#" class="btn btn-light px-5 py-2 mt-4">Explore Now</a>
-				</div>
-			</section>
+		<!-- Main Container for aligned content -->
+		<div class="container-fluid py-5 bg-light">
+			<div class="row">
+				<div class="col-sm-11 mx-auto">
 
-			<!-- Core Services -->
-			<section class="py-5">
-				<div class="container">
-					<div class="text-center mb-5">
-						<h2 class="section-title">Our Core Services</h2>
-						<p class="text-muted">Everything you need in one tech
-							marketplace</p>
+					<!-- Core Services -->
+					<div class="text-center mb-5 mt-3">
+						<h2 class="section-title fw-bold">Our Core Services</h2>
+						<div class="category-line mx-auto mt-2 mb-3"></div>
+						<p class="text-muted fs-5">Everything you need in one unified tech marketplace</p>
 					</div>
-					<div class="row g-4">
-						<div class="col-md-3">
-							<div class="service-card text-center">
-								<div class="service-icon mb-3">🛒</div>
-								<h6 class="fw-bold">Online Marketplace</h6>
-								<p>Buy & sell verified tech products securely.</p>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="service-card text-center">
-								<div class="service-icon mb-3">🔐</div>
-								<h6 class="fw-bold">Secure Payments</h6>
-								<p>Encrypted payment gateways & safe checkout.</p>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="service-card text-center">
-								<div class="service-icon mb-3">🚚</div>
-								<h6 class="fw-bold">Fast Delivery</h6>
-								<p>Reliable shipping with live tracking.</p>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="service-card text-center">
-								<div class="service-icon mb-3">📊</div>
-								<h6 class="fw-bold">Analytics</h6>
-								<p>Sales reports & performance insights.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
 
-			<!-- Buyer Seller Admin -->
-			<section class="py-5 bg-light">
-				<div class="container">
-					<div class="row g-4">
-						<div class="col-md-4">
-							<div class="service-card">
-								<h4 class="section-title">Buyer Services</h4>
-								<ul class="mt-3">
-									<li>Advanced product search</li>
-									<li>Wishlist & price alerts</li>
-									<li>Order tracking</li>
-									<li>Easy returns & refunds</li>
-								</ul>
+					<div class="row g-4 mb-5">
+						<div class="col-xl-3 col-md-6 col-sm-12">
+							<div class="service-card text-center shadow-sm h-100">
+								<div class="service-icon mb-3"><i class="fa-solid fa-shop"></i></div>
+								<h5 class="fw-bold">Online Marketplace</h5>
+								<p class="text-muted">Buy & sell verified tech products securely through our trusted
+									platform.</p>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<div class="service-card">
-								<h4 class="section-title">Seller Services</h4>
-								<ul class="mt-3">
-									<li>Seller dashboard</li>
-									<li>Inventory management</li>
-									<li>Order & payment tracking</li>
-									<li>Sales growth tools</li>
-								</ul>
+						<div class="col-xl-3 col-md-6 col-sm-12">
+							<div class="service-card text-center shadow-sm h-100">
+								<div class="service-icon mb-3"><i class="fa-solid fa-shield-halved"></i></div>
+								<h5 class="fw-bold">Secure Payments</h5>
+								<p class="text-muted">Encrypted payment gateways ensuring safe and hassle-free checkout.
+								</p>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<div class="service-card">
-								<h4 class="section-title">Admin Services</h4>
-								<ul class="mt-3">
-									<li>User & seller verification</li>
-									<li>Platform monitoring</li>
-									<li>Dispute management</li>
-									<li>Analytics & reports</li>
-								</ul>
+						<div class="col-xl-3 col-md-6 col-sm-12">
+							<div class="service-card text-center shadow-sm h-100">
+								<div class="service-icon mb-3"><i class="fa-solid fa-truck-fast"></i></div>
+								<h5 class="fw-bold">Fast Delivery</h5>
+								<p class="text-muted">Reliable shipping partners with live tracking and secure handling.
+								</p>
+							</div>
+						</div>
+						<div class="col-xl-3 col-md-6 col-sm-12">
+							<div class="service-card text-center shadow-sm h-100">
+								<div class="service-icon mb-3"><i class="fa-solid fa-chart-line"></i></div>
+								<h5 class="fw-bold">Analytics & Insights</h5>
+								<p class="text-muted">Detailed sales reports and performance analytics for sellers.</p>
 							</div>
 						</div>
 					</div>
-				</div>
-			</section>
 
-			<!-- How It Works -->
-			<section class="py-5">
-				<div class="container">
-					<div class="text-center mb-5">
-						<h2 class="section-title">How TechBazaar Works</h2>
+					<!-- Comprehensive Services Areas -->
+					<div class="text-center mb-5 mt-5">
+						<h2 class="section-title fw-bold">Comprehensive Platform Solutions</h2>
+						<div class="category-line mx-auto mt-2 mb-4"></div>
 					</div>
-					<div class="row">
-						<div class="col-md-4">
-							<div class="process-step">
-								<h6 class="fw-bold">1. Register</h6>
-								<p>Create buyer or seller account.</p>
+
+					<div class="row g-4 mb-5">
+						<div class="col-lg-4 col-md-12">
+							<div class="card h-100 border-0 shadow feature-card">
+								<div class="card-body p-5">
+									<div class="text-center mb-4">
+										<i class="fa-solid fa-cart-shopping fs-1 text-info mb-3"></i>
+										<h4 class="fw-bold">Buyer Services</h4>
+									</div>
+									<ul class="list-unstyled text-muted ps-3" style="line-height:  2.2;">
+										<li><i class="fa-solid fa-check text-success me-2"></i>Advanced product search &
+											filters</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Wishlist & smart price
+											alerts</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Real-time order tracking
+										</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Easy 7-day returns &
+											refunds</li>
+									</ul>
+								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<div class="process-step">
-								<h6 class="fw-bold">2. Buy or Sell</h6>
-								<p>Browse products or list items.</p>
+						<div class="col-lg-4 col-md-12">
+							<div class="card h-100 border-0 shadow feature-card">
+								<div class="card-body p-5">
+									<div class="text-center mb-4">
+										<i class="fa-solid fa-store fs-1 text-primary mb-3"></i>
+										<h4 class="fw-bold">Seller Services</h4>
+									</div>
+									<ul class="list-unstyled text-muted ps-3" style="line-height:  2.2;">
+										<li><i class="fa-solid fa-check text-success me-2"></i>Intuitive seller
+											dashboard</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Real-time inventory
+											management</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Order & payment tracking
+										</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Promotional & sales
+											growth tools</li>
+									</ul>
+								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<div class="process-step">
-								<h6 class="fw-bold">3. Secure Delivery</h6>
-								<p>Fast delivery & safe payments.</p>
+						<div class="col-lg-4 col-md-12">
+							<div class="card h-100 border-0 shadow feature-card">
+								<div class="card-body p-5">
+									<div class="text-center mb-4">
+										<i class="fa-solid fa-user-shield fs-1 text-danger mb-3"></i>
+										<h4 class="fw-bold">Admin Services</h4>
+									</div>
+									<ul class="list-unstyled text-muted ps-3" style="line-height:  2.2;">
+										<li><i class="fa-solid fa-check text-success me-2"></i>Robust user & seller
+											verification</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>24/7 Platform monitoring
+										</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Transparent dispute
+											management</li>
+										<li><i class="fa-solid fa-check text-success me-2"></i>Advanced analytics &
+											system reports</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</section>
 
-			<!-- Highlight -->
-			<section class="highlight py-5 text-center">
-				<div class="container">
-					<h2 class="fw-bold">Why TechBazaar?</h2>
-					<p class="mt-3">Trusted • Transparent • Technology-driven</p>
-				</div>
-			</section>
+					<!-- How It Works Section -->
+					<div class="bg-white rounded-4 shadow-sm p-5 mb-5 border-top border-4 border-info">
+						<div class="text-center mb-5">
+							<h2 class="section-title fw-bold">How TechBazaar Works</h2>
+							<div class="category-line mx-auto mt-2 mb-4"></div>
+							<p class="text-muted">A seamless experience from start to finish</p>
+						</div>
+						<div class="row text-center g-4">
+							<div class="col-md-4 position-relative">
+								<div class="d-inline-flex align-items-center justify-content-center bg-info text-white rounded-circle mb-3 shadow"
+									style="width: 80px; height: 80px; font-size: 32px; font-weight: bold;">
+									1
+								</div>
+								<h5 class="fw-bold mt-2">Create Account</h5>
+								<p class="text-muted px-3">Join as a buyer or seller with our quick registration
+									process.</p>
+							</div>
+							<div class="col-md-4 position-relative">
+								<div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle mb-3 shadow"
+									style="width: 80px; height: 80px; font-size: 32px; font-weight: bold;">
+									2
+								</div>
+								<h5 class="fw-bold mt-2">Explore or List</h5>
+								<p class="text-muted px-3">Browse thousands of tech products or list your own inventory.
+								</p>
+							</div>
+							<div class="col-md-4 position-relative">
+								<div class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle mb-3 shadow"
+									style="width: 80px; height: 80px; font-size: 32px; font-weight: bold;">
+									3
+								</div>
+								<h5 class="fw-bold mt-2">Secure Transaction</h5>
+								<p class="text-muted px-3">Enjoy fast delivery, reliable tracking, and safe end-to-end
+									payments.</p>
+							</div>
+						</div>
+					</div>
 
-			<!-- CTA -->
-			<section class="py-5 text-center">
-				<div class="container">
-					<h2 class="fw-bold">Ready to Experience Smart Tech Services?</h2>
-					<p class="text-muted">Join TechBazaar as a buyer or seller
-						today</p>
-					<a href="#" class="btn btn-primary px-5 py-2 mt-3">Get Started</a>
 				</div>
-			</section>
-
+			</div>
 		</div>
 
-
+		<!-- CTA Banner -->
+		<section class="py-5 text-center text-white" style="background: linear-gradient(135deg, #0dcaf0, #008ecc);">
+			<div class="container py-4">
+				<h2 class="fw-bold mb-3">Ready to Experience Smart Tech Services?</h2>
+				<p class="lead mb-4 text-white-50">Trusted • Transparent • Technology-driven</p>
+				<div class="d-flex justify-content-center gap-3">
+					<a href="#"
+						class="btn btn-light rounded-pill px-5 py-3 fw-bold text-primary shadow-lg simple-hover">Join as
+						Buyer</a>
+					<a href="#" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold shadow-lg">Become a
+						Seller</a>
+				</div>
+			</div>
+		</section>
 	</main>
 </body>
+
 </html>

@@ -1,133 +1,136 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Form</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <style>
-.login-card {
-    border: 2px solid #008ecc;
-    background: #ffffff;
-}
+<html th:replace="~{base::layout(~{::main})}">
 
-.form-control {
-    border-radius: 10px;
-}
+<head>
+  <title>Login to TechBazaar</title>
+</head>
 
-.btn {
-    border-radius: 10px;
-}
+<body>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero text-center text-white py-5" style="background: linear-gradient(135deg, #008ecc, #00b4ff);">
+      <div class="container py-4">
+        <h1 class="display-4 fw-bolder mb-3 text-white">Welcome Back</h1>
+        <p class="lead mb-0 text-white-50">Login to continue your smart tech shopping journey 🚀</p>
+      </div>
+    </section>
 
-/* Floating Image Animation */
-.floating-img {
-    animation: float 3s ease-in-out infinite;
-}
+    <!-- Main Container -->
+    <div class="container-fluid py-5 bg-light pb-5">
+      <div class="row">
+        <div class="col-sm-11 mx-auto">
 
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
+          <div class="row justify-content-center mt-2 mb-5">
+            <div class="col-lg-10 col-xl-9">
 
-/* Input Focus */
-.form-control:focus {
-    border-color: #008ecc;
-    box-shadow: 0 0 0 0.15rem rgba(0, 142, 204, 0.25);
-}
-</style>
-    
-  </head>
-  <body>
-    
- <!-- Login Start -->
-<div class="container mt-5 mb-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-9 col-md-11 shadow-lg rounded-4 login-card">
-      <div class="row g-0">
+              <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="row g-0">
 
-        <!-- Left Image Section -->
-        <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-light rounded-start-4">
-          <img src="images/login.jpeg" alt="Login"
-               class="img-fluid p-4 floating-img" style="height:450px; width:450px;">
+                  <!-- Left Image Section -->
+                  <div
+                    class="col-lg-5 d-none d-lg-flex flex-column align-items-center justify-content-center p-5 position-relative"
+                    style="background: linear-gradient(145deg, #f8f9fa, #e9ecef);">
+                    <div class="position-absolute top-0 bottom-0 end-0"
+                      style="width: 1px; background: rgba(0,0,0,0.05);"></div>
+                    <img src="images/login.jpeg" alt="TechBazaar Login" class="img-fluid mb-4"
+                      style="max-height: 280px; object-fit: contain; transform: scale(1.05);">
+                    <h4 class="fw-bold text-primary mt-4 text-center">Secure Access</h4>
+                    <p class="text-muted text-center small px-3">Your gateway to thousands of verified tech products and
+                      secure transactions.</p>
+                  </div>
+
+                  <!-- Right Form Section -->
+                  <div class="col-lg-7 p-4 p-md-5 bg-white position-relative">
+                    <!-- Top decorative accent -->
+                    <div class="position-absolute top-0 start-0 w-100" style="height: 5px; background: #008ecc;"></div>
+
+                    <div class="text-center mb-5 mt-3">
+                      <h2 class="fw-bold section-title mb-2">Account Login</h2>
+                      <div class="category-line mx-auto mt-2 mb-3" style="width: 60px;"></div>
+                      <p class="text-muted fs-6">Please enter your registered credentials to proceed</p>
+                    </div>
+
+                    <form action="/Login" method="post" th:object="${dto}">
+
+                      <div class="mb-4">
+                        <label class="form-label fw-semibold text-dark"><i
+                            class="fa-regular fa-envelope text-primary me-2"></i>Email / Username</label>
+                        <div class="input-group input-group-lg shadow-sm">
+                          <span class="input-group-text bg-light text-muted border-primary"><i
+                              class="fa-solid fa-at"></i></span>
+                          <input th:field="${dto.email}" type="email"
+                            class="form-control bg-white border-primary border-start-0" style="font-size: 15px;"
+                            placeholder="name@example.com" required>
+                        </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label class="form-label fw-semibold text-dark"><i
+                            class="fa-solid fa-lock text-primary me-2"></i>Password</label>
+                        <div class="input-group input-group-lg shadow-sm">
+                          <span class="input-group-text bg-light text-muted border-primary"><i
+                              class="fa-solid fa-key"></i></span>
+                          <input th:field="${dto.password}" type="password"
+                            class="form-control bg-white border-primary border-start-0" style="font-size: 15px;"
+                            placeholder="Enter your password" required>
+                        </div>
+                      </div>
+
+                      <div class="d-flex justify-content-between align-items-center mb-5">
+                        <div class="form-check">
+                          <input class="form-check-input border-primary border-opacity-50" type="checkbox"
+                            id="rememberMe">
+                          <label class="form-check-label text-muted small" for="rememberMe">
+                            Remember me
+                          </label>
+                        </div>
+                        <a href="#" class="text-decoration-none small text-primary fw-semibold">
+                          Recover Password?
+                        </a>
+                      </div>
+
+                      <button type="submit"
+                        class="btn btn-primary w-100 py-3 mb-4 fw-bold rounded-pill shadow-sm text-uppercase tracking-wide simple-hover">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i> Login Securely
+                      </button>
+
+                      <div class="text-center mt-3 border-top pt-4">
+                        <p class="mb-3 text-muted">Navigate to other sections</p>
+                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                          <a href="/" class="btn btn-outline-dark rounded-pill px-4 btn-sm fw-semibold">
+                            <i class="fa-solid fa-house me-1"></i> Home
+                          </a>
+                          <a href="/Register" class="btn btn-outline-primary rounded-pill px-4 btn-sm fw-semibold">
+                            <i class="fa-regular fa-user me-1"></i> Register User
+                          </a>
+                          <a href="/BecomeSeller" class="btn btn-outline-info rounded-pill px-4 btn-sm fw-semibold">
+                            <i class="fa-solid fa-store me-1"></i> Become Seller
+                          </a>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
-
-        <!-- Right Form Section -->
-        <div class="col-lg-6 col-12 p-4 p-md-5">
-          <h2 class="text-primary fw-bold text-center">Welcome Back 👋</h2>
-          <p class="text-center text-muted mb-4">Login to continue to TechBazaar</p>
-
-          <form action="/Login" method="post" th:object="${dto}">
-
-            <div class="form-floating mb-3">
-              <input th:field="${dto.email}" type="email"
-                     class="form-control" id="floatingInput"
-                     placeholder="name@example.com">
-              <label for="floatingInput">Email Address</label>
-            </div>
-
-            <div class="form-floating mb-3">
-              <input th:field="${dto.password}" type="password"
-                     class="form-control" id="floatingPassword"
-                     placeholder="Password">
-              <label for="floatingPassword">Password</label>
-            </div>
-
-            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3">
-              <div class="mb-2 mb-sm-0">
-                <input type="checkbox"> Remember me
-              </div>
-              <a href="#" class="text-decoration-none small text-primary">
-                Forgot Password?
-              </a>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-              Login
-            </button>
-
-            <p class="text-center mt-3">
-              Don’t have an account?
-              <a href="/Register" class="fw-semibold text-primary">Create Account</a>
-            </p>
-
-            <!-- Buttons -->
-            <div class="row g-2 mt-3">
-              <div class="col-12 col-sm-6">
-                <a href="/" class="btn btn-outline-danger w-100">
-                  <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
-                </a>
-              </div>
-              <div class="col-12 col-sm-6">
-                <a href="/BecomeSeller" class="btn btn-outline-primary w-100">
-                  <i class="fa-solid fa-store"></i> Become a Seller
-                </a>
-              </div>
-            </div>
-
-          </form>
-        </div>
-
       </div>
     </div>
-  </div>
-</div>
-<!-- Login End -->
-    
-    
-    
 
-    
-    
-        
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-  <script type="text/javascript">
-  var msg="[[${msg}]]";
-  if(msg!=""){
-	  alert(msg);
-  }
-  </script>
-  </body>
+    <!-- Script to handle messages -->
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function () {
+        var msg = "[[${msg}]]";
+        if (msg != "" && msg != "null") {
+          alert(msg);
+        }
+      });
+    </script>
+  </main>
+</body>
+
 </html>

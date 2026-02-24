@@ -9,7 +9,7 @@
 </div>
 <div class="card-body">
 <div class="table-responsive">
-<table class="table table-bordered">
+<table class="table table-bordered" id="example">
 <thead>
 <tr >
 <th>S. No</th>
@@ -49,7 +49,7 @@ style="cursor: pointer;">
 <a onclick="return confirm('Are you sure want to update user status?')" th:href="@{'UpdateUserStatus/'+${seller.id}}" class="btn btn-sm " th:classappend="${seller.userStatus.name() == 'UNBLOCKED' ? 'btn-primary' : 'btn-danger'}" th:text="${seller.userStatus}"></a>
 </td>
 <td>
-<a href="#" class="btn btn-success btn-sm">Edit</a>
+<!--  <a href="#" class="btn btn-success btn-sm">Edit</a>-->
 <a th:href="@{'DeleteUser/'+${seller.id}}" onclick="return confirm('Are you sure want to delete?')" class="btn btn-danger btn-sm">Delete</a></td>
 </tr>
 </tbody>

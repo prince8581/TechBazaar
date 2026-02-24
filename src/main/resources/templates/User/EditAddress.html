@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::main})}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Address</title>
+</head>
+
+<body>
+    <main>
+        <style>
+            /* Modern styles for address page */
+            .address-page-wrapper {
+                background-color: #f4f6f9;
+                min-height: 100vh;
+                padding-bottom: 3rem;
+                font-family: 'Inter', 'Segoe UI', sans-serif;
+            }
+
+            .page-header {
+                background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+                color: white;
+                padding: 2.5rem 0;
+                margin-bottom: -3rem;
+                /* Overlap effect */
+                border-radius: 0 0 2rem 2rem;
+                box-shadow: 0 10px 30px rgba(13, 110, 253, 0.15);
+                text-align: center;
+            }
+
+            .page-header h2 {
+                font-weight: 800;
+                letter-spacing: -0.5px;
+                margin-bottom: 0.5rem;
+            }
+
+            .page-header p {
+                opacity: 0.9;
+                font-size: 1.1rem;
+            }
+
+            .custom-card {
+                background: white;
+                border-radius: 1.25rem;
+                border: none;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+                margin-top: 2rem;
+            }
+
+            .form-control,
+            .form-select {
+                border-radius: 0.75rem;
+                padding: 0.8rem 1rem;
+                border: 1.5px solid #e9ecef;
+                background-color: #f8f9fa;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: #0d6efd;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+            }
+
+            .form-label {
+                font-weight: 600;
+                color: #343a40;
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .form-label i {
+                color: #0d6efd;
+                opacity: 0.8;
+            }
+
+            .btn-custom {
+                border-radius: 0.75rem;
+                padding: 0.8rem 1.5rem;
+                font-weight: 600;
+                letter-spacing: 0.3px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary-custom {
+                background: linear-gradient(135deg, #0d6efd, #0056b3);
+                border: none;
+                color: white;
+            }
+
+            .btn-primary-custom:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(13, 110, 253, 0.3);
+                color: white;
+            }
+
+            .btn-secondary-custom {
+                background: #f8f9fa;
+                border: 1.5px solid #e9ecef;
+                color: #475569;
+            }
+
+            .btn-secondary-custom:hover {
+                background: #e2e8f0;
+                border-color: #cbd5e1;
+                color: #1e293b;
+            }
+
+            .radio-box {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                border: 1.5px solid #e9ecef;
+                border-radius: 0.75rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                margin-right: 1rem;
+                background: #f8f9fa;
+                position: relative;
+            }
+
+            .radio-box:hover {
+                background: #fff;
+                border-color: #ced4da;
+            }
+
+            .radio-box input[type="radio"]:checked+label {
+                color: #0d6efd;
+                font-weight: 600;
+            }
+
+            .radio-box:has(input[type="radio"]:checked) {
+                border-color: #0d6efd;
+                background: rgba(13, 110, 253, 0.05);
+            }
+
+            .radio-box label {
+                cursor: pointer;
+                margin-bottom: 0;
+                width: 100%;
+            }
+
+            /* Fallback for browsers not supporting :has() */
+            input[type="radio"]:checked~label {
+                color: #0d6efd;
+                font-weight: 600;
+            }
+        </style>
+
+        <div class="address-page-wrapper">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="container">
+                    <h2><i class="fa-solid fa-pen-to-square me-2"></i> Edit Address</h2>
+                    <p>Update your delivery location details below</p>
+                </div>
+            </div>
+
+            <div class="container pb-5 mt-5">
+                <div class="row justify-content-center">
+
+                    <!-- Edit Address Form Section -->
+                    <div class="col-lg-8" id="editAddressForm">
+                        <div class="custom-card p-4 p-md-5 mt-lg-5">
+                            <div class="mb-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="fw-bold mb-1"><i
+                                            class="fa-solid fa-location-crosshairs text-primary me-2"></i> Update
+                                        Details</h4>
+                                    <p class="text-muted">Ensure your delivery information is accurate.</p>
+                                </div>
+                                <!-- Back Button -->
+                                <a href="/User/ManageAddress" class="btn btn-sm btn-secondary-custom rounded-pill px-3">
+                                    <i class="fa-solid fa-arrow-left me-1"></i> Back
+                                </a>
+                            </div>
+
+                            <form th:action="@{/User/EditAddress}" method="post" th:object="${address}">
+                                <!-- Hidden ID -->
+                                <input type="hidden" th:field="*{id}" />
+
+                                <div class="row g-4">
+                                    <!-- Full Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa-regular fa-user"></i> Full Name</label>
+                                        <input th:field="*{name}" type="text" class="form-control"
+                                            placeholder="John Doe" required>
+                                    </div>
+
+                                    <!-- Contact No -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa-solid fa-mobile-screen"></i> Mobile
+                                            Number</label>
+                                        <input th:field="*{contactNo}" type="tel" class="form-control"
+                                            placeholder="10-digit mobile number" required pattern="[0-9]{10}"
+                                            title="Please enter valid 10 digit number">
+                                    </div>
+
+                                    <!-- Pincode -->
+                                    <div class="col-md-4">
+                                        <label class="form-label"><i class="fa-solid fa-hashtag"></i> Pincode</label>
+                                        <input th:field="*{pincode}" type="text" class="form-control"
+                                            placeholder="e.g. 110001" required>
+                                    </div>
+
+                                    <!-- Locality -->
+                                    <div class="col-md-8">
+                                        <label class="form-label"><i class="fa-solid fa-street-view"></i>
+                                            Locality</label>
+                                        <input th:field="*{locality}" type="text" class="form-control"
+                                            placeholder="Area / Street / Sector" required>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div class="col-12">
+                                        <label class="form-label"><i class="fa-regular fa-building"></i> Full
+                                            Address</label>
+                                        <textarea th:field="*{address}" rows="3" class="form-control"
+                                            placeholder="House No, Building Name, Road Name" required></textarea>
+                                    </div>
+
+                                    <!-- City -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa-solid fa-city"></i> City /
+                                            District</label>
+                                        <input th:field="*{cityDistrict}" type="text" class="form-control" required>
+                                    </div>
+
+                                    <!-- State -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa-solid fa-map"></i> State</label>
+                                        <select th:field="*{state}" class="form-select" required>
+                                            <option value="">-- Select State --</option>
+                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                            <option value="Assam">Assam</option>
+                                            <option value="Bihar">Bihar</option>
+                                            <option value="Chhattisgarh">Chhattisgarh</option>
+                                            <option value="Goa">Goa</option>
+                                            <option value="Gujarat">Gujarat</option>
+                                            <option value="Haryana">Haryana</option>
+                                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                            <option value="Jharkhand">Jharkhand</option>
+                                            <option value="Karnataka">Karnataka</option>
+                                            <option value="Kerala">Kerala</option>
+                                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                            <option value="Maharashtra">Maharashtra</option>
+                                            <option value="Manipur">Manipur</option>
+                                            <option value="Meghalaya">Meghalaya</option>
+                                            <option value="Mizoram">Mizoram</option>
+                                            <option value="Nagaland">Nagaland</option>
+                                            <option value="Odisha">Odisha</option>
+                                            <option value="Punjab">Punjab</option>
+                                            <option value="Rajasthan">Rajasthan</option>
+                                            <option value="Sikkim">Sikkim</option>
+                                            <option value="Tamil Nadu">Tamil Nadu</option>
+                                            <option value="Telangana">Telangana</option>
+                                            <option value="Tripura">Tripura</option>
+                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                            <option value="Uttarakhand">Uttarakhand</option>
+                                            <option value="West Bengal">West Bengal</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Landmark -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa-solid fa-location-dot"></i> Landmark
+                                            (Optional)</label>
+                                        <input th:field="*{landmark}" type="text" class="form-control"
+                                            placeholder="e.g. Near Apollo Hospital">
+                                    </div>
+
+                                    <!-- Alternate Contact -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa-solid fa-phone"></i> Alternate Mobile
+                                            (Optional)</label>
+                                        <input th:field="*{altContactNo}" type="tel" class="form-control"
+                                            placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                                    </div>
+
+                                    <!-- Address Type -->
+                                    <div class="col-12 mt-4">
+                                        <label class="form-label d-block mb-3"><i class="fa-solid fa-tag"></i> Address
+                                            Type</label>
+                                        <div class="d-flex flex-wrap">
+                                            <div class="radio-box">
+                                                <input th:field="*{addressType}" class="form-check-input me-2 mt-0"
+                                                    type="radio" value="Home" id="typeHome" checked>
+                                                <label class="form-check-label d-flex align-items-center"
+                                                    for="typeHome">
+                                                    <i class="fa-solid fa-house me-2 text-success"></i> Home
+                                                </label>
+                                            </div>
+                                            <div class="radio-box">
+                                                <input th:field="*{addressType}" class="form-check-input me-2 mt-0"
+                                                    type="radio" value="Work" id="typeWork">
+                                                <label class="form-check-label d-flex align-items-center"
+                                                    for="typeWork">
+                                                    <i class="fa-solid fa-briefcase me-2 text-primary"></i> Work
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="col-12 mt-5 text-end">
+                                        <button type="submit"
+                                            class="btn btn-custom btn-primary-custom w-100 py-3 shadow-sm">
+                                            <i class="fa-solid fa-arrows-rotate me-2"></i> Update Address
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

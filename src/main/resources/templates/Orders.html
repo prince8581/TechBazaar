@@ -1,46 +1,205 @@
+<!doctype html>
+<html th:replace="~{Base :: layout(~{::main})}">
+<body>
 
-<html th:replace="~{base::layout(~{::main})}">
- <body>
- 
-    <main>
-   
-    
-    
-    <div class="row mb-5">
-     <div class="col-sm-11 mx-auto">
-     <div class="mt-4">
-       <h4>My Orders</h4>
-       <p>Track Your Order History From Here....</p>
-     
-     </div>
-     </div>
-     <div class="col-lg-10 mt-2 col-sm-12 mx-auto p-1">
-     <div class="card shadow p-2 my-2" th:each="order: ${orders}">
-     <div class="row">
-     <div class="col-md-2">
-     <img alt="image not found" th:src="@{'/ProductImages/'+${order.product.productImages[0]}}" height="130px" width="130px" class="p-2">
-     </div>
-     <div class="col-md-7 pt-3">
-     <h5 class="m-0" th:text="${order.product.productName}">Product Title</h5>
-     <p class="text-muted m-0" th:text="${#strings.abbreviate(order.product.productDescription, 150)}">place your product description here...</p>
-     </div>
-     <div class="col-md-3 my-auto text-center">
-     <div class="badge text-bg-secondary w-75  py-2 my-2 mb-4" th:text="${order.orderstatus}">
-     
-     </div>
-     <div class="d-flex align-items-center justify-content-center">
-       <a href="/TrackOrder" class="btn btn-outline-warning">Track Order</a>
-     <a href="#" class="btn btn-danger mx-2">Cancel Order</a>
-     </div>
-   
-     </div>
-     </div>
-     </div>
-     </div>
-     
+<main class="py-5">
+
+<style>
+
+/* PAGE BACKGROUND */
+body{
+  background:linear-gradient(180deg,#eef5ff,#e6f0ff);
+  font-family:'Segoe UI',sans-serif;
+  color:#111827;
+}
+
+
+/* HEADER */
+.page-header h3{
+  font-weight:700;
+  color:#1e293b;
+}
+.page-header p{
+  color:#64748b;
+}
+
+
+/* WRAPPER */
+.orders-wrapper{
+  background:#ffffffcc;
+  backdrop-filter:blur(8px);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 10px 40px rgba(0,0,0,.08);
+}
+
+
+/* ORDER CARD */
+.order-card{
+  background:white;
+  border-radius:20px;
+  padding:22px;
+  transition:.3s;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+.order-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+
+/* IMAGE */
+.order-img{
+  width:110px;
+  height:110px;
+  object-fit:cover;
+  border-radius:16px;
+  border:1px solid #e5e7eb;
+  padding:6px;
+  background:#f8fafc;
+}
+
+
+/* PRODUCT TITLE */
+.product-title{
+  font-size:18px;
+  font-weight:600;
+  color:#111827;
+}
+
+
+/* DESCRIPTION */
+.product-desc{
+  font-size:14px;
+  color:#6b7280;
+}
+
+
+/* QTY */
+.qty{
+  font-size:14px;
+  font-weight:500;
+  color:#374151;
+}
+
+
+/* STATUS BADGE */
+.order-status{
+  padding:8px 18px;
+  border-radius:30px;
+  font-size:14px;
+  font-weight:600;
+  background:#e0edff;
+  color:#2563eb;
+  display:inline-block;
+}
+
+
+/* ADDRESS BOX */
+.address-box{
+  background:#f1f5ff;
+  padding:16px 20px;
+  border-radius:16px;
+  font-size:14px;
+  color:#374151;
+  border:1px solid #e0e7ff;
+}
+
+
+/* LINK RESET */
+.order-link{
+  text-decoration:none;
+  color:inherit;
+}
+
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+  .order-img{
+    width:90px;
+    height:90px;
+  }
+
+  .order-status{
+    margin-top:10px;
+  }
+
+}
+
+</style>
+
+<div class="container">
+
+  <div class="orders-wrapper">
+
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+      <h3>My Orders</h3>
+      <p>Track, manage and review your orders</p>
     </div>
-   
-    
-    </main>
-  </body>
+
+    <!-- ORDER LOOP -->
+    <div class="order-card mb-4"
+         th:each="order : ${orders}">
+
+      <a th:href="@{'/'+${order.product.productName}+'/details/' +${order.id}}"
+         class="order-link">
+
+        <div class="row align-items-center g-3">
+
+          <!-- IMAGE -->
+          <div class="col-12 col-md-2 text-center">
+            <img th:src="@{'/ProductImages/'+${order.product.ProductImages[0]}}"
+                 class="order-img">
+          </div>
+
+          <!-- DETAILS -->
+          <div class="col-12 col-md-6">
+            <h5 class="product-title"
+                th:text="${order.product.productName}">
+                Product Name
+            </h5>
+
+            <p class="product-desc"
+               th:text="${#strings.abbreviate(order.product.productDescription,120)}">
+               Product description
+            </p>
+
+            <div class="qty mt-1">
+              Qty: <span th:text="${order.quantity}"></span>
+            </div>
+          </div>
+
+          <!-- STATUS -->
+          <div class="col-12 col-md-4 text-md-end text-center">
+            <span class="order-status"
+                  th:text="${order.orderStatus}">
+              Delivered
+            </span>
+          </div>
+
+        </div>
+
+      </a>
+
+      <!-- ADDRESS -->
+      <div class="address-box mt-4">
+        <strong>Delivery Address</strong><br>
+        <span th:text="${order.user.name}"></span>,
+        <span th:text="${order.address}"></span>,
+        <span th:text="${order.city}"></span>,
+        <span th:text="${order.state}"></span>
+        – <span th:text="${order.pincode}"></span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</main>
+
+</body>
 </html>

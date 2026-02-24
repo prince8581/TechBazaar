@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html th:replace="~{base::layout(~{::main})}">
+<body>
+	<main>
+
+		<style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap')
+	;
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #f1f3f6;
+	font-family: 'Poppins', sans-serif;
+	color: #212121;
+}
+
+/* ── WRAPPER ── */
+.page-wrap {
+	max-width: 1100px;
+	margin: 24px auto;
+	padding: 0 16px 48px;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+}
+
+/* ── CARD ── */
+.fk-card {
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+	overflow: hidden;
+}
+
+.fk-card-header {
+	background: #fff;
+	border-bottom: 1px solid #f0f0f0;
+	padding: 16px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.fk-card-header h2 {
+	font-size: 18px;
+	font-weight: 600;
+	color: #212121;
+}
+
+.fk-card-body {
+	padding: 24px;
+}
+
+/* ── ORDER META ── */
+.order-meta-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 0;
+}
+
+.meta-item {
+	padding: 16px 24px;
+	border-right: 1px solid #f0f0f0;
+}
+
+.meta-item:last-child {
+	border-right: none;
+}
+
+.meta-label {
+	font-size: 15px;
+	font-weight: 500;
+	color: #878787;
+	text-transform: uppercase;
+	letter-spacing: .5px;
+	margin-bottom: 4px;
+}
+
+.meta-value {
+	font-size: 14px;
+	font-weight: 600;
+	color: #212121;
+}
+
+.meta-value.small {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+/* ── PRODUCT ROW ── */
+.product-row {
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+	padding: 24px;
+}
+
+.product-img-wrap {
+	width: 200px;
+	height: 200px;
+	flex-shrink: 0;
+	border: 1px solid #f0f0f0;
+	border-radius: 4px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fafafa;
+}
+
+.product-img-wrap img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+.product-info {
+	flex: 1;
+	min-width: 0;
+	margin-left: 10px;
+}
+
+.product-name {
+	font-size: 17px;
+	font-weight: 500;
+	color: #212121;
+	margin-bottom: 6px;
+	line-height: 1.4;
+}
+
+.product-meta {
+	font-size: 14px;
+	color: #878787;
+	margin-bottom: 4px;
+	margin-left: 10px;
+}
+
+.product-price {
+	font-size: 18px;
+	font-weight: 700;
+	color: #212121;
+	margin-top: 10px;
+}
+
+/* ── STATUS BADGE ── */
+.status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 12px;
+	border-radius: 2px;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: .3px;
+}
+
+.badge-placed {
+	background: #e3f2fd;
+	color: #1565c0;
+}
+
+.badge-confirmed {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.badge-processing {
+	background: #fff8e1;
+	color: #f57f17;
+}
+
+.badge-dispatched {
+	background: #fff3e0;
+	color: #e65100;
+}
+
+.badge-shipped {
+	background: #e8eaf6;
+	color: #283593;
+}
+
+.badge-out {
+	background: #f3e5f5;
+	color: #6a1b9a;
+}
+
+.badge-delivered {
+	background: #e8f5e9;
+	color: #1b5e20;
+}
+
+.badge-cancelled {
+	background: #ffebee;
+	color: #b71c1c;
+}
+
+.badge-return {
+	background: #fce4ec;
+	color: #880e4f;
+}
+
+/* ── TIMELINE ── */
+.timeline-section {
+	padding: 0 24px 36px;
+}
+
+.timeline-title {
+	font-size: 14px;
+	font-weight: 600;
+	color: #878787;
+	text-transform: uppercase;
+	letter-spacing: .5px;
+	margin-bottom: 30px;
+	padding-top: 4px;
+}
+
+.timeline {
+	display: flex;
+	align-items: flex-start;
+	position: relative;
+	gap: 0;
+}
+
+/* Each step takes equal space */
+.timeline-step {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+}
+
+/*
+    The connector line lives AFTER each step (except the last).
+    It is built with a split gradient:
+      - done  → solid blue
+      - active (current) → left-half blue, right-half grey  [half-fill]
+      - future → solid grey
+  */
+.timeline-step:not(:last-child)::after {
+	content: '';
+	position: absolute;
+	top: 13px; /* vertically centres on the 28px dot */
+	left: calc(50% + 14px); /* start just after the dot */
+	right: calc(-50% + 14px); /* end just before next dot  */
+	height: 3px;
+	background: #e0e0e0;
+	z-index: 0;
+	border-radius: 2px;
+}
+
+/* Fully completed connector */
+.timeline-step.done:not(:last-child)::after {
+	background: #2874f0;
+}
+
+/* Half-filled connector after the CURRENT (active) step */
+.timeline-step.active:not(:last-child)::after {
+	background: linear-gradient(to right, #2874f0 50%, #e0e0e0 50%);
+}
+
+/* ── DOT ── */
+.tl-dot {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: #e0e0e0;
+	border: 3px solid #e0e0e0;
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	transition: background .3s, border-color .3s, box-shadow .3s;
+}
+
+/* Completed dot — solid blue with checkmark */
+.timeline-step.done .tl-dot {
+	background: #2874f0;
+	border-color: #2874f0;
+}
+
+.timeline-step.done .tl-dot::after {
+	content: '';
+	width: 9px;
+	height: 5px;
+	border-left: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	transform: rotate(-45deg) translateY(-1px);
+	display: block;
+}
+
+/* Active / current step — pulsing ring, spinner-style border */
+.timeline-step.active .tl-dot {
+	background: #fff;
+	border: 3px solid #2874f0;
+	box-shadow: 0 0 0 4px rgba(40, 116, 240, .15);
+	animation: pulse-ring 1.6s ease-in-out infinite;
+}
+/* Rotating arc inside active dot */
+.timeline-step.active .tl-dot::before {
+	content: '';
+	position: absolute;
+	inset: -3px;
+	border-radius: 50%;
+	border: 3px solid transparent;
+	border-top-color: #2874f0;
+	animation: spin-arc 1s linear infinite;
+}
+/* Blue centre fill */
+.timeline-step.active .tl-dot::after {
+	content: '';
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #2874f0;
+	display: block;
+}
+
+/* Cancelled dot */
+.timeline-step.cancelled-step .tl-dot {
+	background: #f44336;
+	border-color: #f44336;
+}
+
+.timeline-step.cancelled-step .tl-dot::after {
+	content: '✕';
+	color: #fff;
+	font-size: 10px;
+	display: block;
+	line-height: 1;
+}
+
+/* Return dot - using orange color to differentiate */
+.timeline-step.return-step .tl-dot {
+	background: #ff9800;
+	border-color: #ff9800;
+}
+
+.timeline-step.return-step .tl-dot::after {
+	content: '↩';
+	color: #fff;
+	font-size: 12px;
+	display: block;
+	line-height: 1;
+}
+
+/* ── LABEL TEXT ── */
+.tl-text {
+	margin-top: 10px;
+	text-align: center;
+	max-width: 90px;
+}
+
+.tl-label {
+	font-size: 11px;
+	font-weight: 600;
+	color: #bdbdbd;
+	line-height: 1.3;
+}
+
+.timeline-step.done   .tl-label {
+	color: #2874f0;
+}
+
+.timeline-step.active .tl-label {
+	color: #2874f0;
+	font-weight: 700;
+}
+
+.timeline-step.cancelled-step .tl-label {
+	color: #f44336;
+}
+
+.timeline-step.return-step .tl-label {
+	color: #ff9800;
+}
+
+.tl-date {
+	font-size: 13px;
+	color: #bdbdbd;
+	margin-top: 3px;
+	line-height: 1.3;
+}
+
+.timeline-step.done   .tl-date {
+	color: #9e9e9e;
+}
+
+.timeline-step.active .tl-date {
+	color: #2874f0;
+	font-weight: 600;
+}
+
+.timeline-step.cancelled-step .tl-date {
+	color: #f44336;
+}
+
+.timeline-step.return-step .tl-date {
+	color: #ff9800;
+	font-weight: 600;
+}
+
+/* ── PRICE BREAKDOWN ── */
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.price-table td {
+	padding: 9px 0;
+	font-size: 14px;
+	color: #212121;
+	border-bottom: 1px solid #f5f5f5;
+}
+
+.price-table td:last-child {
+	text-align: right;
+	font-weight: 500;
+}
+
+.price-table .discount-row td {
+	color: #388e3c;
+}
+
+.price-table .total-row td {
+	font-weight: 700;
+	font-size: 15px;
+	border-bottom: none;
+	padding-top: 14px;
+}
+
+.price-table .muted {
+	color: #878787;
+}
+
+/* ── TWO COLUMN LAYOUT ── */
+.two-col {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+/* ── PAYMENT / ADDRESS SECTIONS ── */
+.info-label {
+	font-size: 14px;
+	font-weight: 600;
+	color: #878787;
+	text-transform: uppercase;
+	letter-spacing: .5px;
+	margin-bottom: 12px;
+}
+
+.info-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+	margin-bottom: 8px;
+	color: #212121;
+}
+
+.info-row span:first-child {
+	color: #878787;
+}
+
+.info-row span:last-child {
+	font-weight: 500;
+	text-align: right;
+	max-width: 60%;
+}
+
+.address-block {
+	font-size: 15px;
+	line-height: 1.8;
+	color: #212121;
+}
+
+.address-block .name {
+	font-weight: 600;
+	font-size: 15px;
+}
+
+/* ── PAYMENT STATUS PILL ── */
+.pay-status {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 20px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.pay-success {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.pay-pending {
+	background: #fff8e1;
+	color: #f57f17;
+}
+
+.pay-failed {
+	background: #ffebee;
+	color: #c62828;
+}
+
+.pay-refunded {
+	background: #e3f2fd;
+	color: #1565c0;
+}
+
+/* ── ACTION BUTTONS ── */
+.action-bar {
+	padding: 16px 24px;
+	background: #fafafa;
+	border-top: 1px solid #f0f0f0;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.btn-fk {
+	padding: 10px 24px;
+	border-radius: 3px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	border: none;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	letter-spacing: .3px;
+	transition: filter .15s;
+}
+
+.btn-fk:hover {
+	filter: brightness(.93);
+}
+
+.btn-cancel {
+	background: #fff;
+	color: #f44336;
+	border: 1.5px solid #f44336;
+}
+
+.btn-return {
+	background: #fff;
+	border: 1.5px solid red;
+	color: black;
+}
+
+.btn-review {
+	background: #fff;
+	color: #2874f0;
+	border: 1.5px solid #2874f0;
+}
+
+.btn-invoice {
+	background: #fff;
+	color: #212121;
+	border: 1.5px solid #d0d0d0;
+}
+
+/* ── RESPONSIVE ── */
+@media ( max-width : 640px) {
+	.two-col {
+		grid-template-columns: 1fr;
+	}
+	.order-meta-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+	.meta-item {
+		border-right: none;
+		border-bottom: 1px solid #f0f0f0;
+	}
+	.product-row {
+		flex-direction: column;
+	}
+	.timeline-step .tl-text {
+		max-width: 70px;
+	}
+}
+
+/* Pulse animation for active dot */
+@keyframes pulse-ring {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(40, 116, 240, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(40, 116, 240, 0.08);
+  }
+}
+
+/* Rotating arc animation */
+
+@keyframes spin-arc {to { transform:rotate(360deg);
+	
+}
+}
+</style>
+
+
+		<div class="page-wrap">
+
+			<!-- ① ORDER META STRIP -->
+			<div class="fk-card">
+				<div class="order-meta-grid">
+					<div class="meta-item">
+						<div class="meta-label">Order ID</div>
+						<div class="meta-value small" th:text="${order.orderNumber}">TBZ-20240001</div>
+					</div>
+					<div class="meta-item">
+						<div class="meta-label">Ordered On</div>
+						<div class="meta-value small"
+							th:text="${#temporals.format(order.orderedAt,'dd MMM yyyy')}">15
+							Feb 2024</div>
+					</div>
+					<div class="meta-item">
+						<div class="meta-label">Total Amount</div>
+						<div class="meta-value">
+							₹ <span th:text="${order.finalAmount}">1,999</span>
+						</div>
+					</div>
+					<div class="meta-item">
+						<div class="meta-label">Order Status</div>
+						<div class="meta-value">
+							<!-- Status badge — only one will render -->
+							<span th:if="${order.orderStatus.name()=='PLACED'}"
+								class="status-badge badge-placed">● Placed</span> <span
+								th:if="${order.orderStatus.name()=='CONFIRMED'}"
+								class="status-badge badge-confirmed">● Confirmed</span> <span
+								th:if="${order.orderStatus.name()=='PROCESSING'}"
+								class="status-badge badge-processing">● Processing</span> <span
+								th:if="${order.orderStatus.name()=='DISPATCHED'}"
+								class="status-badge badge-dispatched">● Dispatched</span> <span
+								th:if="${order.orderStatus.name()=='SHIPPED'}"
+								class="status-badge badge-shipped">● Shipped</span> <span
+								th:if="${order.orderStatus.name()=='OUT_FOR_DELIVERY'}"
+								class="status-badge badge-out">● Out For Delivery</span> <span
+								th:if="${order.orderStatus.name()=='DELIVERED'}"
+								class="status-badge badge-delivered">✓ Delivered</span> <span
+								th:if="${order.orderStatus.name()=='CANCELLED'}"
+								class="status-badge badge-cancelled">✕ Cancelled</span> <span
+								th:if="${order.orderStatus.name()=='RETURN_REQUESTED'}"
+								class="status-badge badge-return">↩ Return Requested</span> <span
+								th:if="${order.orderStatus.name()=='RETURNED'}"
+								class="status-badge badge-return">↩ Returned</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- ② PRODUCT + TIMELINE CARD -->
+			<div class="fk-card">
+				<div class="fk-card-header">
+					<h2>Product &amp; Delivery</h2>
+				</div>
+
+				<!-- Product Row -->
+				<div class="product-row">
+
+					<div class="product-img-wrap">
+						<img width="200" height="200"
+							th:src="@{'/ProductImages/' + ${order.product.productImages[0]}}">
+					</div>
+
+					<div class="product-info">
+
+						<div class="product-name">
+
+							<a
+								th:href="@{'/ViewProduct/' + ${order.product.productName} + '/' + ${order.product.id}}"
+								th:text="${order.product.productName}"> Product Name </a>
+
+						</div>
+
+						<div class="product-meta"
+							th:text="${order.product.productDescription}"></div>
+
+						<div class="product-meta">
+							Qty: <span th:text="${order.quantity}"></span>
+						</div>
+
+						<div class="product-meta">
+							Seller: <span th:text="${order.seller.name}"></span>
+						</div>
+
+						<div class="product-price">
+							₹ <span th:text="${order.finalAmount}"></span>
+						</div>
+
+					</div>
+
+				</div>
+
+
+				<!-- Horizontal Stepper Timeline -->
+				<div class="timeline-section">
+					<div class="timeline-title">Shipment Tracking</div>
+
+					<!--
+        TIMELINE FLOWS:
+        1. Normal flow: PLACED → CONFIRMED → DISPATCHED → SHIPPED → OUT_FOR_DELIVERY → DELIVERED
+        2. Cancelled: PLACED → CANCELLED
+        3. Return flow: DELIVERED → RETURN_REQUESTED → RETURNED
+        
+        Class logic:
+          - All steps BEFORE current  → 'done'   (solid blue dot + full blue line after)
+          - The CURRENT step itself   → 'active'  (pulsing dot + half-blue line after)
+          - Steps AFTER current       → ''        (grey dot + grey line)
+      -->
+
+	<div class="timeline"
+						th:if="${order.orderStatus.name() != 'CANCELLED' 
+                                      and order.orderStatus.name() != 'RETURN_REQUESTED' 
+                                      and order.orderStatus.name() != 'RETURNED'}">
+
+						<!-- ① PLACED — always done (you can't see this page without placing) -->
+						<div class="timeline-step"
+							th:classappend="${order.orderStatus.name()=='PLACED'} ? 'active' : 'done'">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Order Placed</div>
+								<div class="tl-date"
+									th:text="${#temporals.format(order.orderedAt,'dd MMM')}"></div>
+							</div>
+						</div>
+
+						<!-- ② CONFIRMED -->
+						<div class="timeline-step"
+							th:with="stepOrd=${T(com.app.TechBazaar.Model.Orders.OrderStatus).CONFIRMED.ordinal()}, curOrd=${order.orderStatus.ordinal()}"
+							th:classappend="${curOrd == stepOrd} ? 'active' : (${curOrd > stepOrd} ? 'done' : '')">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Confirmed</div>
+							</div>
+						</div>
+
+						<!-- ③ DISPATCHED -->
+						<div class="timeline-step"
+							th:with="stepOrd=${T(com.app.TechBazaar.Model.Orders.OrderStatus).DISPATCHED.ordinal()}, curOrd=${order.orderStatus.ordinal()}"
+							th:classappend="${curOrd == stepOrd} ? 'active' : (${curOrd > stepOrd} ? 'done' : '')">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Dispatched</div>
+							</div>
+						</div>
+
+						<!-- ④ SHIPPED -->
+						<div class="timeline-step"
+							th:with="stepOrd=${T(com.app.TechBazaar.Model.Orders.OrderStatus).SHIPPED.ordinal()}, curOrd=${order.orderStatus.ordinal()}"
+							th:classappend="${curOrd == stepOrd} ? 'active' : (${curOrd > stepOrd} ? 'done' : '')">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Shipped</div>
+							</div>
+						</div>
+
+						<!-- ⑤ OUT FOR DELIVERY -->
+						<div class="timeline-step"
+							th:with="stepOrd=${T(com.app.TechBazaar.Model.Orders.OrderStatus).OUT_FOR_DELIVERY.ordinal()}, curOrd=${order.orderStatus.ordinal()}"
+							th:classappend="${curOrd == stepOrd} ? 'active' : (${curOrd > stepOrd} ? 'done' : '')">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Out For Delivery</div>
+							</div>
+						</div>
+
+						<!-- ⑥ DELIVERED — last step: done when delivered -->
+						<div class="timeline-step"
+							th:classappend="${order.orderStatus.name()=='DELIVERED'} ? 'done' : ''">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Delivered</div>
+								<div class="tl-date" th:if="${order.deliveredAt != null}"
+									th:text="${#temporals.format(order.deliveredAt,'dd MMM')}"></div>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- Return flow timeline -->
+					<div class="timeline"
+						th:if="${order.orderStatus.name() == 'RETURN_REQUESTED' 
+                                     or order.orderStatus.name() == 'RETURNED'}">
+
+						<div class="timeline-step done">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Order Placed</div>
+								<div class="tl-date"
+									th:text="${#temporals.format(order.orderedAt,'dd MMM')}"></div>
+							</div>
+						</div>
+						<div class="timeline-step done">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Delivered</div>
+								<div class="tl-date" th:if="${order.deliveredAt != null}"
+									th:text="${#temporals.format(order.deliveredAt,'dd MMM')}"></div>
+							</div>
+						</div>
+
+						<div class="timeline-step return-step"
+							th:classappend="${order.orderStatus.name()=='RETURN_REQUESTED'} ? 'active' : 'done'">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Return Requested</div>
+								<div class="tl-date" th:if="${order.returnRequestedAt != null}"
+									th:text="${#temporals.format(order.returnRequestedAt,'dd MMM')}"></div>
+							</div>
+						</div>
+
+						<div class="timeline-step return-step"
+							th:classappend="${order.orderStatus.name()=='RETURNED'} ? 'done' : ''">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Return Completed</div>
+								<div class="tl-date" th:if="${order.returnedAt != null}"
+									th:text="${#temporals.format(order.returnedAt,'dd MMM')}"></div>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- Cancelled state -->
+					<div class="timeline"
+						th:if="${order.orderStatus.name() == 'CANCELLED'}">
+						<div class="timeline-step done">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Order Placed</div>
+								<div class="tl-date"
+									th:text="${#temporals.format(order.orderedAt,'dd MMM')}"></div>
+							</div>
+						</div>
+						<div class="timeline-step cancelled-step">
+							<div class="tl-dot"></div>
+							<div class="tl-text">
+								<div class="tl-label">Cancelled</div>
+								<div class="tl-date" th:if="${order.cancelledAt != null}"
+									th:text="${#temporals.format(order.cancelledAt,'dd MMM')}"></div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- Action Bar -->
+				<div class="action-bar">
+					<a
+						th:if="${order.product.cancellationAllowed and  (order.orderStatus.name()=='CONFIRMED' or order.orderStatus.name()=='PROCESSING')}"
+						th:href="@{'/cancel/order/' + ${order.id}}"
+						class="btn-fk btn-cancel"
+						onclick="return confirm('Are You Sure Want To Cancel This Order')">
+						✕ Cancel Order </a> <a
+						th:if="${order.orderStatus.name()=='DELIVERED' and order.product.returnAvailable and T(java.time.LocalDateTime).now().isBefore(order.deliveredAt.plusDays(order.product.returnDays))}"
+						th:href="@{'/return/request/' + ${order.id}}"
+						class="btn-fk btn-return"> ↩ Request Return </a>
+						<a th:if="${order.orderStatus.name()=='DELIVERED' or order.orderStatus.name()=='RETURNED' or order.orderStatus.name()=='RETURN_REQUESTED'}"
+                         th:href="@{'/Feedback/'+${order.id}}"
+                          class="btn-fk btn-review">
+                              ▤ Write Review
+                         </a>
+						<a href="/assets/imgages/headphones1.jpg"
+						class="btn-fk btn-invoice" download>↓ Download Invoice</a>
+				</div>
+			</div>
+
+			<!-- ③ PAYMENT + ADDRESS GRID -->
+			<div class="two-col">
+
+				<!-- Payment Info -->
+				<div class="fk-card">
+					<div class="fk-card-header">
+						<h2>Payment Details</h2>
+					</div>
+					<div class="fk-card-body">
+						<div class="info-label">Summary</div>
+
+						<div class="info-row">
+							<span>Item Price</span> <span>₹ <span
+								th:text="${order.subtotal}">1,999</span></span>
+						</div>
+						<div class="info-row">
+							<span>Shipping Charges</span> <span
+								th:if="${order.shippingCharge == 0}">FREE</span> <span
+								th:if="${order.shippingCharge > 0}">₹ <span
+								th:text="${order.shippingCharge}">0</span></span>
+						</div>
+						<div class="info-row" th:if="${order.discountAmount > 0}"
+							style="color: #388e3c">
+							<span>Discount</span> <span>− ₹ <span
+								th:text="${order.discountAmount}">0</span></span>
+						</div>
+						<hr
+							style="border: none; border-top: 1px solid #f0f0f0; margin: 8px 0">
+						<div class="info-row" style="font-weight: 700; font-size: 15px">
+							<span>Total Amount</span> <span>₹ <span
+								th:text="${order.finalAmount}">1,999</span></span>
+						</div>
+
+						<div style="margin-top: 20px">
+							<div class="info-label">Method &amp; Status</div>
+							<div class="info-row">
+								<span>Payment Mode</span> <span th:text="${order.paymentMethod}">COD</span>
+							</div>
+							<div class="info-row">
+								<span>Payment Status</span> <span> <em
+									class="pay-status pay-success"
+									th:if="${order.paymentStatus.name()=='SUCCESS'}">Paid</em> <em
+									class="pay-status pay-pending"
+									th:if="${order.paymentStatus.name()=='PENDING'}">Pending</em> <em
+									class="pay-status pay-failed"
+									th:if="${order.paymentStatus.name()=='FAILED'}">Failed</em> <em
+									class="pay-status pay-refunded"
+									th:if="${order.paymentStatus.name()=='REFUNDED'}">Refunded</em>
+								</span>
+							</div>
+							<div class="info-row" th:if="${order.transactionId != null}">
+								<span>Transaction ID</span> <span
+									th:text="${order.transactionId}"
+									style="font-size: 11px; word-break: break-all"></span>
+							</div>
+							<div class="info-row" th:if="${order.paymentTime != null}">
+								<span>Payment Time</span> <span
+									th:text="${#temporals.format(order.paymentTime,'dd MMM yyyy, hh:mm a')}"></span>
+							</div>
+							<hr>
+							<span th:if="${order.product.warranty}"> <strong>Warranty
+									Duration :</strong> <small
+								th:text="${'Warranty Available For' + ' '+order.product.warrantyDuration+ ' ' +order.product.warrantyUnit}"></small>
+								<br> <strong>Warranty Terms : </strong> <small
+								th:text="${order.product.warrantyTerms}"></small>
+
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Shipping Address -->
+				<div class="fk-card">
+					<div class="fk-card-header">
+						<h2>Delivery Address</h2>
+					</div>
+					<div class="fk-card-body">
+						<div class="info-label">Shipping To</div>
+						<div class="address-block">
+							<div class="name" th:text="${order.fullName}">John Doe</div>
+							<div th:text="${order.address}">123, MG Road</div>
+							<div>
+								<span th:text="${order.city}">Bengaluru</span>, <span
+									th:text="${order.state}">Karnataka</span> - <span
+									th:text="${order.pincode}">560001</span>
+							</div>
+							<div style="margin-top: 8px; color: #878787; font-size: 12px">
+								📞 <span th:text="${order.phone}">9876543210</span>
+							</div>
+						</div>
+
+						<!-- Refund info if applicable -->
+						<div th:if="${order.refundedAt != null}" style="margin-top: 20px">
+							<div class="info-label">Refund Details</div>
+							<div class="info-row">
+								<span>Refunded On</span> <span
+									th:text="${#temporals.format(order.refundedAt,'dd MMM yyyy')}"></span>
+							</div>
+
+						</div>
+						<hr>
+						<h5>Privacy And Policy</h5>
+						<span th:if="${!order.product.cancellationAllowed}">
+							Cancellation Not Allowed</span> <br> <span
+							th:if="${!order.product.returnAvailable}"> No Return
+							Available for this Product </span> <span
+							th:if="${!order.product.returnAvailable}"> <br> <strong>Return
+								Policy</strong> <br> <small
+							th:if="${order.product.returnAvailable}"
+							th:text="${order.product.returnConditions}"></small>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</main>
+</body>
+</html>
