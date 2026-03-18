@@ -195,12 +195,13 @@ public class OrderService {
 	}
 	
 	public String generateOrderNumber() {
-		
 		int year = LocalDate.now().getYear();
 		long count = orderRepo.countByYear(year);
 		
-		//TB-2026-000001
-		return "TB-"+year+"-"+String.format("%05d", count + 1);
+		// Add a millisecond-precision timestamp snippet to ensure absolute uniqueness 
+		// within a loop and across concurrent users.
+		String timestamp = LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HHmmssSSS"));
+		return "TB-" + year + "-" + String.format("%04d", count + 1) + "-" + timestamp;
 	}
 	
 	

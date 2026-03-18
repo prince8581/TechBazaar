@@ -29,7 +29,7 @@
 <th>Message</th>
 <th>Image</th>
 <th>Date</th>
-<!-- <th>Status</th>-->
+<th>OrderId</th>
 <th>Action</th>
 </tr>
 </thead>
@@ -61,10 +61,7 @@
 
 <td th:text="${#temporals.format(feed.submittedAt, 'dd-MMM-yyyy hh:mm a')}"></td>
 
-<!--<td>
-<span th:if="${feed.active}" class="badge bg-success">Active</span>
-<span th:unless="${feed.active}" class="badge bg-danger">Hidden</span>
-</td>-->
+<td th:text="${feed.order.orderNumber}"></td>
 
 <td>
 <a th:href="@{'/Seller/deleteFeedback/' + ${feed.id}}"

@@ -88,7 +88,8 @@ public class UserController {
 		if(session.getAttribute("loggedInUser") == null) {
 			return "redirect:/Login";
 		}
-		List<SavedAddress> savedAddress  =  addressRepo.findAll();
+		Users user = (Users) session.getAttribute("loggedInUser");
+		List<SavedAddress> savedAddress  =  addressRepo.findByUserId(user.getId());
 		model.addAttribute("savedAddress", savedAddress);
 		
 		SavedAddressDTO dto = new SavedAddressDTO();

@@ -20,7 +20,7 @@ box-shadow:0 4px 10px rgba(0,0,0,0.1);
 .bg-green{background:#28a745;}
 .bg-blue{background:#007bff;}
 .bg-orange{background:#fd7e14;}
-.bg-dark{background:#343a40;}
+.bg-warning{backgrourd: (255, 255, 0)a40;}
 
 .stat-card{
 background:white;
@@ -151,6 +151,7 @@ Recent Orders
 <tr>
 <th>S.No.</th>
 <th>Product</th>
+<th>Order Id</th>
 <th>Quantity</th>
 <th>Buyer</th>
 <th>Status</th>
@@ -166,13 +167,26 @@ Recent Orders
 <td th:text="${iStat.index+1}"></td>
 
 <td th:text="${order.product.productName}"></td>
-
+<td th:text="${order.orderNumber}"></td>
 <td th:text="${order.quantity}"></td>
 <td th:text="${order.user.name}"></td>
 <td>
+    <span class="badge"
+          th:text="${order.orderStatus}"
+          th:classappend="${
+              order.orderStatus.name() == 'PLACED' ? ' bg-blue' :
+              order.orderStatus.name() == 'CONFIRMED' ? ' bg-orange' :
+              order.orderStatus.name() == 'DELIVERED' ? ' bg-success' :
+              order.orderStatus.name() == 'RETURNED' ? ' bg-warning' :
+              ''
+          }">
+    </span>
+</td>
+
+<!-- <td>
 <span class="badge bg-success" th:text="${order.orderStatus}">
 </span>
-</td>
+</td>-->
 
 <td th:text="${#temporals.format(order.orderedAt, 'dd-MMM-yyyy hh:mm a')}">
 </td>

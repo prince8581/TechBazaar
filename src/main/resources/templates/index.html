@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html th:replace="~{base::layout(~{::main})}">
 
 <body>
@@ -45,7 +46,6 @@
 			/* Hero Slider */
 			.hero-slider-wrap {
 				margin: 0 -15px;
-				/* Pull to edges on mobile, restrained by container on desktop */
 				overflow: hidden;
 				border-radius: 0 0 20px 20px;
 				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -147,16 +147,6 @@
 				text-decoration: line-through;
 				font-size: 0.85rem;
 				font-weight: 500;
-			}
-
-			.save-text {
-				color: #10b981;
-				background: #d1fae5;
-				padding: 3px 8px;
-				border-radius: 4px;
-				font-size: 0.75rem;
-				font-weight: 700;
-				display: inline-block;
 			}
 
 			/* Categories */
@@ -373,9 +363,236 @@
 			.section-bg-light {
 				background-color: #f8fafc;
 			}
+
+			/* PREMIUM REDESIGN STYLES */
+			.premium-deal-section {
+				background-color: #fbfcfe;
+				padding: 80px 0;
+			}
+
+			.bg-blob {
+				position: absolute;
+				border-radius: 50%;
+				filter: blur(60px);
+				z-index: 1;
+				opacity: 0.5;
+			}
+
+			.blob-1 {
+				width: 300px;
+				height: 300px;
+				background: rgba(13, 110, 253, 0.1);
+				top: -100px;
+				left: -50px;
+			}
+
+			.blob-2 {
+				width: 400px;
+				height: 400px;
+				background: rgba(13, 202, 240, 0.1);
+				bottom: -150px;
+				right: -100px;
+			}
+
+			.text-gradient-primary {
+				background: linear-gradient(45deg, #2563eb, #0ea5e9);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+
+			.flash-badge {
+				animation: pulse 2s infinite;
+			}
+
+			@keyframes pulse {
+				0% {
+					transform: scale(1);
+					opacity: 1;
+				}
+
+				50% {
+					transform: scale(1.05);
+					opacity: 0.9;
+				}
+
+				100% {
+					transform: scale(1);
+					opacity: 1;
+				}
+			}
+
+			.btn-premium-outline {
+				border: 2px solid #e2e8f0;
+				padding: 12px 28px;
+				border-radius: 100px;
+				color: #475569;
+				font-weight: 600;
+				text-decoration: none;
+				transition: all 0.3s ease;
+				display: inline-block;
+				background: white;
+			}
+
+			.btn-premium-outline:hover {
+				border-color: #2563eb;
+				color: #2563eb;
+				box-shadow: 0 5px 15px rgba(37, 99, 235, 0.1);
+				transform: translateY(-2px);
+			}
+
+			.premium-product-card {
+				background: #ffffff;
+				border-radius: 20px;
+				border: 1px solid #f1f5f9;
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.premium-product-card:hover {
+				transform: translateY(-10px);
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+				border-color: #e2e8f0;
+			}
+
+			.pp-image-area {
+				background: #f8fafc;
+				overflow: hidden;
+				position: relative;
+			}
+
+			.pp-img {
+				height: 230px;
+				object-fit: contain;
+				transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+			}
+
+			.premium-product-card:hover .pp-img {
+				transform: scale(1.1) translateY(-5px);
+			}
+
+			.pp-discount-tag {
+				position: absolute;
+				top: 15px;
+				left: 15px;
+				background: #ef4444;
+				color: white;
+				font-size: 0.75rem;
+				font-weight: 700;
+				padding: 4px 10px;
+				border-radius: 8px;
+				box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+				z-index: 3;
+			}
+
+			.pp-actions-overlay {
+				position: absolute;
+				top: 15px;
+				right: -50px;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				transition: all 0.3s ease;
+				z-index: 3;
+			}
+
+			.premium-product-card:hover .pp-actions-overlay {
+				right: 15px;
+			}
+
+			.pp-action-btn {
+				width: 36px;
+				height: 36px;
+				border-radius: 10px;
+				background: white;
+				border: none;
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #64748b;
+				transition: all 0.2s ease;
+			}
+
+			.pp-action-btn:hover {
+				background: #2563eb;
+				color: white;
+				transform: scale(1.1);
+			}
+
+			.pp-info-area {
+				background: white;
+				flex-grow: 1;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.pp-category {
+				font-size: 11px;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				color: #94a3b8;
+				font-weight: 600;
+			}
+
+			.pp-rating {
+				background: #fef3c7;
+				color: #d97706;
+				padding: 2px 6px;
+				border-radius: 6px;
+				font-size: 10px;
+				font-weight: 700;
+				display: flex;
+				align-items: center;
+				gap: 3px;
+			}
+
+			.pp-title {
+				font-family: 'Inter', sans-serif;
+				font-weight: 600;
+				font-size: 1.05rem;
+				line-height: 1.4;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				height: 2.8em;
+			}
+
+			.pp-price-current {
+				font-size: 1.25rem;
+				font-weight: 800;
+				color: #0f172a;
+			}
+
+			.pp-price-old {
+				color: #94a3b8;
+				text-decoration: line-through;
+				font-size: 0.85rem;
+			}
+
+			.btn-add-cart {
+				background: #f1f5f9;
+				border: none;
+				padding: 10px;
+				border-radius: 12px;
+				color: #1e293b;
+				font-weight: 600;
+				font-size: 0.85rem;
+				transition: all 0.3s ease;
+			}
+
+			.premium-product-card:hover .btn-add-cart {
+				background: #2563eb;
+				color: white;
+				box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+			}
 		</style>
 
-		<!-- Hero Slider Start -->
+		<!-- Hero Slider -->
 		<div class="container mt-3 mb-5">
 			<div class="row">
 				<div class="col-sm-11 mx-auto">
@@ -421,150 +638,101 @@
 				</div>
 			</div>
 		</div>
-		<!-- Hero Slider End -->
 
-		<!-- Grab the best deal on smartphones Start -->
-		<section class="section-bg-light py-5 border-top border-bottom">
-			<div class="container">
+		<!-- Grab the best deal on smartphones REDESIGNED -->
+		<section class="premium-deal-section position-relative overflow-hidden">
+			<div class="bg-blob blob-1"></div>
+			<div class="bg-blob blob-2"></div>
+
+			<div class="container position-relative" style="z-index: 2;">
 				<div class="row">
 					<div class="col-sm-11 mx-auto">
-
-						<!-- Section Header -->
-						<div class="d-flex justify-content-between align-items-end mb-4">
-							<div>
-								<span class="badge bg-danger mb-2 rounded-pill px-3 py-2 shadow-sm">MEGA BRANDS
-									SALE</span>
-								<h2 class="section-title mb-0">Grab the Best Deal on <span
-										class="text-accent">Smartphones</span></h2>
+						<div class="row align-items-center mb-5">
+							<div class="col-md-7">
+								<div class="d-flex align-items-center gap-3 mb-2">
+									<span class="badge bg-danger rounded-pill px-3 py-2 shadow-sm flash-badge">
+										<i class="fa-solid fa-bolt-lightning me-1"></i> LIMITED TIME OFFER
+									</span>
+									<div
+										class="countdown-timers d-flex gap-2 align-items-center text-danger fw-bold small">
+										<span id="hours">00</span>:<span id="mins">00</span>:<span id="secs">00</span>
+									</div>
+								</div>
+								<h2 class="display-6 fw-bolder mb-0" style="letter-spacing: -1px; color: #0f172a;">
+									Grab the Best Deal on <span class="text-gradient-primary">Smartphones</span>
+								</h2>
+								<p class="text-muted mt-2 mb-0">Discover top-tier mobile tech at unbeatable prices. Up
+									to 60% off on flagship models.</p>
 							</div>
-							<a href="#" class="view-all-link d-none d-sm-inline-flex">View All <i
-									class="fa-solid fa-arrow-right"></i></a>
+							<div class="col-md-5 text-md-end mt-4 mt-md-0">
+								<a href="/Products" class="btn-premium-outline">
+									Explore All Models <i class="fa-solid fa-arrow-right-long ms-2"></i>
+								</a>
+							</div>
 						</div>
 
-						<!-- Products Grid -->
-						<div class="row g-4 mt-1">
-							<!-- Product Card 1 -->
-							<div class="col-lg-2 col-md-3 col-sm-4 col-6">
-								<div class="deal-card">
-									<span class="discount-badge">56% OFF</span>
-									<div class="deal-img-wrapper">
-										<img src="/images/Glaxys222.jpg" class="deal-img" alt="Galaxy S22 Ultra">
-									</div>
-									<div class="card-body text-center p-3">
-										<h6 class="product-title text-truncate">Galaxy S22 Ultra</h6>
-										<div class="price-container">
-											<span class="price-current">₹32,999</span>
-											<span class="price-old">₹74,999</span>
+						<div class="row g-4">
+							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12" th:each="product : ${products}">
+								<div class="premium-product-card shadow-sm h-100">
+									<div class="pp-image-area position-relative">
+										<div class="pp-discount-tag" th:if="${product.discount > 0}"
+											th:text="'-' + ${product.discount} + '%'"></div>
+										<div class="pp-actions-overlay">
+											<button class="pp-action-btn" title="Add to Wishlist"><i
+													class="fa-regular fa-heart"></i></button>
+											<button class="pp-action-btn" title="Quick View"><i
+													class="fa-regular fa-eye"></i></button>
 										</div>
-										<div class="mt-2"><span class="save-text">Save ₹42,000</span></div>
+										<a th:href="@{/ViewProduct/{name}/{id}(name=${product.productName},id=${product.id})}"
+											class="d-block text-center p-4">
+											<img th:src="@{'/ProductImages/' + ${product.productImages[0]}}"
+												class="pp-img img-fluid" th:alt="${product.productName}">
+										</a>
+									</div>
+									<div class="pp-info-area p-3">
+										<div class="d-flex justify-content-between align-items-center mb-1">
+											<span class="pp-category"
+												th:text="${product.category.categoryName}">Smartphone</span>
+											<div class="pp-rating"><i class="fa-solid fa-star"></i> <span>4.8</span>
+											</div>
+										</div>
+										<h6 class="pp-title mb-2">
+											<a th:href="@{/ViewProduct/{name}/{id}(name=${product.productName},id=${product.id})}"
+												th:text="${product.productName}"
+												class="text-decoration-none text-dark"></a>
+										</h6>
+										<div class="pp-price-box d-flex align-items-center gap-2 mb-3">
+											<span class="pp-price-current">₹<span
+													th:text="${product.finalPrice}"></span></span>
+											<span class="pp-price-old" th:if="${product.discount > 0}">₹<span
+													th:text="${product.pricePerUnit}"></span></span>
+										</div>
+										<button class="btn-add-cart w-100"
+											th:onclick="'addToCart(' + ${product.id} + ')'">
+											<i class="fa-solid fa-cart-shopping me-2"></i> Add to Cart
+										</button>
 									</div>
 								</div>
 							</div>
-
-							<!-- Product Card 2 -->
-							<div class="col-lg-2 col-md-3 col-sm-4 col-6">
-								<div class="deal-card">
-									<span class="discount-badge">40% OFF</span>
-									<div class="deal-img-wrapper">
-										<img src="/images/iphone1.jpg" class="deal-img" alt="iPhone">
-									</div>
-									<div class="card-body text-center p-3">
-										<h6 class="product-title text-truncate">iPhone 13 Pro</h6>
-										<div class="price-container">
-											<span class="price-current">₹45,999</span>
-											<span class="price-old">₹75,999</span>
-										</div>
-										<div class="mt-2"><span class="save-text">Save ₹30,000</span></div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Product Card 3 -->
-							<div class="col-lg-2 col-md-3 col-sm-4 col-6">
-								<div class="deal-card">
-									<span class="discount-badge">60% OFF</span>
-									<div class="deal-img-wrapper">
-										<img src="/images/s22.jpg" class="deal-img" alt="Galaxy S22">
-									</div>
-									<div class="card-body text-center p-3">
-										<h6 class="product-title text-truncate">Galaxy S22</h6>
-										<div class="price-container">
-											<span class="price-current">₹29,999</span>
-											<span class="price-old">₹74,999</span>
-										</div>
-										<div class="mt-2"><span class="save-text">Save ₹45,000</span></div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Product Card 4 -->
-							<div class="col-lg-2 col-md-3 col-sm-4 col-6">
-								<div class="deal-card">
-									<span class="discount-badge">50% OFF</span>
-									<div class="deal-img-wrapper">
-										<img src="/images/5gone.jpg" class="deal-img" alt="OnePlus 5G">
-									</div>
-									<div class="card-body text-center p-3">
-										<h6 class="product-title text-truncate">OnePlus 5G</h6>
-										<div class="price-container">
-											<span class="price-current">₹34,999</span>
-											<span class="price-old">₹69,999</span>
-										</div>
-										<div class="mt-2"><span class="save-text">Save ₹35,000</span></div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Product Card 5 -->
-							<div class="col-lg-2 col-md-3 col-sm-4 col-6">
-								<div class="deal-card">
-									<span class="discount-badge">45% OFF</span>
-									<div class="deal-img-wrapper">
-										<img src="/images/slimphone.jpg" class="deal-img" alt="Slim Phone">
-									</div>
-									<div class="card-body text-center p-3">
-										<h6 class="product-title text-truncate">Oppo Reno Slim</h6>
-										<div class="price-container">
-											<span class="price-current">₹27,999</span>
-											<span class="price-old">₹49,999</span>
-										</div>
-										<div class="mt-2"><span class="save-text">Save ₹22,000</span></div>
-									</div>
-								</div>
-							</div>
-
-							<!-- Product Card 6 -->
-							<div class="col-lg-2 col-md-3 col-sm-4 col-6">
-								<div class="deal-card">
-									<span class="discount-badge">55% OFF</span>
-									<div class="deal-img-wrapper">
-										<img src="/images/Glaxys222.jpg" class="deal-img" alt="Galaxy S21">
-									</div>
-									<div class="card-body text-center p-3">
-										<h6 class="product-title text-truncate">Galaxy S21 FE</h6>
-										<div class="price-container">
-											<span class="price-current">₹31,999</span>
-											<span class="price-old">₹71,999</span>
-										</div>
-										<div class="mt-2"><span class="save-text">Save ₹40,000</span></div>
-									</div>
-								</div>
-							</div>
-
-							<div class="col-12 mt-4 text-center d-sm-none">
-								<a href="#" class="view-all-link w-100 justify-content-center">View All Smartphone Deals
-									<i class="fa-solid fa-arrow-right"></i></a>
-							</div>
-
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-		<!-- Grab the best deal on smartphones End -->
 
+		<script>
+			function updateTimer() {
+				const now = new Date();
+				const hours = 23 - now.getHours(), mins = 59 - now.getMinutes(), secs = 59 - now.getSeconds();
+				const hElem = document.getElementById('hours'), mElem = document.getElementById('mins'), sElem = document.getElementById('secs');
+				if (hElem) hElem.innerText = hours.toString().padStart(2, '0');
+				if (mElem) mElem.innerText = mins.toString().padStart(2, '0');
+				if (sElem) sElem.innerText = secs.toString().padStart(2, '0');
+			}
+			setInterval(updateTimer, 1000); updateTimer();
+		</script>
 
-		<!-- Shop From Top Categories Start -->
+		<!-- Shop From Top Categories -->
 		<section class="py-5 bg-white">
 			<div class="container">
 				<div class="row">
@@ -574,58 +742,40 @@
 								style="letter-spacing: 2px;">Explore The Store</span>
 							<h2 class="section-title">Shop By <span class="text-accent">Top Categories</span></h2>
 						</div>
-
 						<div class="row g-4 text-center">
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
 								<a href="#" class="text-decoration-none d-block">
-									<div class="category-card">
-										<img src="/images/laptopbg.png" alt="Laptop">
-									</div>
+									<div class="category-card"><img src="/images/laptopbg.png" alt="Laptop"></div>
 									<h6 class="category-title">Laptops & PCs</h6>
 								</a>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
 								<a href="#" class="text-decoration-none d-block">
-									<div class="category-card">
-										<img src="/images/freeze.png" alt="Refrigerator">
-									</div>
+									<div class="category-card"><img src="/images/freeze.png" alt="Refrigerator"></div>
 									<h6 class="category-title">Refrigerators</h6>
 								</a>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
 								<a href="#" class="text-decoration-none d-block">
-									<div class="category-card">
-										<img src="/images/cooler.png" alt="Cooler">
-									</div>
+									<div class="category-card"><img src="/images/cooler.png" alt="Cooler"></div>
 									<h6 class="category-title">Air Coolers</h6>
 								</a>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
 								<a href="#" class="text-decoration-none d-block">
-									<div class="category-card">
-										<img src="/images/Ac.png" alt="AC">
-									</div>
+									<div class="category-card"><img src="/images/Ac.png" alt="AC"></div>
 									<h6 class="category-title">Air Conditioners</h6>
 								</a>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
 								<a href="#" class="text-decoration-none d-block">
-									<div class="category-card">
-										<img src="/images/fan.png" alt="Fan">
-									</div>
+									<div class="category-card"><img src="/images/fan.png" alt="Fan"></div>
 									<h6 class="category-title">Smart Fans</h6>
 								</a>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
 								<a href="#" class="text-decoration-none d-block">
-									<div class="category-card">
-										<img src="/images/mobile1.png" alt="Mobile">
-									</div>
+									<div class="category-card"><img src="/images/mobile1.png" alt="Mobile"></div>
 									<h6 class="category-title">Smartphones</h6>
 								</a>
 							</div>
@@ -634,10 +784,8 @@
 				</div>
 			</div>
 		</section>
-		<!-- Shop from top Category End -->
 
-
-		<!-- Why Shop With TechBazaar Start -->
+		<!-- Why Shop With TechBazaar -->
 		<section class="section-bg-light py-5 border-top border-bottom">
 			<div class="container">
 				<div class="row">
@@ -646,42 +794,34 @@
 							<h2 class="section-title">Why Shop With <span class="text-accent">TechBazaar</span></h2>
 							<p class="text-muted mt-2 fs-5">Trusted by millions of customers across India</p>
 						</div>
-
 						<div class="row g-4 text-center mt-2">
 							<div class="col-lg-3 col-md-6">
 								<div class="feature-card">
-									<div class="feature-icon-wrapper shadow-sm">
-										<i class="fa-solid fa-truck-fast"></i>
+									<div class="feature-icon-wrapper shadow-sm"><i class="fa-solid fa-truck-fast"></i>
 									</div>
 									<h6>Lightning Fast Delivery</h6>
 									<p>Same-day and next-day delivery options across all major cities in India.</p>
 								</div>
 							</div>
-
 							<div class="col-lg-3 col-md-6">
 								<div class="feature-card">
-									<div class="feature-icon-wrapper shadow-sm">
-										<i class="fa-solid fa-shield-halved"></i>
-									</div>
+									<div class="feature-icon-wrapper shadow-sm"><i
+											class="fa-solid fa-shield-halved"></i></div>
 									<h6>100% Secure Payments</h6>
 									<p>Your transactions are encrypted and secured with top-tier security standards.</p>
 								</div>
 							</div>
-
 							<div class="col-lg-3 col-md-6">
 								<div class="feature-card">
-									<div class="feature-icon-wrapper shadow-sm">
-										<i class="fa-solid fa-rotate-left"></i>
+									<div class="feature-icon-wrapper shadow-sm"><i class="fa-solid fa-rotate-left"></i>
 									</div>
 									<h6>Hassle-Free Returns</h6>
 									<p>Not satisfied? Return or exchange products easily within 30 days of delivery.</p>
 								</div>
 							</div>
-
 							<div class="col-lg-3 col-md-6">
 								<div class="feature-card">
-									<div class="feature-icon-wrapper shadow-sm">
-										<i class="fa-solid fa-headset"></i>
+									<div class="feature-icon-wrapper shadow-sm"><i class="fa-solid fa-headset"></i>
 									</div>
 									<h6>Dedicated 24/7 Support</h6>
 									<p>Our expert technical support team is always ready to help you, anytime.</p>
@@ -692,20 +832,17 @@
 				</div>
 			</div>
 		</section>
-		<!-- Why Shop With TechBazaar End -->
 
-		<!-- Trending Gadgets Start -->
+		<!-- Trending Gadgets -->
 		<section class="py-5 bg-white">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-11 mx-auto">
-
 						<div class="d-flex justify-content-between align-items-end mb-4">
 							<h2 class="section-title mb-0">Trending <span class="text-accent">Gadgets</span></h2>
 							<a href="#" class="view-all-link d-none d-sm-inline-flex">Explore More <i
 									class="fa-solid fa-arrow-right"></i></a>
 						</div>
-
 						<div class="row g-4 mt-2">
 							<div class="col-lg-3 col-md-4 col-sm-6 col-6">
 								<div class="deal-card p-4">
@@ -719,12 +856,10 @@
 									<div class="text-center mt-auto border-top pt-3">
 										<h6 class="product-title">Premium 5G Smartphones</h6>
 										<p class="mb-0 px-3 py-1 bg-light rounded text-primary fw-bold d-inline-block">
-											From
-											₹12,999</p>
+											From ₹12,999</p>
 									</div>
 								</div>
 							</div>
-
 							<div class="col-lg-3 col-md-4 col-sm-6 col-6">
 								<div class="deal-card p-4">
 									<div class="text-center mb-3"
@@ -737,12 +872,10 @@
 									<div class="text-center mt-auto border-top pt-3">
 										<h6 class="product-title">Latest Generation Laptops</h6>
 										<p class="mb-0 px-3 py-1 bg-light rounded text-primary fw-bold d-inline-block">
-											From
-											₹39,999</p>
+											From ₹39,999</p>
 									</div>
 								</div>
 							</div>
-
 							<div class="col-lg-3 col-md-4 col-sm-6 col-6">
 								<div class="deal-card p-4">
 									<div class="text-center mb-3"
@@ -755,12 +888,10 @@
 									<div class="text-center mt-auto border-top pt-3">
 										<h6 class="product-title">Smart Ceiling Fans</h6>
 										<p class="mb-0 px-3 py-1 bg-light rounded text-primary fw-bold d-inline-block">
-											From
-											₹2,499</p>
+											From ₹2,499</p>
 									</div>
 								</div>
 							</div>
-
 							<div class="col-lg-3 col-md-4 col-sm-6 col-6">
 								<div class="deal-card p-4">
 									<div class="text-center mb-3"
@@ -773,48 +904,33 @@
 									<div class="text-center mt-auto border-top pt-3">
 										<h6 class="product-title">Energy Efficient ACs</h6>
 										<p class="mb-0 px-3 py-1 bg-light rounded text-primary fw-bold d-inline-block">
-											From
-											₹24,999</p>
+											From ₹24,999</p>
 									</div>
 								</div>
-							</div>
-
-							<div class="col-12 mt-4 text-center d-sm-none">
-								<a href="#" class="view-all-link w-100 justify-content-center">Explore More Gadgets <i
-										class="fa-solid fa-arrow-right"></i></a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-		<!-- Trending Gadgets End -->
 
-
-		<!-- Seller Promotion Start -->
+		<!-- Seller Promotion -->
 		<section class="py-5 bg-white">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-11 mx-auto">
 						<div class="seller-banner p-4 p-md-5 shadow-lg">
 							<div class="row align-items-center">
-
-								<!-- Text Content -->
 								<div class="col-lg-7 col-md-8 position-relative" style="z-index: 2;">
 									<span
 										class="badge bg-white text-primary mb-3 px-3 py-2 fw-bold text-uppercase rounded-pill shadow-sm">Partner
 										Network</span>
 									<h2 class="fw-bolder text-white mb-3"
-										style="font-size: 2.5rem; letter-spacing: -1px;">
-										Grow your business on <span class="text-info">TechBazaar</span>
-									</h2>
-
-									<p class="text-white-50 fs-5 mb-4 pe-lg-5">
-										Join India's fastest-growing premium electronics marketplace. Start your online
-										business
-										today and reach millions of customers instantly.
-									</p>
-
+										style="font-size: 2.5rem; letter-spacing: -1px;">Grow your business on <span
+											class="text-info">TechBazaar</span></h2>
+									<p class="text-white-50 fs-5 mb-4 pe-lg-5">Join India's fastest-growing premium
+										electronics marketplace. Start your online business today and reach millions of
+										customers instantly.</p>
 									<ul class="list-unstyled seller-list mb-5 row g-3">
 										<li class="col-sm-6"><i class="fa-solid fa-check"></i> Zero registration fee
 										</li>
@@ -825,30 +941,23 @@
 										<li class="col-sm-6"><i class="fa-solid fa-check"></i> Dedicated seller support
 										</li>
 									</ul>
-
 									<a href="/Seller/Register"
-										class="btn btn-info fw-bold px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2">
-										Start Selling Now <i class="fa-solid fa-arrow-right"></i>
-									</a>
+										class="btn btn-info fw-bold px-5 py-3 rounded-pill shadow d-inline-flex align-items-center gap-2">Start
+										Selling Now <i class="fa-solid fa-arrow-right"></i></a>
 								</div>
-
-								<!-- Image -->
 								<div class="col-lg-5 col-md-4 text-center text-lg-end mt-5 mt-md-0 position-relative"
 									style="z-index: 2;">
 									<img src="/images/Sellerbanner.png"
 										class="img-fluid seller-img d-none d-md-inline-block" alt="Become a Seller">
 								</div>
-
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-		<!-- Seller Promotion End -->
 
-
-		<!-- Top Brands Start -->
+		<!-- Top Brands -->
 		<section class="section-bg-light py-5 border-top">
 			<div class="container">
 				<div class="row">
@@ -857,52 +966,32 @@
 							<h2 class="section-title">In Partnership With <span class="text-accent">Top Brands</span>
 							</h2>
 						</div>
-
 						<div class="row g-4 justify-content-center mt-3">
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
-								<div class="brand-card">
-									<img src="/images/apple.png" alt="Apple">
-								</div>
+								<div class="brand-card"><img src="/images/apple.png" alt="Apple"></div>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
-								<div class="brand-card">
-									<img src="/images/sumsung.png" alt="Samsung">
-								</div>
+								<div class="brand-card"><img src="/images/sumsung.png" alt="Samsung"></div>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
-								<div class="brand-card">
-									<img src="/images/oneplus.png" alt="OnePlus">
-								</div>
+								<div class="brand-card"><img src="/images/oneplus.png" alt="OnePlus"></div>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
-								<div class="brand-card">
-									<img src="/images/Aasus.png" alt="Asus">
-								</div>
+								<div class="brand-card"><img src="/images/Aasus.png" alt="Asus"></div>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
-								<div class="brand-card">
-									<img src="/images/dell.png" alt="Dell">
-								</div>
+								<div class="brand-card"><img src="/images/dell.png" alt="Dell"></div>
 							</div>
-
 							<div class="col-lg-2 col-md-4 col-sm-4 col-6">
-								<div class="brand-card">
-									<img src="/images/hp.png" alt="HP">
-								</div>
+								<div class="brand-card"><img src="/images/hp.png" alt="HP"></div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
-		<!-- Top Brands End -->
 
-
-		<!-- Customer Reviews Start -->
+		<!-- Customer Reviews -->
 		<section class="py-5 bg-white mb-4">
 			<div class="container">
 				<div class="row">
@@ -911,80 +1000,60 @@
 							<h2 class="section-title">What Our <span class="text-accent">Customers Say</span></h2>
 							<p class="text-muted mt-2">Read honest reviews from our verified buyers</p>
 						</div>
-
 						<div class="row g-4 justify-content-center">
 							<div class="col-lg-4 col-md-6">
 								<div class="review-card">
 									<i class="fa-solid fa-quote-right quote-icon"></i>
 									<div class="d-flex align-items-center gap-3 mb-3">
 										<div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5 shadow-sm"
-											style="width: 50px; height: 50px;">
-											R
-										</div>
+											style="width: 50px; height: 50px;">R</div>
 										<div>
 											<h6 class="reviewer-name mb-1">Rahul Sharma</h6>
-											<div class="review-stars">
-												<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+											<div class="review-stars"><i class="fa-solid fa-star"></i><i
 													class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-													class="fa-solid fa-star"></i>
-											</div>
+													class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
 										</div>
 									</div>
 									<p class="review-text">"Absolutely amazing service! The delivery was faster than
-										expected,
-										and the packaging was incredibly secure. My new Galaxy S22 Ultra works
-										flawlessly.
-										Highly recommend TechBazaar!"</p>
+										expected, and the packaging was incredibly secure. My new Galaxy S22 Ultra works
+										flawlessly. Highly recommend TechBazaar!"</p>
 								</div>
 							</div>
-
 							<div class="col-lg-4 col-md-6">
 								<div class="review-card">
 									<i class="fa-solid fa-quote-right quote-icon"></i>
 									<div class="d-flex align-items-center gap-3 mb-3">
 										<div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5 shadow-sm"
-											style="width: 50px; height: 50px;">
-											A
-										</div>
+											style="width: 50px; height: 50px;">A</div>
 										<div>
 											<h6 class="reviewer-name mb-1">Anjali Verma</h6>
-											<div class="review-stars">
-												<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+											<div class="review-stars"><i class="fa-solid fa-star"></i><i
 													class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-													class="fa-regular fa-star text-muted"></i>
-											</div>
+													class="fa-solid fa-star"></i><i
+													class="fa-regular fa-star text-muted"></i></div>
 										</div>
 									</div>
 									<p class="review-text">"Got some crazy deals during the electronics sale. The
-										customer
-										support team was very helpful when I had to change my delivery address at the
-										last
-										minute. Trustworthy platform."</p>
+										customer support team was very helpful when I had to change my delivery address
+										at the last minute. Trustworthy platform."</p>
 								</div>
 							</div>
-
 							<div class="col-lg-4 col-md-6">
 								<div class="review-card">
 									<i class="fa-solid fa-quote-right quote-icon"></i>
 									<div class="d-flex align-items-center gap-3 mb-3">
 										<div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5 shadow-sm"
-											style="width: 50px; height: 50px;">
-											A
-										</div>
+											style="width: 50px; height: 50px;">A</div>
 										<div>
 											<h6 class="reviewer-name mb-1">Amit Singh</h6>
-											<div class="review-stars">
-												<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+											<div class="review-stars"><i class="fa-solid fa-star"></i><i
 													class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-													class="fa-solid fa-star"></i>
-											</div>
+													class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
 										</div>
 									</div>
 									<p class="review-text">"Best online tech store experience by far. Getting EMI
-										options on
-										checkout was super smooth. The laptop arrived in perfect condition. I will
-										definitely
-										buy from here again."</p>
+										options on checkout was super smooth. The laptop arrived in perfect condition. I
+										will definitely buy from here again."</p>
 								</div>
 							</div>
 						</div>
@@ -992,7 +1061,6 @@
 				</div>
 			</div>
 		</section>
-		<!-- Customer Reviews End -->
 	</main>
 </body>
 

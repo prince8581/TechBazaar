@@ -978,12 +978,13 @@ body {
 
 						</div>
 						<hr>
+						
 						<h5>Privacy And Policy</h5>
-						<span th:if="${!order.product.cancellationAllowed}">
+						<span th:if="${order.product.cancellationAllowed}">
 							Cancellation Not Allowed</span> <br> <span
-							th:if="${!order.product.returnAvailable}"> No Return
+							th:if="${order.product.returnAvailable}"> No Return
 							Available for this Product </span> <span
-							th:if="${!order.product.returnAvailable}"> <br> <strong>Return
+							th:if="${order.product.returnAvailable}"> <br> <strong>Return
 								Policy</strong> <br> <small
 							th:if="${order.product.returnAvailable}"
 							th:text="${order.product.returnConditions}"></small>

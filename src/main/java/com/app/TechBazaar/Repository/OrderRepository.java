@@ -36,13 +36,30 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
 	List<Orders> findTop5BySellerOrderByOrderedAtDesc(Users seller);
 	
-	
-	@Query("SELECT SUM(o.finalAmount) FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' or o.paymentStatus ='SUCCESS'")
-	double getTotalRevenueBySeller(Users seller);
+	///Double getTotalRevenueBySeller(Users seller);
+	@Query("""
+		       SELECT COALESCE(SUM(o.finalAmount), 0)
+		       FROM Orders o
+		       WHERE o.seller = :seller
+		       AND o.orderStatus = 'DELIVERED'
+		       """)
+		Double getTotalRevenueBySeller(@Param("seller") Users seller);
+	//@Query("SELECT SUM(o.finalAmount) FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' or o.paymentStatus ='SUCCESS'")
+	//double getTotalRevenueBySeller(Users seller);
 	
 
-	@Query("SELECT SUM(o.finalAmount) FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' AND MONTH(o.deliveredAt) = MONTH(CURRENT_DATE) AND YEAR(o.deliveredAt) = YEAR(CURRENT_DATE)")
-	double getCurrentMonthRevenueBySeller(Users seller);
+	@Query("""
+		       SELECT COALESCE(SUM(o.finalAmount), 0) 
+		       FROM Orders o 
+		       WHERE o.seller = :seller 
+		       AND o.orderStatus = 'DELIVERED'
+		       AND MONTH(o.deliveredAt) = MONTH(CURRENT_DATE)
+		       AND YEAR(o.deliveredAt) = YEAR(CURRENT_DATE)
+		       """)
+		Double getCurrentMonthRevenueBySeller(@Param("seller") Users seller);
+	//@Query("SELECT SUM(o.finalAmount) FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' AND MONTH(o.deliveredAt) = MONTH(CURRENT_DATE) AND YEAR(o.deliveredAt) = YEAR(CURRENT_DATE)")
+	//Double getCurrentMonthRevenueBySeller(Users seller);
+	//double getCurrentMonthRevenueBySeller(Users seller);
 	
 	
 	@Query("SELECT o.product.productName FROM Orders o WHERE o.seller = :seller AND o.orderStatus = 'DELIVERED' GROUP BY o.product ORDER BY SUM(o.quantity) DESC LIMIT 1")

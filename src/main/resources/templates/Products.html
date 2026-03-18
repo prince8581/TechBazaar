@@ -1,244 +1,297 @@
 <html th:replace="~{base::layout(~{::main})}">
+
 <body>
-<main>
+  <main>
 
-<style>
-
-/* PAGE BACKGROUND */
-body{
-  background:linear-gradient(180deg,#eef5ff,#e6f0ff);
-}
-
-
-/* MAIN WRAPPER */
-.product-wrapper{
-  background:#ffffffcc;
-  backdrop-filter:blur(8px);
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 10px 40px rgba(0,0,0,.08);
-}
+    <style>
+      /* PAGE BACKGROUND */
+      body {
+        background: linear-gradient(180deg, #eef5ff, #e6f0ff);
+      }
 
 
-/* CATEGORY BAR */
-.product-scroll{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  padding-bottom:10px;
-}
-.product-item{
-  border-radius:40px;
-  padding:8px 20px;
-  font-size:18px;
-  border:none;
-  background:#e9f1ff;
-  color:#2563eb;
-  font-weight:500;
-  transition:.3s;
-}
-.product-item:hover{
-  background:#2563eb;
-  color:white;
-}
-.product-item.active{
-  background:#2563eb;
-  color:white;
-}
+      /* MAIN WRAPPER */
+      .product-wrapper {
+        background: #ffffffcc;
+        backdrop-filter: blur(8px);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+      }
 
 
-/* CARD */
-.product-card{
-  border:none;
-  border-radius:16px;
-  overflow:hidden;
-  background:white;
-  transition:.3s;
-  position:relative;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-.product-card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 12px 28px rgba(0,0,0,.15);
-}
+      /* CATEGORY BAR */
+      .product-scroll {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+
+      .product-item {
+        border-radius: 40px;
+        padding: 8px 20px;
+        font-size: 18px;
+        border: none;
+        background: #e9f1ff;
+        color: #2563eb;
+        font-weight: 500;
+        transition: .3s;
+      }
+
+      .product-item:hover {
+        background: #2563eb;
+        color: white;
+      }
+
+      .product-item.active {
+        background: #2563eb;
+        color: white;
+      }
 
 
-/* IMAGE BOX */
-.img-box{
-  height:170px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-}
-.product-img{
-  max-height:100%;
-  transition:.3s;
-}
-.product-card:hover .product-img{
-  transform:scale(1.05);
-}
+      /* CARD */
+      .product-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        background: white;
+        transition: .3s;
+        position: relative;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .15);
+      }
 
 
-/* TITLE */
-.product-title{
-  font-size:18px;
-  font-weight:600;
-  min-height:40px;
-  color:#111827;
-}
+      /* IMAGE BOX */
+      .img-box {
+        height: 170px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+      }
+
+      .product-img {
+        max-height: 100%;
+        transition: .3s;
+      }
+
+      .product-card:hover .product-img {
+        transform: scale(1.05);
+      }
 
 
-/* PRICE */
-.price{
-  font-size:18px;
-  font-weight:700;
-}
-.old-price{
-  font-size:15px;
-  color:#9ca3af;
-  text-decoration:line-through;
-}
+      /* TITLE */
+      .product-title {
+        font-size: 18px;
+        font-weight: 600;
+        min-height: 40px;
+        color: #111827;
+      }
 
 
-/* DISCOUNT */
-.discount{
-  color:#16a34a;
-  font-weight:600;
-  font-size:15px;
-}
+      /* PRICE */
+      .price {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .old-price {
+        font-size: 15px;
+        color: #9ca3af;
+        text-decoration: line-through;
+      }
 
 
-/* WISHLIST */
-.wishlist{
-  position:absolute;
-  top:10px;
-  right:10px;
-  background:white;
-  height:34px;
-  width:34px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 3px 10px rgba(0,0,0,.2);
-  cursor:pointer;
-  transition:.3s;
-}
-.wishlist:hover{
-  background:#fee2e2;
-  color:#ef4444;
-}
+      /* DISCOUNT */
+      .discount {
+        color: #16a34a;
+        font-weight: 600;
+        font-size: 15px;
+      }
 
 
-/* RATING */
-.rating{
-  font-size:14px;
-  color:#f59e0b;
-}
+      /* WISHLIST */
+      .wishlist {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: white;
+        height: 34px;
+        width: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+        cursor: pointer;
+        transition: .3s;
+      }
+
+      .wishlist:hover {
+        background: #fee2e2;
+        color: #ef4444;
+      }
 
 
-/* DELIVERY */
-.delivery{
-  font-size:15px;
-  color:#6b7280;
-}
-
-</style>
+      /* RATING */
+      .rating {
+        font-size: 14px;
+        color: #f59e0b;
+      }
 
 
-
-<div class="col-sm-11 mx-auto mt-4 product-wrapper mb-5">
-
-<!-- CATEGORY FILTER -->
-<div class="product-scroll mb-4">
-
-  <a th:href="@{/Products}"
-     class="btn product-item"
-     th:classappend="${selectedCategory == null ? 'active':''}">
-     All
-  </a>
-
-  <a th:each="cate:${categories}"
-     th:href="@{'/Products/'+${cate.categoryName}}"
-     th:text="${cate.categoryName}"
-     class="btn product-item"
-     th:classappend="${cate.categoryName == selectedCategory ? 'active':''}">
-  </a>
-
-</div>
+      /* DELIVERY */
+      .delivery {
+        font-size: 15px;
+        color: #6b7280;
+      }
 
 
+      /* NO PRODUCTS FOUND */
+      .no-products-container {
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        border: 2px dashed #cbd5e1;
+        padding: 60px 40px;
+      }
 
-<!-- PRODUCT GRID -->
-<div class="row g-4">
+      .no-products-icon {
+        font-size: 80px;
+        background: linear-gradient(135deg, #60a5fa, #2563eb);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 20px;
+      }
 
-<div class="col-lg-3 col-md-4 col-sm-6"
-     th:each="product:${products}">
+      .btn-browse {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      }
 
-<a th:href="@{/ViewProduct/{name}/{id}(name=${product.productName},id=${product.id})}"
-   class="text-decoration-none text-dark">
+      .btn-browse:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        color: white;
+      }
+    </style>
 
-<div class="card product-card h-100">
 
-<!-- Wishlist -->
-<div class="wishlist">
-<i class="fa-regular fa-heart"></i>
-</div>
 
-<!-- Image -->
-<div class="img-box">
-<img th:src="@{'/ProductImages/'+${product.productImages[0]}}" class="product-img">
-</div>
+    <div class="col-sm-11 mx-auto mt-4 product-wrapper mb-5">
 
-<div class="card-body d-flex flex-column">
+      <!-- CATEGORY FILTER -->
+      <div class="product-scroll mb-4">
 
-<h6 class="product-title"
-    th:text="${product.productName}"></h6>
+        <a th:href="@{/Products}" class="btn product-item" th:classappend="${selectedCategory == null ? 'active':''}">
+          All
+        </a>
 
-<h6 class="text-muted  mb-1"
-   th:text="${product.brandName}"></h6>
+        <a th:each="cate:${categories}" th:href="@{'/Products/'+${cate.categoryName}}" th:text="${cate.categoryName}"
+          class="btn product-item" th:classappend="${cate.categoryName == selectedCategory ? 'active':''}">
+        </a>
 
-<!-- Rating -->
-<div class="rating mb-1">
-★★★★☆ <span class="text-muted">(124)</span>
-</div>
+      </div>
 
-<!-- Price -->
-<div class="mb-1">
-<span class="price">₹ <span th:text="${product.finalPrice}"></span></span>
 
-<span class="old-price ms-2"
-      th:if="${product.discount>0}">
-₹ <span th:text="${product.pricePerUnit}"></span>
-</span>
 
-<span class="discount ms-2"
-      th:if="${product.discount>0}"
-      th:text="${product.discount} + '% off'"></span>
-</div>
+      <!-- PRODUCT GRID -->
+      <div class="row g-4">
 
-<!-- Offer line -->
-<div class="delivery mb-2">
-Or Pay ₹<span th:text="${product.finalPrice - 30}"></span> + ⚡ 15
-</div>
+        <div class="col-lg-3 col-md-4 col-sm-6" th:each="product:${products}">
 
-<!-- Delivery -->
-<div class="delivery mb-2">
-Delivery in
-<span th:text="${product.minDeliveryDays}"></span>–
-<span th:text="${product.maxDeliveryDays}"></span> days
-</div>
+          <a th:href="@{/ViewProduct/{name}/{id}(name=${product.productName},id=${product.id})}"
+            class="text-decoration-none text-dark">
 
-</div>
-</div>
+            <div class="card product-card h-100">
 
-</a>
-</div>
+              <!-- Wishlist -->
+              <div class="wishlist">
+                <i class="fa-regular fa-heart"></i>
+              </div>
 
-</div>
-</div>
+              <!-- Image -->
+              <div class="img-box">
+                <img th:src="@{'/ProductImages/'+${product.productImages[0]}}" class="product-img">
+              </div>
 
-</main>
+              <div class="card-body d-flex flex-column">
+
+                <h6 class="product-title" th:text="${product.productName}"></h6>
+
+                <h6 class="text-muted  mb-1" th:text="${product.brandName}"></h6>
+
+                <!-- Rating -->
+                <div class="rating mb-1">
+                  ★★★★☆ <span class="text-muted">(124)</span>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-1">
+                  <span class="price">₹ <span th:text="${product.finalPrice}"></span></span>
+
+                  <span class="old-price ms-2" th:if="${product.discount>0}">
+                    ₹ <span th:text="${product.pricePerUnit}"></span>
+                  </span>
+
+                  <span class="discount ms-2" th:if="${product.discount>0}"
+                    th:text="${product.discount} + '% off'"></span>
+                </div>
+
+                <!-- Offer line -->
+                <div class="delivery mb-2">
+                  Or Pay ₹<span th:text="${product.finalPrice - 30}"></span> + ⚡ 15
+                </div>
+
+                <!-- Delivery -->
+                <div class="delivery mb-2">
+                  Delivery in
+                  <span th:text="${product.minDeliveryDays}"></span>–
+                  <span th:text="${product.maxDeliveryDays}"></span> days
+                </div>
+
+              </div>
+            </div>
+
+          </a>
+        </div>
+
+        <!-- NO PRODUCTS FOUND MESSAGE -->
+        <div th:if="${products.isEmpty()}" class="col-12 text-center">
+          <div class="no-products-container my-4">
+            <div class="no-products-icon">
+              <i class="fa-solid fa-box-open"></i>
+            </div>
+            <h2 class="fw-bold text-dark mb-3">No Products Found</h2>
+            <p class="text-muted fs-5 mb-4">
+              Oops! It looks like there are no products in the
+              <span class="fw-bold text-primary"
+                th:text="${selectedCategory != null ? selectedCategory : 'selected'}"></span>
+              category right now.
+            </p>
+            <a th:href="@{/Products}" class="btn btn-browse">
+              <i class="fa-solid fa-arrow-left me-2"></i> Browse All Products
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
 </body>
+
 </html>

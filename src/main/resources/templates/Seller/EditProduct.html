@@ -1,0 +1,101 @@
+<html th:replace="~{Seller/Sellerbase::layout(~{::main})}">
+<body>
+<main>
+<div class="row">
+   <div class="col-sm-8 mx-auto">
+       <p class="text-white text-center bg-primary p-1 mt-2" th:if="${msg}" th:text="${msg}"></p>
+       <div class="card shadow mt-4">
+           <div class="card-header bg-warning">
+               <h5>Edit Product</h5>
+           </div>
+           <div class="card-body">
+               <form th:action="@{/Seller/EditProduct}" th:object="${product}" method="post" enctype="multipart/form-data">
+                   <input type="hidden" th:field="*{id}">
+
+                   <!-- Product Name -->
+                   <div class="mb-3">
+                       <label class="form-label">Product Name</label>
+                       <input th:field="*{productName}" type="text" class="form-control" required>
+                   </div>
+
+                   <!-- Brand Name -->
+                   <div class="mb-3">
+                       <label class="form-label">Brand Name</label>
+                       <input th:field="*{brandName}" type="text" class="form-control" required>
+                   </div>
+
+                   <!-- Product Description -->
+                   <div class="mb-3">
+                       <label class="form-label">Description</label>
+                       <textarea th:field="*{productDescription}" class="form-control" rows="3"></textarea>
+                   </div>
+
+                   <!-- Price & Discount -->
+                   <div class="row">
+                       <div class="col-sm-6 mb-3">
+                           <label class="form-label">Price per Unit</label>
+                           <input th:field="*{pricePerUnit}" type="number" class="form-control" step="0.01" required>
+                       </div>
+                       <div class="col-sm-6 mb-3">
+                           <label class="form-label">Discount (%)</label>
+                           <input th:field="*{discount}" type="number" class="form-control" step="0.01">
+                       </div>
+                   </div>
+
+                   <!-- Quantity -->
+                   <div class="mb-3">
+                       <label class="form-label">Available Quantity</label>
+                       <input th:field="*{quantityAvailable}" type="number" class="form-control" required>
+                   </div>
+
+                   <!-- Existing Images -->
+                   <div class="mb-3">
+                       <label class="form-label">Existing Images:</label>
+                       <div class="d-flex gap-2 flex-wrap">
+                           <div th:each="img : ${product.productImages}">
+                               <img th:src="@{'/ProductImages/' + ${img}}" height="80" width="80" class="border rounded">
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Upload New Images -->
+                   <div class="mb-3">
+                       <label class="form-label">Update Images (Max 5)</label>
+                       <input type="file" class="form-control" name="images" accept=".png,.jpg,.jpeg,.webp,.bmp" multiple>
+                   </div>
+
+                   <!-- Other Options (COD, Return, Warranty) -->
+                   <div class="form-check mb-2">
+                       <input th:field="*{codAvailable}" class="form-check-input" type="checkbox">
+                       <label class="form-check-label">Cash on Delivery Available</label>
+                   </div>
+
+                   <div class="form-check mb-2">
+                       <input th:field="*{returnAvailable}" class="form-check-input" type="checkbox">
+                       <label class="form-check-label">Return Available</label>
+                   </div>
+
+                   <div class="form-check mb-3">
+                       <input th:field="*{warranty}" class="form-check-input" type="checkbox">
+                       <label class="form-check-label">Warranty Available</label>
+                   </div>
+
+                   <div class="text-center mt-4">
+                       <button type="submit" class="btn btn-danger">Update Product</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
+</div>
+
+<script>
+    var msg = /*[[${msg}]]*/ '';
+    if(msg) {
+        alert(msg);
+    }
+</script>
+
+</main>
+</body>
+</html>

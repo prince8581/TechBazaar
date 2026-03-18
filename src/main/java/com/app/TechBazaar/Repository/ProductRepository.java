@@ -24,5 +24,11 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
 	
 	@Query("SELECT SUM(p.finalPrice * p.quantityAvailable) FROM Products p WHERE seller =:seller")
 	double getTotalInStockRevenueBySeller(Users seller);
+
+	//List<Products> findTop6ByOrderByIdDesc();
+
+	List<Products> findTop4ByOrderByIdDesc();
+
+	
 	
 }

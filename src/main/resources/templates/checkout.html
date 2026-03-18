@@ -1,255 +1,666 @@
+<!DOCTYPE html>
 <html th:replace="~{Base::layout(~{::main})}">
-	<body>
-		<main>
-			<style>
-				.card-title-link
-				{
-					text-decoration: none;
-					color: black;
-					font-size: 18px;
-					text-transform: capitalize;
-					transition:0.3s;
+
+<body>
+	<main class="py-5">
+		<style>
+			/* ── DESIGN TOKENS ── */
+			:root {
+				--tb-primary: #0d6efd;
+				--tb-dark: #1e293b;
+				--tb-success: #166534;
+				--tb-border: #e2e8f0;
+				--tb-bg-soft: #f8fafc;
+				--tb-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+			}
+
+			/* ── HERO HEADER ── */
+			.checkout-hero {
+				background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+				border-radius: 20px;
+				padding: 3rem 2rem;
+				color: white;
+				margin-bottom: 2rem;
+				position: relative;
+				overflow: hidden;
+				box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+			}
+
+			.checkout-hero h2 {
+				font-weight: 800;
+				margin-bottom: 0.5rem;
+			}
+
+			.checkout-hero p {
+				opacity: 0.9;
+				font-size: 1.1rem;
+				margin-bottom: 0;
+			}
+
+			.checkout-hero-icon {
+				position: absolute;
+				right: -20px;
+				top: -20px;
+				font-size: 8rem;
+				opacity: 0.1;
+				transform: rotate(-15deg);
+			}
+
+			/* ── CARDS ── */
+			.checkout-card {
+				background: white;
+				border-radius: 16px;
+				border: 1px solid var(--tb-border);
+				padding: 1.5rem;
+				margin-bottom: 1.5rem;
+				box-shadow: var(--tb-shadow);
+			}
+
+			/* Fix: Ensure sticky summary stays below navbar */
+			.sticky-summary {
+				position: sticky;
+				top: 110px;
+				z-index: 1000;
+			}
+
+			.card-header-flex {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 1.25rem;
+				padding-bottom: 12px;
+				border-bottom: 1px solid var(--tb-border);
+			}
+
+			.card-header-flex h5 {
+				font-weight: 800;
+				margin-bottom: 0;
+				color: var(--tb-dark);
+				font-size: 1.15rem;
+			}
+
+			/* ── ITEMS ── */
+			.item-list-container {
+				max-height: 50vh;
+				overflow-y: auto;
+				padding-right: 5px;
+			}
+
+			.cart-row {
+				display: flex;
+				gap: 1.5rem;
+				padding: 1.5rem 0;
+				border-bottom: 1px solid var(--tb-border);
+			}
+
+			.cart-row:last-child {
+				border-bottom: none;
+			}
+
+			.item-img-container {
+				width: 120px;
+				height: 120px;
+				background: #f8fafc;
+				border-radius: 12px;
+				padding: 10px;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.item-img-container img {
+				max-width: 100%;
+				max-height: 100%;
+				object-fit: contain;
+			}
+
+			.item-details {
+				flex-grow: 1;
+			}
+
+			.item-name {
+				color: var(--tb-dark);
+				font-weight: 700;
+				text-decoration: none;
+				font-size: 1.1rem;
+				display: inline-block;
+				margin-bottom: 4px;
+			}
+
+			.item-name:hover {
+				color: var(--tb-primary);
+			}
+
+			.price-line {
+				margin: 10px 0;
+				display: flex;
+				align-items: baseline;
+				gap: 10px;
+			}
+
+			.current-price {
+				font-size: 1.25rem;
+				font-weight: 800;
+				color: var(--tb-dark);
+			}
+
+			.mrp-price {
+				font-size: 0.9rem;
+				color: #94a3b8;
+				text-decoration: line-through;
+			}
+
+			.discount-badge {
+				background: #dcfce7;
+				color: #166534;
+				font-weight: 700;
+				font-size: 0.75rem;
+				padding: 2px 8px;
+				border-radius: 4px;
+			}
+
+			/* ── QTY CONTROL ── */
+			.qty-control {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				background: #f1f5f9;
+				padding: 4px;
+				border-radius: 8px;
+				width: fit-content;
+			}
+
+			.qty-btn {
+				width: 28px;
+				height: 28px;
+				background: white;
+				border: 1px solid #e2e8f0;
+				border-radius: 6px;
+				color: #64748b;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 0.8rem;
+				transition: all 0.2s;
+			}
+
+			.qty-btn:hover {
+				background: var(--tb-primary);
+				color: white;
+				border-color: var(--tb-primary);
+			}
+
+			.qty {
+				font-weight: 700;
+				font-size: 0.9rem;
+				min-width: 20px;
+				text-align: center;
+			}
+
+			/* ── SUMMARY STYLING ── */
+			.price-row {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 12px;
+				font-size: 0.95rem;
+				color: #64748b;
+			}
+
+			.grand-total {
+				margin-top: 1rem;
+				padding-top: 1rem;
+				border-top: 2px dashed #e2e8f0;
+				font-weight: 800;
+				font-size: 1.25rem;
+				color: var(--tb-dark);
+			}
+
+			/* ── PAYMENT OPTIONS ── */
+			.payment-method {
+				margin-top: 1.5rem;
+			}
+
+			.payment-option-card {
+				border: 1px solid var(--tb-border);
+				border-radius: 12px;
+				padding: 12px 16px;
+				margin-bottom: 10px;
+				cursor: pointer;
+				transition: all 0.2s;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.payment-option-card:hover {
+				background: #f1f5f9;
+				border-color: var(--tb-primary);
+			}
+
+			.payment-option-card input:checked+label {
+				font-weight: 700;
+				color: var(--tb-primary);
+			}
+
+			.btn-place-order {
+				width: 100%;
+				background: var(--tb-dark);
+				color: white;
+				padding: 14px;
+				border-radius: 12px;
+				font-weight: 700;
+				border: none;
+				margin-top: 1rem;
+				transition: all 0.3s;
+			}
+
+			.btn-place-order:hover {
+				background: var(--tb-primary);
+				transform: translateY(-2px);
+				box-shadow: 0 10px 15px -3px rgba(13, 110, 253, 0.3);
+			}
+
+			/* ── RESPONSIVE ── */
+			@media (max-width: 768px) {
+				.cart-row {
+					flex-direction: column;
+					align-items: center;
+					text-align: center;
 				}
-				.card-title-link:hover
-				{
-					color: blue;
+
+				.item-img-container {
+					margin-bottom: 1rem;
 				}
-				
-				.link-hover{
-				 color: black;
-				 transition:0.3s;
-				 cursor: pointer;
+
+				.qty-control {
+					margin: 0 auto;
 				}
-				.link-hover:hover{
-					color: blue;
-				}
-				
-				.price-card-item
-				{
-					display: flex;
-					justify-content: space-between;
-				}
-				
-				#MainItemCard{
-					max-height: 66vh;
-					overflow-y: scroll;
-				}
-				#MainItemCard::-webkit-scrollbar{
-					width: 0
-				}
-				
-</style>
-			
-<div class="container-fluid">
-			<div class="row my-5">
-				<div class="col-sm-11 mx-auto"  >
-					<div class="row mt-3">
-						
-						<div class="col-md-8" >
-						<div class="card rounded-1 shadow p-2">
-							<div class="row p-1">
-								<div class="col-sm-8" th:if="${session.loggedInUser ==null or address == null}">
-							<p class=" pt-1 m-0">Select Addres From Saved Address</p>
+			}
+		</style>
+
+		<div class="container col-sm-11 mx-auto">
+
+			<!-- Hero Header -->
+			<div class="checkout-hero">
+				<i class="fa-solid fa-bag-shopping checkout-hero-icon"></i>
+				<h2>Checkout</h2>
+				<p>Review your order details and fulfill your payment method.</p>
+			</div>
+
+			<div class="row g-4">
+				<div class="col-lg-8">
+
+					<!-- Address Card -->
+					<div class="checkout-card">
+						<div class="card-header-flex">
+							<h5>Delivery Address</h5>
+							<button class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold"
+								data-bs-toggle="modal" data-bs-target="#addressModal">
+								Change
+							</button>
 						</div>
-								<div class="col-sm-8" th:if="${session.loggedInUser != null && address!=null}">
-								<p class="m-0" style="font-size: 14px;">Deliver To : <b th:text="${address.name+','+address.pincode}">Sunny, 272152</b> <span class="badge text-bg-secondary rounded-1 bg-opacity-25 p-2 mx-2 text-muted fw-normal" style="font-size: 11px;" th:text="${address.addressType}">WORK</span> </p>
-								<p class="m-0 text-muted" style="font-size: 14px;"> <span th:text="${address.address}">Softpro House secoter j jankipuram gudmba thana lucknow....</span> </p>
+						<div class="address-box">
+							<div th:if="${session.loggedInUser == null or address == null}">
+								<p class="text-muted mb-0">Please select a delivery address to proceed.</p>
 							</div>
-							<div class="col-sm-4 text-end pt-2">
-								<a href="#" class="btn btn-outline-info rounded-0 " data-bs-toggle="modal" data-bs-target="#addressModal">Change</a>
-							</div>
+							<div th:if="${session.loggedInUser != null && address != null}">
+								<div class="d-flex align-items-center mb-1">
+									<h6 class="mb-0 fw-bold" th:text="${address.name}">Sunny</h6>
+									<span class="badge bg-secondary bg-opacity-10 text-muted ms-2 px-2"
+										th:text="${address.addressType}">WORK</span>
+								</div>
+								<p class="text-muted mb-2 small" th:text="${address.address}">123 Street Name, City,
+									State</p>
+								<div class="small fw-bold"><i class="fa-solid fa-phone me-2 text-primary"></i> Pin:
+									<span th:text="${address.pincode}">272152</span>
+								</div>
 							</div>
 						</div>
-						
-						<!--Item cart  -->
-						<!-- Item From Cart -->
-						<div class="card rounded-0 mt-2 main-item-card" th:if="${cartItems != null}">
-							<div class="row m-0 cart-row" style="border-bottom: solid #0000002d; " th:each="item : ${cartItems}" th:attr="data-id=${item.id}">
-								<div class="col-md-2 text-center p-3">
-									<img alt="img not found" th:src="@{'ProductImages/'+${item.product.productImages[0]}}" class="p-2" width="130px" height="130px">
-									<div class="d-flex p-2">
-										<button class="btn px-1 border border-secondry rounded-circle  " style="width: 30px; height: 28px; font-size: 13px;" onclick="updateQuantity(this,-1)"><i class="fa-solid fa-minus"></i></button>
-										<div class="border border-secondry text-center px-3 mx-2 qty" th:text="${item.quantity}">4</div>
-										<button class="btn px-1 border border-secondry rounded-circle " style="width: 30px; height: 28px; font-size: 13px;" onclick="updateQuantity(this,1)"><i class="fa-solid fa-plus"></i></button>
+					</div>
+
+					<!-- Cart Items Review -->
+					<div class="checkout-card">
+						<div class="card-header-flex">
+							<h5>Review Items (<span th:text="${cartItems != null ? cartItems.size() : 1}">0</span>)</h5>
+						</div>
+
+						<div class="item-list-container">
+							<!-- Items from Cart -->
+							<div th:if="${cartItems != null}">
+								<div class="cart-row shadow-xs rounded-3 mb-3 p-3 border" th:each="item : ${cartItems}"
+									th:attr="data-id=${item.id}">
+									<div class="item-img-container">
+										<img th:src="@{'ProductImages/'+${item.product.productImages[0]}}" alt="item">
+									</div>
+									<div class="item-details">
+										<a href="#" class="item-name" th:text="${item.product.productName}">Product
+											Name</a>
+										<div class="text-muted small mb-1">
+											Brand: <span th:text="${item.product.brandName}">ABCD</span> • <span
+												th:text="${item.product.category.categoryName}">Category</span>
+										</div>
+										<p class="text-muted small mb-2">Seller: <span
+												th:text="${item.product.seller.name}">Seller Name</span></p>
+
+										<div class="price-line">
+											<span class="current-price">₹<span class="updated-final-price"
+													th:text="${item.product.finalPrice * item.quantity}">0</span></span>
+											<span class="mrp-price">₹<span class="updated-unit-price"
+													th:text="${item.product.pricePerUnit * item.quantity}">0</span></span>
+											<span class="discount-badge"
+												th:text="${item.product.discount + '% OFF'}">0%</span>
+										</div>
+
+										<input type="hidden" th:value="${item.product.pricePerUnit}"
+											class="price-per-unit">
+										<input type="hidden" th:value="${item.product.finalPrice}" class="final-price">
+
+										<div
+											class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
+											<div class="qty-control">
+												<button class="qty-btn" onclick="updateQuantity(this,-1)"><i
+														class="fa-solid fa-minus"></i></button>
+												<div class="qty" th:text="${item.quantity}">0</div>
+												<button class="qty-btn" onclick="updateQuantity(this,1)"><i
+														class="fa-solid fa-plus"></i></button>
+											</div>
+											<div class="small text-muted">
+												<i class="fa-solid fa-truck-fast me-1 text-success"></i> Delivery: <span
+													class="fw-bold text-dark"
+													th:text="${#temporals.format(T(java.time.LocalDate).now().plusDays(item.product.maxDeliveryDays),'EEE, MMM dd')}">Date</span>
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col-md-6 p-3 px-lg-5">
-									<a href="#" class="card-title-link" th:text="${item.product.productName}">ajshgjk</a>
-									<br>
-									<span class="text-muted">Brand Name : <span th:text="${item.product.brandName}">ABCD</span>, <span th:text="${item.product.category.categoryName}" class="">Category Name</span> </span>
-									<br>
-									<p class="text-muted pt-2">Seller : <span th:text="${item.product.seller.name}">Sarvesh Kumar</span> </p>
-									
-									<p> <del class="text-muted">₹ <span th:text="${item.product.pricePerUnit*item.quantity}" class="updated-unit-price"></span></del>
-									 <span class="fs-4 fw-bold">₹ <span th:text="${item.product.finalPrice*item.quantity}" class="updated-final-price">₹12000</span></span> <span class="text-success fw-bold ms-2" th:text="${item.product.discount+'%'}">80% OFF</span> <i class="fa-solid fa-exclamation bg-success rounded-circle text-white p-1 text-center" style="font-size: 9px; height: 16px; width: 16px"></i>
-									<input type="hidden" th:value="${item.product.pricePerUnit}" class="price-per-unit">
-									<input type="hidden" th:value="${item.product.finalPrice}" class="final-price">
-									</p>
-									
-								</div>
-								<div class="col-md-4 p-3">
-									Delivery By <span th:text="${#temporals.format(T(java.time.LocalDate).now().plusDays(item.product.maxDeliveryDays),'EEE-MMM-dd')}">Fri Feb 13</span>
-								</div>
 							</div>
-						</div>
-						
-						<!-- item from  buy now product -->
-					
-						<div class="card rounded-0 mt-2 " id="MainItemCard" th:if="${isBuyNow}">
-							<div class="row m-0" style="border-bottom: solid #0000002d; ">
-								<div class="col-md-2 text-center p-3">
-									<img alt="img not found" th:src="@{'ProductImages/'+${buyNowProduct.productImages[0]}}" class="p-2" width="130px" height="130px">
-									<div class="d-flex p-2">
-										<button class="btn px-1 border border-secondry rounded-circle  " style="width: 30px; height: 28px; font-size: 13px;" onclick="updateBuyNowQuantity(-1)"><i class="fa-solid fa-minus"></i></button>
-										<div class="border border-secondry text-center px-3 mx-2 qty" th:text="${quantity}" id="buyNowQuantity">4</div>
-										<button class="btn px-1 border border-secondry rounded-circle " style="width: 30px; height: 28px; font-size: 13px;" onclick="updateBuyNowQuantity(1)"><i class="fa-solid fa-plus"></i></button>
-									</div>
+
+							<!-- Item from Buy Now -->
+							<div th:if="${isBuyNow}" id="MainItemCard" class="cart-row shadow-xs rounded-3 p-3 border">
+								<div class="item-img-container">
+									<img th:src="@{'ProductImages/'+${buyNowProduct.productImages[0]}}" alt="item">
 								</div>
-								<div class="col-md-6 p-3 px-lg-5">
-									<a href="#" class="card-title-link" th:text="${buyNowProduct.productName}">ajshgjk</a>
-									<br>
-									<span class="text-muted">Brand Name : <span th:text="${buyNowProduct.brandName}">ABCD</span>, <span th:text="${buyNowProduct.category.categoryName}" class="">Category Name</span> </span>
-									<br>
-									<p class="text-muted pt-2">Seller : <span th:text="${buyNowProduct.seller.name}">Sarvesh Kumar</span> </p>
-									
-									<p> <del class="text-muted">₹ <span th:text="${buyNowProduct.pricePerUnit*quantity}" id="update-unit-price" ></span></del>
-									 <span class="fs-4 fw-bold">₹ <span th:text="${buyNowProduct.finalPrice*quantity}" id="update-final-price">₹12000</span></span> <span class="text-success fw-bold ms-2" th:text="${buyNowProduct.discount+'%'}">80% OFF</span> <i class="fa-solid fa-exclamation bg-success rounded-circle text-white p-1 text-center" style="font-size: 9px; height: 16px; width: 16px"></i>
+								<div class="item-details">
+									<a href="#" class="item-name" th:text="${buyNowProduct.productName}">Product
+										Name</a>
+									<div class="text-muted small mb-1">
+										Brand: <span th:text="${buyNowProduct.brandName}">ABCD</span> • <span
+											th:text="${buyNowProduct.category.categoryName}">Category</span>
+									</div>
+									<p class="text-muted small mb-2">Seller: <span
+											th:text="${buyNowProduct.seller.name}">Seller Name</span></p>
+
+									<div class="price-line">
+										<span class="current-price">₹<span id="update-final-price"
+												th:text="${buyNowProduct.finalPrice * quantity}">0</span></span>
+										<span class="mrp-price">₹<span id="update-unit-price"
+												th:text="${buyNowProduct.pricePerUnit * quantity}">0</span></span>
+										<span class="discount-badge"
+											th:text="${buyNowProduct.discount + '% OFF'}">0%</span>
+									</div>
+
 									<input type="hidden" th:value="${buyNowProduct.pricePerUnit}" id="price-per-unit">
 									<input type="hidden" th:value="${buyNowProduct.finalPrice}" id="final-price">
-									</p>
-									
-								</div>
-								<div class="col-md-4 p-3">
-									Delivery By <span th:text="${#temporals.format(T(java.time.LocalDate).now().plusDays(buyNowProduct.maxDeliveryDays),'EEE-MMM-dd')}">Fri Feb 13</span>
+
+									<div class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
+										<div class="qty-control">
+											<button class="qty-btn" onclick="updateBuyNowQuantity(-1)"><i
+													class="fa-solid fa-minus"></i></button>
+											<div class="qty" id="buyNowQuantity" th:text="${quantity}">0</div>
+											<button class="qty-btn" onclick="updateBuyNowQuantity(1)"><i
+													class="fa-solid fa-plus"></i></button>
+										</div>
+										<div class="small text-muted">
+											<i class="fa-solid fa-truck-fast me-1 text-success"></i> Delivery: <span
+												class="fw-bold text-dark"
+												th:text="${#temporals.format(T(java.time.LocalDate).now().plusDays(buyNowProduct.maxDeliveryDays),'EEE, MMM dd')}">Date</span>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="card rounded-0 shadow">
-							<div class="card-header border border-0 bg-white">
-								<h5 class="m-0">Price Details</h5>
-							</div>
-							<div class="card-body">
-								
-								<div class="card bg-secondary bg-opacity-10 border border-0  p-3">
-									<p class="price-card-item"> <span style="border-bottom: 1px dashed;">Total MRP</span> <span th:text="${'₹'+totalPrice}" id="totalPrice">₹70,000</span> </p>
-									<span>Discounts</span>
-									<p class="text-muted price-card-item m-0"> 
-										<span>Discount on MRP</span>
-										<span class="text-success" th:text="${'-₹'+(totalPrice-finalPrice)}" id="discount">-₹20,000</span>
-									</p>
-									<p class="text-muted price-card-item m-0"> 
-										<span>Coupans Applied(0)</span>
-										<span class="text-success">0.0</span>
-									</p>
-									<p class="text-muted price-card-item m-0"> 
-										<span>Delivery Charge</span>
-										<span class="text-success" th:text="${shippingCharge}" id="shippingCharge">₹ 0.0</span>
-									</p>
-									<hr>
-									<p class="fw-bold price-card-item p-0">
-										<span >Total Ammout To Pay</span>
-										<span th:text="${'₹'+(finalPrice+shippingCharge)}" id="finalPrice">₹50000</span>
-									</p>
-								</div>
-								
-								<form id="orderForm">
-								<h5 class="fw-bold mt-3">Payment Mode</h5>
-								<input type="hidden" th:if="${isBuyNow}" th:value="${buyNowProduct.id}" name="productId">
-								<input type="hidden" th:if="${isBuyNow}" th:value="${quantity}" name ="qty" id="qty">
-								
-								<span class="me-5" th:if="${cod}">
-								<input type="radio" id="cod" value="COD" name="paymentMethod" required> <label for="cod" styel="font-size:18px;">Cash on Delivery</label>
-								</span>
-								<span th:if="${cod != true}" class="fw-bold text-danger">
-								 COD Not Available..
-								 <br>
-								 </span>
-								<input type="radio" id="online" value="ONLINE" name="paymentMethod" required> <label for="online" style="font-size:18px;">Online Payment</label>
-								
-								<button type="button" onclick="placeOrder()" class="btn btn-warning w-100 mt-4 rounded-0">Place Order</button>
-								</form>
-							</div>
-						</div>
-					</div>
 					</div>
 				</div>
-				
-				
+
+				<div class="col-lg-4">
+					<!-- Price Details Summary -->
+					<div class="checkout-card sticky-summary">
+						<h5 class="card-header-flex border-0 pb-0">Order Summary</h5>
+
+						<div class="mt-3">
+							<div class="price-row">
+								<span>Total MRP</span>
+								<span th:text="${'₹' + totalPrice}" id="totalPrice">₹0</span>
+							</div>
+							<div class="price-row text-success fw-bold">
+								<span>Bag Discount</span>
+								<span th:text="${'-₹' + (totalPrice-finalPrice)}" id="discount">-₹0</span>
+							</div>
+							<div class="price-row">
+								<span>Coupon Discount</span>
+								<span class="text-primary fw-bold" style="cursor:pointer">Apply</span>
+							</div>
+							<div class="price-row">
+								<span>Delivery Fee</span>
+								<span class="text-success fw-bold"
+									th:text="${shippingCharge == 0 ? 'FREE' : '₹' + shippingCharge}"
+									id="shippingCharge">FREE</span>
+							</div>
+
+							<div class="price-row grand-total">
+								<span>Total Amount</span>
+								<span th:text="${'₹' + (finalPrice + shippingCharge)}" id="finalPrice">₹0</span>
+							</div>
+						</div>
+
+						<form id="orderForm" class="payment-method">
+							<h6 class="fw-bold mb-3">Payment Mode</h6>
+							<input type="hidden" th:if="${isBuyNow}" th:value="${buyNowProduct.id}" name="productId">
+							<input type="hidden" th:if="${isBuyNow}" th:value="${quantity}" name="qty" id="qty">
+
+							<div th:if="${cod}">
+								<label class="payment-option-card">
+									<input type="radio" value="COD" name="paymentMethod" required
+										class="form-check-input">
+									<label class="mb-0">Cash on Delivery</label>
+								</label>
+							</div>
+							<div th:if="${cod != true}" class="text-danger small mb-2 ps-2">
+								<i class="fa-solid fa-circle-info me-1"></i> COD not available
+							</div>
+
+							<label class="payment-option-card">
+								<input type="radio" value="ONLINE" name="paymentMethod" required
+									class="form-check-input">
+								<label class="mb-0">Net Banking / Cards / UPI</label>
+							</label>
+
+							<button type="button" onclick="placeOrder()" class="btn-place-order">
+								PLACE ORDER <i class="fa-solid fa-circle-check ms-2"></i>
+							</button>
+						</form>
+					</div>
+				</div>
 			</div>
+		</div>
+
+		<!-- Address Modal -->
+		<div class="modal fade" id="addressModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content border-0 shadow" style="border-radius: 20px;">
+					<div class="modal-header border-0 pb-0">
+						<h5 class="modal-title fw-bold">Select Delivery Address</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body p-4">
+						<div th:if="${session.loggedInUser == null}" class="text-center py-4">
+							<i class="fa-solid fa-user-lock fs-1 text-muted mb-3 opacity-30"></i>
+							<p class="text-muted">Login to view your saved addresses.</p>
+							<a href="/Login" class="btn btn-primary rounded-pill px-4 mt-2">Login Now</a>
+						</div>
+
+						<div th:if="${session.loggedInUser != null}">
+							<form action="/ChangeAddress" method="post">
+								<div class="address-list mb-4" style="max-height: 300px; overflow-y: auto;">
+									<div class="p-3 border rounded-4 mb-3 d-flex align-items-center gap-3"
+										th:each="add : ${addresses}">
+										<input type="radio" th:checked="${add.active}" th:id="'addressId_'+ ${add.id}"
+											name="addressId" th:value="${add.id}" class="form-check-input">
+										<label th:for="'addressId_'+ ${add.id}" class="w-100" style="cursor: pointer;">
+											<div class="d-flex justify-content-between align-items-center mb-1">
+												<span class="fw-bold" th:text="${add.name}">Name</span>
+												<span class="badge bg-light text-muted border px-2"
+													th:text="${add.addressType}">TYPE</span>
+											</div>
+											<div class="small text-muted" th:text="${add.address + ', ' + add.pincode}">
+												Address</div>
+										</label>
+									</div>
+								</div>
+								<div class="d-flex justify-content-between align-items-center pt-3 border-top">
+									<a href="/User/ManageAddress" class="text-decoration-none fw-bold small">+ New
+										Address</a>
+									<button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold"
+										th:if="${address != null}">Confirm Address</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
-				<!-- Button trigger modal -->
+		</div>
+	</main>
 
+	<script type="text/javascript">
+		// Helper to safely get shipping charge from UI
+		function getShippingCharge() {
+			const el = document.getElementById("shippingCharge");
+			if (!el) return 0;
+			const text = el.innerText.replace("₹", "").trim();
+			return text === "FREE" ? 0 : parseFloat(text) || 0;
+		}
 
-<!-- Modal -->
-<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Select Delivery Address</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" th:if="${session.loggedInUser==null}">
-       <div class="row border-bottom">
-       		<div class="col-md-2">
-       			<img alt="img not found" src="assets/img/saveadd.jpeg">
-       		</div>
-       		<div class="col-md-10">
-       			Log In  to view Saved Address
-       		</div>
-       </div>
-       <div class="row pt-4">
-       	<div class="col-md-10">
-       		<b>Use Pincode to check Delivery info</b>
-       		<input type="text" placeholder="Enter Pincode" style="border: 0; border-bottom: 2px solid grey; width: 100%; outline: 0;" class="p-2">
-       	</div>
-       	<div class="col-md-2 d-flex align-items-end">
-       		<button class="btn btn-secondary btn-sm disabled">Submit</button>
-       	</div>
-       	<div class="col-md-12">
-       		<img alt="img not found" src="assets/img/address-img.webp">
-       		<a href="#" class="text-decoration-none fw-bold" style="margin-left: -70px;">Use My Current location</a>
-       	</div>
-       </div>
-      </div>
-      	<div class="modal-body px-0" th:if="${session.loggedInUser!=null}">
-      	<form action="/ChangeAddress" method="post">
-      	
-      		<div class="row ms-0" style="max-height: 200px; overflow-y:scroll; width: 100%; ">
-      			
-      				<table class="table table-hover align-items-start">
-      					<tr th:each="add: ${addresses}">
-      						<td class="d-flex">
-      						<input type="radio" th:checked="${add.active}" class="form-check-input" th:id="'addressId_'+ ${add.id}" name="addressId" th:value="${add.id}">
-      						<div class="ms-3"> 
-      							<label th:for="'addressId_'+ ${add.id}">
-      								<b th:text="${add.name+' ,'+add.pincode}" style="font-size: 14px;"></b>
-      							<span class="badge bg-secondary bg-opacity-25 text-muted ms-1" th:text="${add.addressType}">work</span>
-      							<p th:text="${add.address}" class="text-muted" style="font-size: 14px;"></p>
-      							</label>
-      						</div>
-      						</td>
-      					</tr>
-      				</table>
-      			
-      			
-      		</div>
-      		<div class="row p-3">
-      			<b>Save this address or new address </b>
-      			<div class="d-flex justify-content-between pt-3 px-4">
-      				<a href="/User/ManageAddress" class="text-decoration-none fw-bold">+Add New Address</a>
-      				<button type="submit" class="btn btn-warning btn-sm" th:if="${address!=null}" >Save Address</button>
-      			</div>
-      		</div>
-      		</form>
-      	</div>
-    </div>
-  </div>
-</div>
+		function updateQuantity(btn, update) {
+			const cartItem = btn.closest(".cart-row");
+			const cartId = cartItem.getAttribute('data-id');
+			const finalPricePerUnit = parseFloat(cartItem.querySelector('.final-price').value);
+			const unitPricePerUnit = parseFloat(cartItem.querySelector(".price-per-unit").value);
+			const qtyElement = cartItem.querySelector(".qty");
 
-            
-		
-		</main>
-	</body>
+			let qty = parseInt(qtyElement.innerText);
+			const max = 5;
+
+			if (update == 1) {
+				if (qty >= max) { alert("Maximum 5 items allowed."); return; }
+				qty += 1;
+			} else {
+				if (qty <= 1) { alert("Minimum 1 item required."); return; }
+				qty -= 1;
+			}
+
+			fetch('/UpdateQuantity/' + cartId + '?quantity=' + qty, { method: 'POST' })
+				.then(res => res.json())
+				.then(data => {
+					if (data.err) {
+						alert(data.err);
+						if (data.quantity) qtyElement.innerText = data.quantity;
+					} else {
+						// Update Individual Item UI
+						qtyElement.innerText = qty;
+						cartItem.querySelector('.updated-unit-price').innerText = (qty * unitPricePerUnit).toFixed(1);
+						cartItem.querySelector('.updated-final-price').innerText = (qty * finalPricePerUnit).toFixed(1);
+
+						// Update Global Summary
+						const shipping = getShippingCharge();
+						document.getElementById("totalPrice").innerText = "₹" + data.totalPrice.toFixed(1);
+						document.getElementById("discount").innerText = "-₹" + (data.totalPrice - data.finalPrice).toFixed(1);
+						document.getElementById("finalPrice").innerText = "₹" + (data.finalPrice + shipping).toFixed(1);
+					}
+				})
+				.catch(err => console.error("Update failed:", err));
+		}
+
+		function updateBuyNowQuantity(update) {
+			const qtyElement = document.getElementById("buyNowQuantity");
+			const hiddenQtyInput = document.getElementById("qty");
+			const pricePerUnit = parseFloat(document.getElementById("price-per-unit").value);
+			const finalPricePerUnit = parseFloat(document.getElementById("final-price").value);
+
+			let qty = parseInt(qtyElement.innerText);
+			const max = 5;
+
+			if (update == 1) {
+				if (qty >= max) { alert("Maximum 5 items allowed."); return; }
+				qty += 1;
+			} else {
+				if (qty <= 1) { alert("Minimum 1 item required."); return; }
+				qty -= 1;
+			}
+
+			// Update UI and Hidden Inputs
+			qtyElement.innerText = qty;
+			if (hiddenQtyInput) hiddenQtyInput.value = qty;
+
+			// Update URL for persistence
+			const url = new URL(window.location.href);
+			url.searchParams.set("qty", qty);
+			window.history.replaceState({}, '', url);
+
+			// Update Item Price Display
+			document.getElementById("update-unit-price").innerText = (qty * pricePerUnit).toFixed(1);
+			document.getElementById("update-final-price").innerText = (qty * finalPricePerUnit).toFixed(1);
+
+			// Update Summary
+			const shipping = getShippingCharge();
+			document.getElementById("totalPrice").innerText = "₹" + (qty * pricePerUnit).toFixed(1);
+			document.getElementById("discount").innerText = "-₹" + (qty * (pricePerUnit - finalPricePerUnit)).toFixed(1);
+			document.getElementById("finalPrice").innerText = "₹" + (qty * finalPricePerUnit + shipping).toFixed(1);
+		}
+
+		function placeOrder() {
+			const form = document.getElementById("orderForm");
+			const formData = new URLSearchParams(new FormData(form));
+
+			fetch('/place-order', {
+				method: 'POST',
+				body: formData
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.status == "FAILED") {
+						alert(data.message);
+					}
+					if (data.status === "COD_SUCCESS") {
+						alert("Order Placed Successfully!");
+						window.location.href = "/Orders";
+					}
+					if (data.status === "ONLINE") {
+						const options = {
+							key: data.key,
+							amount: data.amount,
+							currency: "INR",
+							order_id: data.razorpayOrderId,
+							handler: function (response) {
+								fetch('/verify-payment', {
+									method: 'POST',
+									headers: { "Content-Type": "application/json" },
+									body: JSON.stringify(response)
+								})
+									.then(res => res.text())
+									.then(data => {
+										alert(data);
+										window.location.href = '/Orders';
+									})
+									.catch(err => alert(err.message));
+							}
+						};
+						const rzp = new Razorpay(options);
+						rzp.open();
+					}
+				})
+				.catch(err => alert("Form submission failed. Please try again."));
+		}
+	</script>
+</body>
+
 </html>

@@ -1,5 +1,6 @@
 package com.app.TechBazaar.Controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -309,6 +310,46 @@ public class SellerController {
 
 	    return "redirect:/Seller/Feedback";
 	}
+	
+	
+	//Edit Product
+	
+	@GetMapping("/EditProduct")
+	public String showEditProduct(@RequestParam("id") long id, Model model) {
+
+	 Products product = productRepo.findById(id)
+	            .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+
+	    model.addAttribute("product", product);
+
+	    return "Seller/EditProduct";
+	}
+	
+	
+	@PostMapping("/EditProduct")
+	public String editProduct(@ModelAttribute Products product,
+	                          RedirectAttributes attributes) {
+
+	    Products existingProduct = productRepo.findById(product.getId())
+	            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+	    existingProduct.setProductName(product.getProductName());
+	    existingProduct.setProductDescription(product.getProductDescription());
+	    existingProduct.setBrandName(product.getBrandName());
+	    existingProduct.setPricePerUnit(product.getPricePerUnit());
+	    existingProduct.setDiscount(product.getDiscount());
+	    existingProduct.setFinalPrice(product.getFinalPrice());
+	    existingProduct.setQuantityAvailable(product.getQuantityAvailable());
+	    existingProduct.setUpdatedAt(LocalDateTime.now());
+	    existingProduct.setSeller(existingProduct.getSeller());
+
+	    
+	    productRepo.save(existingProduct);
+
+	    attributes.addFlashAttribute("msg", "Product Updated Successfully!");
+	    return "redirect:/Seller/ManageProduct";
+	}
+	
 	
 	//Logout
 //		@GetMapping("/logout")

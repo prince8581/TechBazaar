@@ -15,6 +15,8 @@ public interface SavedAddressRepository extends JpaRepository<SavedAddress, Long
 
 	SavedAddress findByUserAndActive(Users user, boolean b);
 
+	List<SavedAddress> findByUserId(long id);
+
 	//List<SavedAddress> findByUser(Users user);
 
 }

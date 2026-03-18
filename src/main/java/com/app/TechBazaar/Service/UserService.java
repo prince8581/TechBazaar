@@ -251,6 +251,7 @@ public class UserService {
 		userRepo.save(existUsers);
 		
 	}
+	
 	public void updateProfile(Users user,UserDTO dto) 
 	{
 		user.setName(dto.getName());
@@ -271,12 +272,5 @@ public class UserService {
 	}
 	
 	
-//	public void editAddress(SavedAddress address, SavedAddressDTO dto) {
-//		address.setAddress(dto.getAddress());
-//		address.setContactNo(dto.getContactNo());
-//		address.setAltContactNo(dto.getAltContactNo());
-//		address.setLandmark(dto.getLandmark());
-//		
-//		addressRepo.save(address);
-//	}
+
 }

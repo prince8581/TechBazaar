@@ -40,6 +40,7 @@ import com.app.TechBazaar.Service.CartItemService;
 import com.app.TechBazaar.Service.EnquiryService;
 import com.app.TechBazaar.Service.FeedbackService;
 import com.app.TechBazaar.Service.OrderService;
+import com.app.TechBazaar.Service.ProductService;
 import com.app.TechBazaar.Service.SavedAddressService;
 import com.app.TechBazaar.Service.UserService;
 import com.razorpay.RazorpayException;
@@ -92,13 +93,29 @@ public class MainController {
 	
 	@Autowired
 	private FeedbackService feedbackService;
+	
+	@Autowired
+	private ProductService productService;
 
 	
 	@GetMapping("/")
 	public String ShowIndex(Model model) {
 		
+		List<Products> topProducts = productService.getTop4Products();
+		model.addAttribute("products",topProducts);
 		return "index";
 	}
+	
+	@GetMapping("/viewProduct/{id}")
+    public String viewProduct(@PathVariable Long id, Model model) {
+
+        Products product = productRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product Not Found"));
+
+        model.addAttribute("product", product);
+
+        return "ViewProduct";
+    }
 	
 	@GetMapping("/Orders")
 	public String ShowOrders(Model model) {

@@ -171,30 +171,66 @@ public class ProductService {
 		
 	}
 	
-	//Update product 
-//		public void updateProduct(Users seller, MultipartFile profileImage) throws IOException  {
-//			Users existProducts = userRepo.findById(seller.getId()).orElseThrow();
-//			
-//			//Delete Existing profilepic from source
-//			if(existUsers.getProfilePic() != null && !existUsers.getProfilePic().isEmpty()) {
-//				Path filePath = Paths.get(uploadDir+existUsers.getProfilePic());
-//				Files.deleteIfExists(filePath);
-//			}
-//			
-//			String storageFileName = UUID.randomUUID()+"_"+profileImage.getOriginalFilename();
-//			Files.copy(profileImage.getInputStream(), Paths.get(uploadDir+storageFileName), StandardCopyOption.REPLACE_EXISTING);
-//			
-//			existUsers.setName(seller.getName());
-//			existUsers.setContactNo(seller.getContactNo());
-//			existUsers.setPanCard(seller.getPanCard());
-//			existUsers.setAadharNo(seller.getAadharNo());
-//			existUsers.setGstNo(seller.getGstNo());
-//			existUsers.setAddress(seller.getAddress());
-//			existUsers.setProfilePic(storageFileName);
-//			
-//			userRepo.save(existUsers);
-//			
-//		}
-//	
+	
+	
+	//Update Product
+	public void updateEditProduct(Products product, MultipartFile[] productImages) throws IOException {
+	    Products existingProduct = productRepo.findById(product.getId())
+	            .orElseThrow(() -> new RuntimeException("Product not found with ID: " + product.getId()));
+
+	    String uploadDir = "public/ProductImages/";
+
+	    // Delete old images if new ones uploaded
+	    if(productImages != null && productImages.length > 0) {
+	        if(existingProduct.getProductImages() != null) {
+	            for(String img : existingProduct.getProductImages()) {
+	                Path filePath = Paths.get(uploadDir + img);
+	                Files.deleteIfExists(filePath);
+	            }
+	            existingProduct.getProductImages().clear();
+	        }
+
+	        // Save new images
+	        for(MultipartFile image : productImages) {
+	            if(!image.isEmpty()) {
+	                String storageFileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+	                Files.copy(image.getInputStream(), Paths.get(uploadDir + storageFileName),
+	                        StandardCopyOption.REPLACE_EXISTING);
+	                existingProduct.getProductImages().add(storageFileName);
+	            }
+	        }
+	    }
+
+	    // Update all product fields
+	    existingProduct.setProductName(product.getProductName());
+	    existingProduct.setProductDescription(product.getProductDescription());
+	    existingProduct.setBrandName(product.getBrandName());
+	    existingProduct.setPricePerUnit(product.getPricePerUnit());
+	    existingProduct.setDiscount(product.getDiscount());
+	    existingProduct.setFinalPrice(product.getFinalPrice());
+	    existingProduct.setQuantityAvailable(product.getQuantityAvailable());
+	    existingProduct.setCategory(product.getCategory());
+	    existingProduct.setCancellationAllowed(product.isCancellationAllowed());
+	    existingProduct.setCodAvailable(product.isCodAvailable());
+	    existingProduct.setShippingType(product.getShippingType());
+	    existingProduct.setShippingCharge(product.getShippingCharge());
+	    existingProduct.setMinDeliveryDays(product.getMinDeliveryDays());
+	    existingProduct.setMaxDeliveryDays(product.getMaxDeliveryDays());
+	    existingProduct.setReturnAvailable(product.isReturnAvailable());
+	    existingProduct.setReturnConditions(product.getReturnConditions());
+	    existingProduct.setReturnDays(product.getReturnDays());
+	    existingProduct.setWarranty(product.isWarranty());
+	    existingProduct.setWarrantyDuration(product.getWarrantyDuration());
+	    existingProduct.setWarrantyUnit(product.getWarrantyUnit());
+	    existingProduct.setWarrantyTerms(product.getWarrantyTerms());
+	    existingProduct.setUpdatedAt(LocalDateTime.now());
+
+	    productRepo.save(existingProduct);
+	}
+	
+	
+	public List<Products> getTop4Products(){
+		return productRepo.findTop4ByOrderByIdDesc();
+	}
 	
 }

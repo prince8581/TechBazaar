@@ -2,170 +2,261 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{Admin/Adminbase::layout(~{::main})}">
 <body>
-<main>
+<main class="admin-main">
 
-<div class="container-fluid py-4">
+<style>
 
-    <!-- PAGE TITLE -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <h2 class="fw-bold text-success">
-                <i class="la la-dashboard"></i> Admin Dashboard
-            </h2>
-        </div>
+/* ===== PAGE BACKGROUND ===== */
+.admin-main{
+    background:linear-gradient(135deg,#f0fdf4,#ecfdf5,#f0f9ff);
+    padding:30px 15px 60px;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ===== TITLE ===== */
+.page-title{
+    font-weight:700;
+    font-size:26px;
+    color:#065f46;
+}
+
+/* ===== CARD COMMON ===== */
+.dashboard-card{
+    background:#ffffffcc;
+    backdrop-filter:blur(8px);
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.3s;
+    border:none;
+}
+.dashboard-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+/* ===== TOP COUNT CARDS ===== */
+.stat-card{
+    padding:22px 15px;
+    text-align:center;
+}
+
+.stat-icon{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    font-size:22px;
+    color:white;
+    margin-bottom:10px;
+}
+
+.bg-green{background:linear-gradient(45deg,#16a34a,#22c55e);}
+.bg-blue{background:linear-gradient(45deg,#2563eb,#3b82f6);}
+.bg-orange{background:linear-gradient(45deg,#f59e0b,#fbbf24);}
+.bg-red{background:linear-gradient(45deg,#dc2626,#ef4444);}
+.bg-cyan{background:linear-gradient(45deg,#06b6d4,#0ea5e9);}
+.bg-gray{background:linear-gradient(45deg,#4b5563,#6b7280);}
+
+.stat-label{
+    font-size:13px;
+    text-transform:uppercase;
+    color:#6b7280;
+    font-weight:600;
+}
+
+.stat-number{
+    font-size:22px;
+    font-weight:700;
+    margin-top:5px;
+}
+
+/* ===== ORDER STATUS ===== */
+.status-card{
+    padding:25px 15px;
+    text-align:center;
+}
+.status-icon{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header{
+    background:linear-gradient(45deg,#10b981,#059669);
+    color:white;
+    font-weight:600;
+    padding:12px 20px;
+    border-radius:15px 15px 0 0;
+}
+
+/* ===== CHART CARD ===== */
+.chart-card{
+    border-radius:18px;
+    overflow:hidden;
+}
+
+/* ===== ENQUIRY LIST ===== */
+.enquiry-item{
+    padding:12px 0;
+    border-bottom:1px solid #e5e7eb;
+}
+.enquiry-item:last-child{
+    border-bottom:none;
+}
+.enquiry-name{
+    font-weight:600;
+}
+.enquiry-date{
+    font-size:12px;
+    color:#6b7280;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .stat-number{font-size:18px;}
+}
+
+</style>
+
+<div class="container-fluid">
+
+    <!-- TITLE -->
+    <div class="mb-4">
+        <h2 class="page-title">
+            <i class="la la-dashboard"></i> Admin Dashboard
+        </h2>
     </div>
 
-    <!-- ================= TOP COUNT CARDS ================= -->
-    <div class="row g-4 text-center">
+    <!-- ===== TOP STATS ===== -->
+    <div class="row g-4">
 
-        <!-- Sellers -->
-        <div class="col-md-2">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <div class="icon-circle bg-success text-white mb-2">
-                        <i class="la la-user"></i>
-                    </div>
-                    <h6 class="text-muted">Sellers</h6>
-                    <h4 class="fw-bold" th:text="${sellerCount}">0</h4>
+        <div class="col-md-2 col-sm-6">
+            <div class="dashboard-card stat-card">
+                <div class="stat-icon bg-green">
+                    <i class="la la-user"></i>
                 </div>
+                <div class="stat-label">Sellers</div>
+                <div class="stat-number" th:text="${sellerCount}">0</div>
             </div>
         </div>
 
-        <!-- Buyers -->
-        <div class="col-md-2">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <div class="icon-circle bg-primary text-white mb-2">
-                        <i class="la la-users"></i>
-                    </div>
-                    <h6 class="text-muted">Users (Buyers)</h6>
-                    <h4 class="fw-bold" th:text="${buyerCount}">0</h4>
+        <div class="col-md-2 col-sm-6">
+            <div class="dashboard-card stat-card">
+                <div class="stat-icon bg-blue">
+                    <i class="la la-users"></i>
                 </div>
+                <div class="stat-label">Buyers</div>
+                <div class="stat-number" th:text="${buyerCount}">0</div>
             </div>
         </div>
 
-        <!-- Products -->
-        <div class="col-md-2">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <div class="icon-circle bg-warning text-white mb-2">
-                        <i class="la la-cube"></i>
-                    </div>
-                    <h6 class="text-muted">Products</h6>
-                    <h4 class="fw-bold" th:text="${productCount}">0</h4>
+        <div class="col-md-2 col-sm-6">
+            <div class="dashboard-card stat-card">
+                <div class="stat-icon bg-orange">
+                    <i class="la la-cube"></i>
                 </div>
+                <div class="stat-label">Products</div>
+                <div class="stat-number" th:text="${productCount}">0</div>
             </div>
         </div>
 
-        <!-- Orders -->
-        <div class="col-md-2">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <div class="icon-circle bg-danger text-white mb-2">
-                        <i class="la la-shopping-cart"></i>
-                    </div>
-                    <h6 class="text-muted">Orders</h6>
-                    <h4 th:text="${orderCount}">5</h4>
+        <div class="col-md-2 col-sm-6">
+            <div class="dashboard-card stat-card">
+                <div class="stat-icon bg-red">
+                    <i class="la la-shopping-cart"></i>
                 </div>
+                <div class="stat-label">Orders</div>
+                <div class="stat-number" th:text="${orderCount}">0</div>
             </div>
         </div>
 
-        <!-- Total Sales -->
-        <div class="col-md-2">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <div class="icon-circle bg-info text-white mb-2">
-                        <i class="la la-money"></i>
-                    </div>
-                    <h6 class="text-muted">Categories</h6>
-                    <h4 th:text="${categoryCount}">₹6</h4>
+
+        <div class="col-md-2 col-sm-6">
+            <div class="dashboard-card stat-card">
+                <div class="stat-icon bg-cyan">
+                    <i class="la la-th-large"></i>
                 </div>
+                <div class="stat-label">Categories</div>
+                <div class="stat-number" th:text="${categoryCount}">0</div>
             </div>
         </div>
 
-        <!-- Enquiries -->
-        <div class="col-md-2">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <div class="icon-circle bg-secondary text-white mb-2">
-                        <i class="la la-envelope"></i>
-                    </div>
-                    <h6 class="text-muted">Enquiries</h6>
-                    <h4 th:text="${enquiryCount}">0</h4>
+        <div class="col-md-2 col-sm-6">
+            <div class="dashboard-card stat-card">
+                <div class="stat-icon bg-gray">
+                    <i class="la la-envelope"></i>
                 </div>
+                <div class="stat-label">Enquiries</div>
+                <div class="stat-number" th:text="${enquiryCount}">0</div>
             </div>
         </div>
 
     </div>
 
-    <!-- ================= ORDER STATUS ================= -->
-    <div class="row mt-5 g-4 text-center">
+    <!-- ===== ORDER STATUS ===== -->
+    <div class="row mt-5 g-4">
 
         <div class="col-md-4">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <i class="la la-times-circle text-danger fs-5"></i>
-                    <h6 class="mt-2 text-muted">Cancelled Orders</h6>
-                    <h4 class="fw-bold" th:text="${cancelledOrders}">0</h4>
-                </div>
+            <div class="dashboard-card status-card">
+                <i class="la la-times-circle text-danger status-icon"></i>
+                <div class="stat-label">Cancelled Orders</div>
+                <div class="stat-number" th:text="${cancelledOrders}">0</div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <i class="la la-clock-o text-warning fs-5"></i>
-                    <h6 class="mt-2 text-muted">Pending Orders</h6>
-                    <h4 class="fw-bold" th:text="${confirmOrders}">0</h4>
-                </div>
+            <div class="dashboard-card status-card">
+                <i class="la la-clock-o text-warning status-icon"></i>
+                <div class="stat-label">Pending Orders</div>
+                <div class="stat-number" th:text="${confirmOrders}">0</div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm start-card border-0 rounded-4">
-                <div class="card-body">
-                    <i class="la la-check-circle text-success fs-1"></i>
-                    <h6 class="mt-2 text-muted">Delivered Orders</h6>
-                    <h4 class="fw-bold" th:text="${deliveredOrders}">0</h4>
-                </div>
+            <div class="dashboard-card status-card">
+                <i class="la la-check-circle text-success status-icon"></i>
+                <div class="stat-label">Delivered Orders</div>
+                <div class="stat-number" th:text="${deliveredOrders}">0</div>
             </div>
         </div>
 
     </div>
 
-    <!-- ================= CHART + RECENT ================= -->
+    <!-- ===== CHART + ENQUIRY ===== -->
     <div class="row mt-5 g-4">
 
         <!-- Chart -->
         <div class="col-lg-8">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header bg-success text-white fw-bold">
+            <div class="dashboard-card chart-card">
+                <div class="section-header">
                     Orders Overview
                 </div>
-                <div class="card-body">
+                <div class="p-4">
                     <canvas id="ordersChart" height="110"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Enquiries -->
+        <!-- Enquiries -->
         <div class="col-lg-4">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header bg-info text-white fw-bold">
+            <div class="dashboard-card chart-card">
+                <div class="section-header" style="background:linear-gradient(45deg,#0ea5e9,#0284c7)">
                     Recent Enquiries
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush"
-                        style="max-height:300px; overflow-y:auto;">
-                        <li class="list-group-item"
-                            th:each="enq : ${recentEnquiries}">
-                            <strong th:text="${enq.name}">Name</strong>
-                            <small class="text-muted d-block"
-                                   th:text="${#temporals.format(enq.enquiryDate, 'dd MMM yyyy')}"></small>
-                            <span class="d-block text-truncate"
-                                  th:text="${enq.message}"></span>
-                        </li>
-                    </ul>
+                <div class="p-4" style="max-height:350px; overflow-y:auto;">
+                    <div class="enquiry-item"
+                         th:each="enq : ${recentEnquiries}">
+                        <div class="enquiry-name"
+                             th:text="${enq.name}">Name</div>
+                        <div class="enquiry-date"
+                             th:text="${#temporals.format(enq.enquiryDate, 'dd MMM yyyy')}"></div>
+                        <div class="text-muted small text-truncate"
+                             th:text="${enq.message}"></div>
+                    </div>
+
                     <div class="text-center mt-3">
                         <a th:href="@{/Admin/Enquiry}"
                            class="btn btn-outline-success btn-sm">
@@ -180,12 +271,11 @@
 
 </div>
 
-<!-- ================= CHART JS ================= -->
+<!-- ===== CHART JS ===== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script th:inline="javascript">
     const ctx = document.getElementById('ordersChart');
-
     const orderMonths = [[${orderMonths}]];
     const orderCounts = [[${orderCounts}]];
 
@@ -196,12 +286,12 @@
             datasets: [{
                 label: 'Orders',
                 data: orderCounts,
-                borderColor: 'green',
-                backgroundColor: 'rgba(0,128,0,0.1)',
-                borderWidth: 2,
-                tension: 0.3,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16,185,129,0.15)',
+                borderWidth: 3,
+                tension: 0.4,
                 fill: true,
-                pointRadius: 5
+                pointRadius: 4
             }]
         },
         options: {
@@ -212,27 +302,6 @@
         }
     });
 </script>
-
-<!-- ================= CUSTOM CSS ================= -->
-<style>
-.start-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-}
-.start-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-.icon-circle {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:auto;
-}
-</style>
 
 </main>
 </body>
